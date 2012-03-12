@@ -1,8 +1,0 @@
-#summary Frequently asked questions
-#labels Featured
-
-  * *What packages do I need to compile gejengel on ubuntu?*
-Run the following command to install the necessary dependencies
-{{{
-sudo apt-get install build-essential automake autoconf libtool libgtkmm-2.4-dev libsqlite3-dev libtag1-dev libmagick++-dev libxdg-basedir-dev libnotify-dev libflac++-dev libmad0-dev libavformat-dev libavcodec-dev libavutil-dev libpulse-dev intltool
-}}}
