@@ -1,0 +1,3 @@
+[submodule "modules/upnpframework"]
+	path = modules/upnpframework
+	url = https://bitbucket.org/dirk_vdb/upnpframework.git
