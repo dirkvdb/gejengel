@@ -1,0 +1,16 @@
+#summary Screenshots of the Gejengel ui
+#labels Featured
+
+Mainwindow (Large album view)
+
+http://gejengel.googlecode.com/svn/trunk/web/screenshots/largealbums.png
+
+
+Mainwindow (Small album view)
+
+http://gejengel.googlecode.com/svn/trunk/web/screenshots/smallalbums.png
+
+
+Plugin settings
+
+http://gejengel.googlecode.com/svn/trunk/web/screenshots/plugins.png
