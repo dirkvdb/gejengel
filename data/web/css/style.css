@@ -1,0 +1,563 @@
+/*-----------------------------------------------------------------------------
+Watercolor Style Sheet
+
+version:   1.0
+author:    james southorn
+email:     james@pixelfuze.co.uk
+website:   http://www.pixelfuze.co.uk
+-----------------------------------------------------------------------------
+ General
+-----------------------------------------------------------------------------*/
+.clear {
+clear:both;
+}
+
+img {
+border:0;
+}
+
+#container {
+height:auto !important;
+min-height:100%;
+min-width:1000px;
+}
+
+a {
+color:#3E89AA;
+text-decoration:none;
+}
+
+a:hover {
+text-decoration:underline;
+}
+
+#paypal {
+position: absolute;
+top: 10px;
+right: 10px;
+}
+
+/* Typography
+-----------------------------------------------------------------------------*/
+html,body {
+height:100%;
+}
+
+body {
+color:#666;
+font:1em "Trebuchet MS", "Lucida Grande", "Lucida Sans", Tahoma, Verdana, sans-serif;
+margin:0;
+padding:0;
+}
+
+/* Headings
+-----------------------------------------------------------------------------*/
+#header {
+background:#02689b url(../img/header_bg.jpg) repeat-x;
+height:160px;
+margin:0;
+margin:1px 0 -1px;
+position:relative;
+width:100%;
+}
+
+#header div {
+height:165px;
+}
+
+#header h2 {
+float:none;
+font-size:20px;
+font-weight:400;
+margin:100px 0 0px 0px;
+}
+
+h1 {
+float:left;
+font-size:35px;
+font-weight:400;
+margin:60px 0 20px 42px;
+}
+
+h1 span {
+color:#fff;
+font-size:20px;
+font-style:italic;
+}
+
+h1 a {
+color:#75b2cd;
+}
+
+h2 {
+color:#369;
+font-size:30px;
+font-style:italic;
+margin-top:30px;
+}
+
+h2 span {
+color:#fff;
+}
+
+
+h3 {
+background:url(../img/underline.png) no-repeat left bottom;
+margin:0 0 20px;
+padding:0 0 5px;
+position:relative;
+z-index:2;
+}
+
+h3 span {
+background:url(../img/calendar.png) no-repeat left top;
+bottom:-28px;
+color:#fff;
+display:block;
+font-size:9px;
+height:33px;
+line-height:1em;
+padding-top:10px;
+position:relative;
+text-align:center;
+width:35px;
+}
+
+h3 a {
+padding:13px 0 3px 45px;
+}
+
+h3 a:hover {
+padding:13px 0 3px 45px;
+text-decoration:none;
+}
+
+/* Main Nav
+-----------------------------------------------------------------------------*/
+#mainNav {
+color:#fff;
+display:inline;
+float:right;
+font-weight:400;
+list-style-type:none;
+margin:100px 25px 20px 0;
+padding:0;
+}
+
+#mainNav li {
+float:left;
+font-size:1.2em;
+padding:0 30px;
+}
+
+#mainNav li a {
+background:url(../img/button_bg.png) repeat;
+border:1px transparent #2783ae;
+color:#fff;
+display:block;
+padding:5px;
+text-decoration:none;
+}
+
+#mainNav li a:hover,a.active {
+background:url(../img/button_bg_hover.png) repeat-x;
+border:1px transparent #2783ae;
+}
+
+#mainNav .on a {
+background:url(../img/button_bg_hover.png) repeat-x;
+border:1px transparent #2783ae;
+cursor:default;
+}
+
+/* Content wrapper
+-----------------------------------------------------------------------------*/
+#content {
+height:1%;
+padding-bottom:70px;
+}
+
+#content:after {
+clear:both;
+content:".";
+display:block;
+font-size:0;
+height:0;
+visibility:hidden;
+}
+
+/* Main Content
+-----------------------------------------------------------------------------*/
+#main {
+float:left;
+width:100%;
+}
+
+#main div {
+padding:10px 40px 50px 40px;
+}
+
+#main div {
+padding:10px 40px 50px 40px;
+}
+
+#main div div {
+padding:0;
+}
+
+#highlight {
+background:url(../img/intro_bg.jpg) repeat-x top left;
+height:1%;
+}
+
+#highlight:after {
+clear:both;
+content:".";
+display:block;
+font-size:0;
+height:0;
+visibility:hidden;
+}
+
+#highlight div {
+padding:10px !important;
+}
+
+.comments {
+position:relative;
+}
+
+.comments a {
+background:url(../img/comments.png) no-repeat left center;
+color:#69C;
+font-size:13px;
+font-style:italic;
+padding-left:20px;
+position:absolute;
+right:0;
+text-decoration:underline;
+top:-50px;
+z-index: 3;
+}
+
+.comments a:hover {
+background:url(../img/comments_add.png) no-repeat left center;
+}
+
+.readMore a {
+background:url(../img/book_next.png) no-repeat right center;
+color:#666;
+font-size:12px;
+font-weight:700;
+height:16px;
+margin-top:20px;
+padding-right:20px;
+text-decoration:none;
+}
+
+.border img {
+background:url(../img/watercolor-bg.gif) no-repeat;
+border:none;
+padding:9px 12px 12px 11px;
+}
+
+.photo {
+float:left;
+height:130px;
+margin:0 30px 30px 0;
+position:relative;
+width:180px;
+}
+
+#pagination {
+float:right;
+}
+
+#pagination a {
+padding:0 20px;
+}
+
+a#previous {
+background:url(../img/arrow_left.png) no-repeat left center;
+padding-left:15px;
+}
+
+a#next {
+background:url(../img/arrow_right.png) no-repeat right center;
+padding-right:20px;
+}
+
+/* Contact Page
+-----------------------------------------------------------------------------*/
+#details {
+float:left;
+list-style-type:none;
+padding:20px;
+}
+
+#details li {
+padding:10px 10px 10px 30px;
+}
+
+#details li.name {
+background:url(../img/16-member.png) no-repeat left center;
+}
+
+#details li.address {
+background:url(../img/book_addresses.png) no-repeat left center;
+}
+
+#details li.email {
+background:url(../img/email.png) no-repeat left center;
+}
+
+#details li.phone {
+background:url(../img/phone.png) no-repeat left center;
+}
+
+
+
+/* Entry Page
+-----------------------------------------------------------------------------*/
+.commentOdd {
+background:#eef9ff url(../img/quote_right.png) no-repeat 98% 86%;
+}
+
+.commentEven {
+background:#c5e9fd url(../img/quote_right.png) no-repeat 98% 86%;
+}
+
+.commentOdd p,.commentEven p {
+margin:0;
+padding:5px 10px 10px;
+}
+
+.commentOdd blockquote,.commentEven blockquote {
+background:url(../img/quote_left.png) no-repeat 2% 14%;
+margin:0;
+padding:0 80px;
+}
+
+/* Right Content
+-----------------------------------------------------------------------------*/
+#right {
+background:url(../img/right_bg.jpg) repeat-x;
+float:right;
+height:100%;
+margin-left:-435px;
+padding:0 15px 15px;
+position:relative;
+width:405px;
+}
+
+#right div {
+background:url(../img/plant.jpg) no-repeat right bottom;
+bottom:0;
+height:683px;
+position:absolute;
+right:15px;
+width:160px;
+z-index:1;
+}
+
+ul#archive {
+list-style-image:url(../img/archive.gif);
+}
+
+ul#category {
+list-style-image:url(../img/category.gif);
+}
+
+ul#archive li,ul#category li {
+padding:5px;
+}
+
+/* Footer
+-----------------------------------------------------------------------------*/
+#footer {
+background:#1C80B2 url(../img/footer_bg.jpg) repeat-x;
+color:#fff;
+margin-top:-68px;
+position:relative;
+z-index:5;
+}
+
+#footer div {
+background: #1C80B2 url(../img/header_overlay.png) repeat-y 50% 0;
+height:62px;
+position:relative;
+top: 6px;
+}
+
+#footer div:after {
+clear:both;
+content:".";
+display:block;
+font-size:0;
+height:0;
+visibility:hidden;
+}
+
+#footer a {
+color:#AEE4FF;
+font-weight:700;
+}
+
+.left {
+float:left;
+margin:0;
+padding:13px 0 0 40px;
+font-size: 0.8em;
+}
+
+.right {
+float:right;
+margin:0;
+padding:20px 40px 0 0;
+}
+
+
+/* Forms
+-----------------------------------------------------------------------------*/
+fieldset {
+border:1px solid transparent;
+margin:0;
+padding:0;
+}
+
+form p {
+height:1%;
+margin:10px 0 5px;
+}
+
+form p:after {
+clear:both;
+content:".";
+display:block;
+font-size:0;
+height:0;
+visibility:hidden;
+}
+
+form p label {
+display:block;
+float:left;
+margin-right:30px;
+width:15%;
+}
+
+form#search legend,form#contact legend {
+display:none;
+}
+
+/* Search bar form */
+
+form#search {
+height:40px;
+left:-15px;
+padding:13px 10px 0 20px;
+position:relative;
+top:-4px;
+}
+
+form#search input {
+background:url(../img/searchbox.gif) no-repeat left;
+border:none;
+font-family:"Trebuchet MS", Tahoma;
+font-size:14px;
+height:auto;
+margin-top:2px;
+padding:5px;
+width:290px;
+}
+
+form#search button.btn,a.btn,form#contact button.btn,a.btn {
+background-color:#39C;
+border:1px solid #015796;
+border-left:1px solid #2783ae;
+border-top:1px solid #2783ae;
+color:#fff;
+cursor:pointer;
+font-weight:700;
+overflow:visible;
+padding:2px 3px 3px;
+text-decoration:none;
+width:auto;
+}
+
+form#search button.btn img,a.btn img {
+border:none;
+height:16px;
+margin:0 3px -3px 0 !important;
+padding:0;
+width:16px;
+}
+
+/* Right nav contact form */
+
+form.postit {
+background:url(../img/postit.png) no-repeat center top;
+font-family:"Lucida Handwriting";
+font-size:12px;
+height:223px;
+margin:50px auto;
+padding:18px 0 0 40px;
+position:relative;
+width:331px;
+z-index:2;
+}
+
+form.postit p input,form.postit p select,form.postit p textarea {
+background-color:#fff;
+border:1px solid #cc6;
+color:#999;
+font-size:11px;
+width:200px;
+}
+
+form.postit legend {
+font-size:16px;
+font-weight:700;
+}
+
+form.postit button.btn,a.btn {
+background:url(../img/send_button.png) no-repeat;
+border:0;
+bottom:44px;
+color:#fff;
+cursor:pointer;
+font-weight:700;
+height:45px;
+position:absolute;
+right:20px;
+text-indent:-9999px;
+width:53px;
+}
+
+form.postit a.btn:hover {
+background-color:#ccc;
+color:#333;
+}
+
+/* Contact page form */
+
+form#contact {
+float:right;
+margin:15px 15px 10px;
+padding:0;
+width:355px;
+}
+
+form#contact p input,form#contact p select,form#contact p textarea {
+background-color:#fff;
+border:1px solid #999;
+color:#999;
+width:320px;
+}
+
+/* Misc
+-----------------------------------------------------------------------------*/
+
+h1 a:hover,.photo a,ul#archive li a,ul#category li a {
+text-decoration:none;
+}

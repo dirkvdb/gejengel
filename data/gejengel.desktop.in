@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Version=${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}
+Encoding=UTF-8
+Name=Gejengel
+Comment=Music player
+Exec=gejengel
+Terminal=false
+Type=Application
+Categories=Audio;AudioVideo;

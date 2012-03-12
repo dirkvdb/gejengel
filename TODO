@@ -1,0 +1,7 @@
+- Preview function
+- Search function (check performance)
+- Solve difference in time between taglib time and real time vor vbr files
+- Tray icon: better tooltip
+- Cue sheet support?
+- Do something fancy with clutter...
+- Decent pause / resume with large audio buffer if pause is not supported in alsa renderer

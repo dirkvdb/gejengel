@@ -1,0 +1,20 @@
+Gejengel is an audio player which focuses on performance and simplicity, yet with a nice set of features.
+
+Required dependencies to build the source archive:
+gtkmm
+libsexymm
+taglib
+libnotify
+sqlite
+imagemagick (built with c++ support)
+
+Optional dependencies:
+lastfmlib (lastfm plugin)
+dbus-glib (dbus plugin)
+openal (openal output)
+alsa-lib (alsa output)
+pulseaudio (pulseaudio output)
+gtest (build unittests)
+
+Credits:
+Last.fm logo: http://www.gorvan.com

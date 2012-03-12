@@ -1,0 +1,425 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"inc",
+				"include"
+			],
+			[
+				"fil",
+				"fileSize"
+			],
+			[
+				"Reader",
+				"ReaderFactory"
+			],
+			[
+				"m_",
+				"m_RunningThreads"
+			],
+			[
+				"no",
+				"notify_all"
+			],
+			[
+				"m_S",
+				"m_Servers"
+			],
+			[
+				"trac",
+				"trackId"
+			],
+			[
+				"m_Sett",
+				"m_SettingsFile"
+			],
+			[
+				"string",
+				"stringops"
+			],
+			[
+				"str",
+				"stringops"
+			],
+			[
+				"uin",
+				"uint32_t"
+			],
+			[
+				"n",
+				"namespace"
+			],
+			[
+				"re",
+				"receiver"
+			],
+			[
+				"UPN",
+				"UPnPLibrarySource"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/upnpframework/upnp/upnpbrowser.cpp",
+			"settings":
+			{
+				"buffer_size": 24158,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/cmake.sublime-build",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/upnpalbumfetcher.cpp",
+		"/home/dirk/projects/gejengelgit/src/CMakeLists.txt",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/upnpmusiclibrary.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/upnpmusiclibrary.cpp",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/CMakeLists.txt",
+		"/home/dirk/projects/gejengelgit/src/ui/uilayout.h",
+		"/home/dirk/projects/gejengelgit/src/Core/playqueue.cpp",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/utils/threadpool.h",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpbrowser.cpp",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/utils/log.h",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/utils/timeoperations.h",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpbrowser.h",
+		"/home/dirk/projects/gejengelgit/src/AudioDecoder/readerfactory.cpp",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpitem.cpp",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpitem.h",
+		"/home/dirk/projects/gejengelgit/src/AudioDecoder/httpreader.cpp",
+		"/home/dirk/projects/gejengelgit/src/Core/playback.cpp",
+		"/home/dirk/projects/gejengelgit/src/Core/playback.h",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpcontrolpoint.h",
+		"/home/dirk/projects/gejengelgit/src/utils/signal.h",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpcontrolpoint.cpp",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpdevice.h",
+		"/home/dirk/projects/gejengelgit/src/utils/functiontraits.h",
+		"/home/dirk/projects/gejengelgit/src/utils/CMakeLists.txt",
+		"/home/dirk/projects/gejengelgit/src/utils/log.h",
+		"/home/dirk/projects/gejengelgit/src/Core/upnpserversettings.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/upnpview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/librarychangedispatcher.h",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpdevicescanner.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/addupnpserverdlg.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/addupnpserverdlg.h",
+		"/usr/include/c++/4.6/bits/vector.tcc",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnpdevicescanner.h",
+		"/usr/include/c++/4.6/bits/allocator.h",
+		"/usr/include/c++/4.6/ext/new_allocator.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/upnpalbumfetcher.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/upnplibrarysource.h",
+		"/home/dirk/projects/gejengelgit/src/ui/mainwindow.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/mainwindow.h",
+		"/home/dirk/projects/gejengelgit/src/ui/upnpview.h",
+		"/home/dirk/projects/gejengelgit/src/Core/upnpserversettings.h",
+		"/home/dirk/projects/gejengelgit/src/UPnP/upnpcontrolpoint.h",
+		"/home/dirk/projects/gejengelgit/src/utils/fileoperations.h",
+		"/home/dirk/projects/gejengelgit/src/upnpframework/upnp/upnphttpget.cpp",
+		"/home/dirk/projects/gejengelgit/src/utils/fileoperations.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/sharedfunctions.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/systemtray.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/trackview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/uilayoutfactory.cpp",
+		"/home/dirk/projects/gejengelgit/src/Core/albumartgrabber.cpp",
+		"/home/dirk/projects/gejengelgit/src/Core/gejengel.cpp",
+		"/home/dirk/projects/gejengelgit/src/utils/timeoperations.h",
+		"/home/dirk/projects/gejengelgit/src/Core/libraryaccess.cpp",
+		"/home/dirk/projects/gejengelgit/src/Core/pluginmanager.cpp",
+		"/home/dirk/projects/gejengelgit/src/Core/settings.cpp",
+		"/home/dirk/projects/gejengelgit/src/main.cpp",
+		"/home/dirk/projects/gejengelgit/src/utils/stringoperations.h",
+		"/home/dirk/projects/gejengelgit/src/utils/trace.h",
+		"/home/dirk/projects/gejengelgit/src/utils/numericoperations.h",
+		"/home/dirk/projects/gejengelgit/src/Plugins/lastfmplugin.cpp",
+		"/home/dirk/projects/gejengelgit/src/Plugins/notificationplugin.cpp",
+		"/home/dirk/projects/gejengelgit/src/UPnP/upnpbrowser.cpp",
+		"/home/dirk/projects/gejengelgit/src/UPnP/upnpcontrolpoint.cpp",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/scanner.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/metadata.cpp",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/musicdb.cpp",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/scanner.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/albuminfoview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/albummodel.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/cellrendereralbum.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/cellrendererhoverbutton.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/detailedalbumview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/mouseawaretreeview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/nowplayingview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/playqueuemodel.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/playqueueview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/pluginview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/pluginwidget.cpp",
+		"/home/dirk/projects/gejengelgit/src/AudioRenderer/audioframe.h",
+		"/home/dirk/projects/gejengelgit/src/AudioDecoder/maddecoder.cpp",
+		"/home/dirk/projects/gejengelgit/src/AudioRenderer/alsarenderer.cpp",
+		"/home/dirk/projects/gejengelgit/src/AudioRenderer/openalrenderer.cpp",
+		"/home/dirk/projects/gejengelgit/src/AudioRenderer/pulserenderer.cpp",
+		"/home/dirk/projects/gejengelgit/src/Plugins/dbusplugin.cpp",
+		"/home/dirk/projects/gejengelgit/src/tags",
+		"/home/dirk/projects/gejengelgit/src/ui/albumview.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/basiclayout.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/detailedalbumlayout.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/simplealbumlayout.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/trackmodel.cpp",
+		"/home/dirk/projects/gejengelgit/src/ui/upnpalbumview.cpp",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/filesystemmusiclibrary.cpp",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/musiclibrary.cpp",
+		"/home/dirk/projects/gejengelgit/src/AudioRenderer/audiorenderer.h",
+		"/home/dirk/projects/gejengelgit/src/Core/albumartgrabber.h",
+		"/home/dirk/projects/gejengelgit/src/Core/albumartprovider.h",
+		"/home/dirk/projects/gejengelgit/src/Core/gejengel.h",
+		"/home/dirk/projects/gejengelgit/src/Core/gejengelcore.h",
+		"/home/dirk/projects/gejengelgit/src/Core/gstreamerengine.cpp",
+		"/home/dirk/projects/gejengelgit/src/Core/gstreamerengine.h",
+		"/home/dirk/projects/gejengelgit/src/Core/libraryaccess.h",
+		"/home/dirk/projects/gejengelgit/src/Core/playbackengine.h",
+		"/home/dirk/projects/gejengelgit/src/Core/playqueue.h",
+		"/home/dirk/projects/gejengelgit/src/Core/pluginmanager.h",
+		"/home/dirk/projects/gejengelgit/src/Core/settings.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/album.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/albumart.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/filesystemmusiclibrary.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/libraryitem.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/metadata.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/musicdb.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/musiclibrary.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/subscribers.h",
+		"/home/dirk/projects/gejengelgit/src/MusicLibrary/track.h",
+		"/home/dirk/projects/gejengelgit/src/Plugins/mpristracklist.cpp",
+		"/home/dirk/projects/gejengelgit/src/UPnP/upnpcontainer.h",
+		"/home/dirk/projects/gejengelgit/src/UPnP/upnpdevice.h",
+		"/home/dirk/projects/gejengelgit/src/UPnP/upnphttpget.h",
+		"/home/dirk/projects/gejengelgit/src/ui/albummodel.h",
+		"/home/dirk/projects/gejengelgit/src/ui/cellrendereralbum.h",
+		"/home/dirk/projects/gejengelgit/src/ui/cellrendererhoverbutton.h",
+		"/home/dirk/projects/gejengelgit/src/ui/detailedalbumview.h",
+		"/home/dirk/projects/gejengelgit/src/ui/dispatchedsubscriber.h",
+		"/home/dirk/projects/gejengelgit/src/ui/nowplayingview.h",
+		"/home/dirk/projects/gejengelgit/src/ui/overlay.h",
+		"/home/dirk/projects/gejengelgit/src/ui/playqueuemodel.h",
+		"/home/dirk/projects/gejengelgit/src/ui/playqueueview.h",
+		"/home/dirk/projects/gejengelgit/src/ui/preferencesdlg.cpp"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/home/dirk/projects/gejengelgit/src/",
+			"/home/dirk/projects/gejengelgit/src/AudioDecoder"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"signalAlbumQueued",
+			"signalAlbumChanged",
+			"SignalAlbumQueued",
+			"SignalAlbumChanged",
+			"m_ThreadListMutex",
+			"#include \"UPnP/",
+			"inline ",
+			"StringOperations::",
+			"FileOperations::",
+			"StringOperations::",
+			"FileOperations::",
+			"StringOperations::",
+			"Utils::trace",
+			"#include \"Utils/",
+			"Log::",
+			"#include \"Utils/",
+			"Log::",
+			"StringOperations::",
+			"NumericOperations::",
+			"utils::log::",
+			"Log::",
+			"disconnect",
+			"do_disconnect",
+			"struct",
+			"class",
+			"::type",
+			"type",
+			"arg1_type",
+			"operator",
+			"==",
+			"last_value",
+			"get_signal_impl",
+			"connect",
+			"get_signal_impl",
+			"_1",
+			"dynamic",
+			"create_param_spec",
+			"ALSA_LIBRARIES",
+			"_LIBRARIES)",
+			"TARGET_LINK_LIBRARIES(gejengel ",
+			"Flac++",
+			"Libnotify",
+			"Lastfmlib"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"#include \"upnp/",
+			"",
+			"stringops::",
+			"fileops::",
+			"stringops::",
+			"fileops::",
+			"stringops::",
+			"utils::trace",
+			"#include \"utils/",
+			"log::",
+			"#include \"utils/",
+			"log::",
+			"stringops::",
+			"numericops::",
+			"log::",
+			"utils::log::",
+			"utils::log",
+			"_LIBRARIES})",
+			"TARGET_LINK_LIBRARIES(gejengel ${",
+			"Mad",
+			"Flac++",
+			"Libxdgbasedir",
+			"Libnotify"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/upnpframework/upnp/upnpbrowser.cpp",
+					"settings":
+					{
+						"buffer_size": 24158,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1357,
+								1357
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 408.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 268.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 286.0,
+	"status_bar_visible": true
+}

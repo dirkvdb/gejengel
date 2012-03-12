@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F2ED6570-94E5-4882-A516-4E4550650304}</ProjectGuid>
+    <RootNamespace>ui</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\gtkmm-vc100-2_4.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\gtkmm-vc100-d-2_4.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..;..\..\inc\Magick++;..\..\inc\taglib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..;..\..\inc\Magick++;..\..\inc\taglib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="albuminfoview.cpp" />
+    <ClCompile Include="albummodel.cpp" />
+    <ClCompile Include="albumview.cpp" />
+    <ClCompile Include="basiclayout.cpp" />
+    <ClCompile Include="cellrendereralbum.cpp" />
+    <ClCompile Include="cellrendererhoverbutton.cpp" />
+    <ClCompile Include="detailedalbumlayout.cpp" />
+    <ClCompile Include="detailedalbumview.cpp" />
+    <ClCompile Include="librarychangedispatcher.cpp" />
+    <ClCompile Include="mainwindow.cpp" />
+    <ClCompile Include="mouseawaretreeview.cpp" />
+    <ClCompile Include="nowplayingview.cpp" />
+    <ClCompile Include="playqueuemodel.cpp" />
+    <ClCompile Include="playqueueview.cpp" />
+    <ClCompile Include="pluginview.cpp" />
+    <ClCompile Include="pluginwidget.cpp" />
+    <ClCompile Include="preferencesdlg.cpp" />
+    <ClCompile Include="searchbar.cpp" />
+    <ClCompile Include="sharedfunctions.cpp" />
+    <ClCompile Include="simplealbumlayout.cpp" />
+    <ClCompile Include="statusbar.cpp" />
+    <ClCompile Include="systemtray.cpp" />
+    <ClCompile Include="trackmodel.cpp" />
+    <ClCompile Include="trackview.cpp" />
+    <ClCompile Include="uilayoutfactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="albuminfoview.h" />
+    <ClInclude Include="albummodel.h" />
+    <ClInclude Include="albumview.h" />
+    <ClInclude Include="basiclayout.h" />
+    <ClInclude Include="cellrendereralbum.h" />
+    <ClInclude Include="cellrendererhoverbutton.h" />
+    <ClInclude Include="detailedalbumlayout.h" />
+    <ClInclude Include="detailedalbumview.h" />
+    <ClInclude Include="dispatchedsubscriber.h" />
+    <ClInclude Include="librarychangedispatcher.h" />
+    <ClInclude Include="mainwindow.h" />
+    <ClInclude Include="mouseawaretreeview.h" />
+    <ClInclude Include="nowplayingview.h" />
+    <ClInclude Include="overlay.h" />
+    <ClInclude Include="playqueuemodel.h" />
+    <ClInclude Include="playqueueview.h" />
+    <ClInclude Include="pluginview.h" />
+    <ClInclude Include="pluginwidget.h" />
+    <ClInclude Include="preferencesdlg.h" />
+    <ClInclude Include="searchbar.h" />
+    <ClInclude Include="sharedfunctions.h" />
+    <ClInclude Include="signals.h" />
+    <ClInclude Include="simplealbumlayout.h" />
+    <ClInclude Include="statusbar.h" />
+    <ClInclude Include="systemtray.h" />
+    <ClInclude Include="trackmodel.h" />
+    <ClInclude Include="trackview.h" />
+    <ClInclude Include="uilayout.h" />
+    <ClInclude Include="uilayoutfactory.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

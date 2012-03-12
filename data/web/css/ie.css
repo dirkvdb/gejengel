@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Common IE styles
+-----------------------------------------------------------------------------*/
+
+div { zoom: 1; }
+
+
+/* IE6 only styles (prepend with * html)
+-----------------------------------------------------------------------------*/
+
+* html #container {
+	height:100% !important;
+}
+
+* html #header div {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/header_overlay.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html h3 {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/underline.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html h3 span {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/calendar.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #mainNav li a {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/button_bg.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #mainNav li a:hover,a.active {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/button_bg_hover.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #mainNav .on a {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/button_bg_hover.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html .commentOdd, * html .commentEven {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/quote_right.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html .commentOdd blockquote, * html .commentEven blockquote {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/quote_left.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html .comments a {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/comments.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html .comments a:hover {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/comments_add.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html .readMore a {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/book_next.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html a#previous {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/arrow_left.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html a#next {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/arrow_right.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #details li.name {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/16-member.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #details li.address {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/book_addresses.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #details li.email {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/email.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #details li.phone {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/phone.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html #footer div {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/header_overlay.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html form.postit {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/postit.png", sizingMethod="crop"); 	
+	zoom: 1;
+}
+* html form.postit button.btn,a.btn {
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/send_button.png", sizingMethod="crop"); 	
+	zoom: 1;
+}

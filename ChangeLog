@@ -1,0 +1,61 @@
+Gejengel
+Version ?.?.?
+- Fixed albumart loading when changing album art size
+- Search bar only visible when activated
+- Improved audio buffering to avoid playback problems
+- Added option to the simple album view to show track details
+- Fixed wma playback with alsa and pulseaudio output
+- UPnP support added
+- Fixed album art being displayed at startup when nothing is playing
+- Apply sample format changes between files for PulseAudio
+
+Version 0.1.4 (May 25, 2010)
+- Close to tray in stead of minimize to tray
+- Fixed compilation against latest ffmpeg
+- Fixed compilation errors with gcc-4.5.0
+
+Version 0.1.3 (April 13, 2010)
+- Fixed underruns in alsarender on certain hardware
+- Fixed random album art shown at startup
+- Fixed assertion failure in Pulse audio output
+- Fixed 64-bit compilation error
+- Removed libsexy dependency
+
+Version 0.1.2 (November 28, 2009)
+- Option added to minimize to tray
+- Properly use XDG directories for storing config files and data
+- Fixed segmentation fault when destroying dbus plugin
+- Use updated interface of lastfmlib 0.4.0
+- Right clicking on a column header in the track view allows you to select the visible columns
+- Spanish translation added (thanks to mati86dl)
+
+Version 0.1.1 (October 27, 2009)
+- Don't show disc label if no disc info is present
+- Fixed libnotify showing default action in xfce4-notifyd
+- Don't install unnecessary library
+- Requires lastfmlib 0.3.1 now
+
+Version 0.1.0 (July 23, 2009)
+- Save sort order of the treeviews
+- A library scan detects changes in emedded album art
+- Changed Last.fm client identifier
+- Show disc number in track info if present
+
+Version 0.1.0_rc3 (June 26, 2009)
+- CTRL+F puts focus in the search field
+- Basic layout added (no images so low memory usage)
+Bug fixes:
+- Fixed compilation errors with gcc 4.4
+- Fixed library scan not working on certain filesystems
+
+Version 0.1.0_rc2 (June 25, 2009)
+- Albums with same name and different artist are now put in db separately
+Bug fixes:
+- Fixed exception when compiling with only pulseaudio support
+- Fixed tray icon tooltip not properly displaying & symbol
+- Fixed pulseaudio asserts caused by invoking async operation without lock
+- Reset search entry after layout change
+
+Version 0.1.0_rc1 (June 23, 2009)
+- Initial release candidate
+

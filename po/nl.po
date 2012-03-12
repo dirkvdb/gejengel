@@ -1,0 +1,383 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-05 19:45+0100\n"
+"PO-Revision-Date: 2009-07-23 12:21+0100\n"
+"Last-Translator: Dirk Vanden Boer <dirk.vdb@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /home/dirk/projects\n"
+"X-Poedit-SearchPath-0: gejengel\n"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:60
+msgid " Preferences"
+msgstr " Voorkeuren"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/addupnpserverdlg.cpp:36
+#: /home/dirk/projects/gejengelgit/po/../src/ui/addupnpserverdlg.cpp:47
+msgid "Add UPnP server"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:54
+msgid "Add to queue"
+msgstr "Voeg toe aan afspeellijst"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:272
+msgid "Added "
+msgstr "Voegde toe "
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/albumview.cpp:45
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:133
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:64
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:299
+msgid "Album"
+msgstr "Album"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:70
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:334
+#, fuzzy
+msgid "Album Artist"
+msgstr "Artiest"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:47
+msgid "Album art filenames ( seperate by ; )"
+msgstr "Albumhoes bestandsnaam (splits door ; )"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:64
+msgid "Albums"
+msgstr "Albums"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/statusbar.cpp:41
+msgid "Albums: "
+msgstr "Albums:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/albumview.cpp:46
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:46
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:131
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:62
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:289
+msgid "Artist"
+msgstr "Artiest"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:46
+msgid "Audio Backend:"
+msgstr "Geluidsweergave:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:378
+msgid "Basic view"
+msgstr "Basis layout"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:68
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:324
+msgid "Bitrate"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:390
+msgid "Clear play queue"
+msgstr "Wis afspeellijst"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:52
+msgid "Close to tray"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:120
+msgid "Completely rescan the library, clearing the current information"
+msgstr "Bibliotheek geheel opnieuw inlezen, huidige informatie gaat verloren"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:71
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:339
+msgid "Composer"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:48
+msgid "Date added"
+msgstr "Datum toegevoegd"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:377
+msgid "Detailed album view"
+msgstr "Gedetailleerde album layout"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:137
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:309
+msgid "Disc"
+msgstr "Cd"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:67
+msgid "Disc Number"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:65
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:319
+msgid "Duration"
+msgstr "Lengte"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:570
+msgid "Failed to perform search query: "
+msgstr "Zoekopdracht mislukt: "
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:678
+msgid "Failed to switch to UPnP server library: "
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:638
+msgid "Failed to switch to local filesystem library: "
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:112
+msgid "General"
+msgstr "Algemeen"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:66
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:314
+msgid "Genre"
+msgstr "Genre"
+
+#: /home/dirk/projects/gejengelgit/po/../src/Plugins/dbusplugin.cpp:143
+msgid "Implements the MPRIS specification allowing control through dbus"
+msgstr ""
+"Implementeerd the MPRIS specificatie, waardoor bediening door dbus mogelijk "
+"wordt"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:44
+msgid "Large"
+msgstr "Groot"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:44
+msgid "Library location:"
+msgstr "Bibliotheek locatie:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:326
+msgid "Library scan failed"
+msgstr "Bibliotheek inlezen is mislukt"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:317
+msgid "Library scan finished"
+msgstr "Bibliotheek inlezen is voltooid"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:383
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:464
+msgid "Local filesystem"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/Plugins/notificationplugin.cpp:118
+msgid "Notification plugin"
+msgstr "Notificatie plugin"
+
+#: /home/dirk/projects/gejengelgit/po/../src/Plugins/lastfmplugin.cpp:272
+msgid "Password: "
+msgstr "Wachtwoord:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:69
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:329
+msgid "Path"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/playqueueview.cpp:39
+#: /home/dirk/projects/gejengelgit/po/../src/ui/playqueueview.cpp:142
+#: /home/dirk/projects/gejengelgit/po/../src/ui/playqueueview.cpp:146
+msgid "Play queue"
+msgstr "Afspeellijst"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:113
+msgid "Plugins"
+msgstr "Uitbreidingen"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:41
+msgid "Preferences"
+msgstr "Voorkeuren"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/systemtray.cpp:86
+msgid "Put an icon in the system tray"
+msgstr "Plaats een icoon in het systeemvak"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/albuminfoview.cpp:51
+#, fuzzy
+msgid "Queue album"
+msgstr "Voeg een willekeurig album toe"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:389
+msgid "Queue random album"
+msgstr "Voeg een willekeurig album toe"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:388
+msgid "Queue random tracks"
+msgstr "Voeg willekeurige liedjes toe"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:49
+msgid "Save play queue on exit"
+msgstr "Bewaar afspeellijst bij het afsluiten"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:48
+msgid "Scan library at startup"
+msgstr "Doorzoek de bibliotheek bij het opstarten"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:266
+msgid "Scan library failed: "
+msgstr "Bibliotheek inlezen voltooid: "
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:299
+msgid "Scanning library"
+msgstr "Bibliotheek wordt ingelezen"
+
+#: /home/dirk/projects/gejengelgit/po/../src/Plugins/lastfmplugin.cpp:210
+msgid "Scrobble your tracks on Last.fm"
+msgstr "Verzamel afspeel gegevens op Last.fm"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/addupnpserverdlg.cpp:37
+msgid "Select a upnp container containing albums"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:45
+msgid "Select library location"
+msgstr "Selecteer bibliotheek locatie"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/addupnpserverdlg.cpp:38
+#, fuzzy
+msgid "Server name: "
+msgstr "Gebruikersnaam:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/Plugins/notificationplugin.cpp:123
+msgid "Show notifications for played tracks"
+msgstr "Laat meldingen zien van nieuwe nummers"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:51
+msgid "Show tray icon"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:376
+msgid "Simple album view"
+msgstr "Eenvoudige album layout"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:45
+msgid "Small"
+msgstr "Klein"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:86
+msgid "Sort by"
+msgstr "Sorteer op"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:261
+msgid "Starting library scan, obtaining directory information"
+msgstr ""
+"Bibliotheek inlezen wordt gestart, bezig met het verkrijgen van directory "
+"informatie"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/systemtray.cpp:81
+msgid "System tray"
+msgstr "Systeemvak"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:47
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:132
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:63
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:294
+msgid "Title"
+msgstr "Titel"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:135
+msgid "Track"
+msgstr "Nummer"
+
+#. This order must be the same as the "add" order in the TrackModel to assure matching ids!
+#: /home/dirk/projects/gejengelgit/po/../src/ui/trackview.cpp:61
+#, fuzzy
+msgid "Track Number"
+msgstr "Nummers:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/statusbar.cpp:44
+msgid "Tracks: "
+msgstr "Nummers:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/preferencesdlg.cpp:115
+msgid "UPnP"
+msgstr ""
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:218
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:219
+msgid "Unknown"
+msgstr "Onbekend"
+
+#: /home/dirk/projects/gejengelgit/po/../src/Plugins/lastfmplugin.cpp:271
+msgid "Username: "
+msgstr "Gebruikersnaam:"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/detailedalbumview.cpp:76
+msgid "View"
+msgstr "Beeld"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/nowplayingview.cpp:134
+msgid "Year"
+msgstr "Jaar"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:369
+msgid "_Edit"
+msgstr "_Wijzig"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:365
+msgid "_File"
+msgstr "_Bestand"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:392
+msgid "_Help"
+msgstr "_Help"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:382
+#, fuzzy
+msgid "_Library"
+msgstr "Bibliotheek opniew _inlezen"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:366
+msgid "_Rescan library"
+msgstr "Bibliotheek opniew _inlezen"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:386
+msgid "_Tools"
+msgstr "_Extra"
+
+#: /home/dirk/projects/gejengelgit/po/../src/ui/mainwindow.cpp:372
+msgid "_View"
+msgstr "B_eeld"
+
+#: /home/dirk/projects/gejengelgit/po/../src/Plugins/lastfmplugin.cpp:261
+msgid "settings"
+msgstr "instellingen"
+
+#~ msgid "Enabled"
+#~ msgstr "Ingeschakeld"
+
+#~ msgid "Failed to get albums from database: "
+#~ msgstr "Album uit de database halen is mislukt: "
+
+#~ msgid "Last.fm"
+#~ msgstr "Last.fm"
+
+#, fuzzy
+#~ msgid "PlayQueue"
+#~ msgstr "Afspeellijst"
+
+#~ msgid "Plugin"
+#~ msgstr "Uitbreiding"
+
+#~ msgid "Unknown Album"
+#~ msgstr "Onbekend album"
+
+#~ msgid "Unknown Artist"
+#~ msgstr "Onbekende artiest"
+
+#~ msgid "Unknown Title"
+#~ msgstr "Onbekende titel"
+
+#~ msgid "Various Artists"
+#~ msgstr "Meerdere artiesten"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "_Volledig scherm"

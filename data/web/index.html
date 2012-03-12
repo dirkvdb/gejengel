@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!--[if IE]>
+<link href="css/ie.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<title>Gejengel</title>
+</head>
+<body>
+<div id="container">
+  <div id="header">
+    <div>
+      <h1><a href="index.html">Gejengel</a><br/><span>Lightweight audio player</span></h1>
+      <ul id="mainNav">
+        <li class="on"><a href="index.html">Home</a></li>
+        <li><a href="screenshots.html">Screenshots</a></li>
+        <li><a href="download.html">Download</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="content">
+    <div id="main">
+      <div>
+        <img class="right" src="screenshots/largealbums_small.png" alt="UI image" />
+      </div>
+      <div>
+        <h2>Introduction</h2>
+        Gejengel is an audio player which focuses on performance and simplicity, yet with a nice set of features.<br/>
+        Some key features:
+        <ul>
+            <li>Easy to use</li>
+            <li>Properly handles compilation albums (even if album artist tag is not set)</li>
+            <li>Lean and fast (low on dependencies)</li>
+            <li>Gapless playback (even for mp3 by reading encoder delay, zeropadding from files)</li>
+            <li>Various audio outputs (Alsa, Pulseaudio, OpenAL)</li>
+            <li>Last.Fm scrobbling (optional plugin)</li>
+            <li>Remote control through dbus (MPRIS specification) (optional plugin)</li>
+        </ul>
+        <h2>News</h2>
+        <h3><span>13<br/>Apr</span><a>Gejengel 0.1.3 released</a></h3>
+        <p>Version 0.1.3 has been released, containing some bug fixes.</p>
+        <p>
+            <ul>
+                <li>Fixed underruns in alsarender on certain hardware</li>
+                <li>Fixed random album art shown at startup</li>
+                <li>Fixed assertion failure in Pulse audio output</li>
+                <li>Fixed 64-bit compilation error</li>
+                <li>Removed libsexy dependency</li>
+            </ul>
+        </p>
+        <h3><span>28<br/>Nov</span><a>Gejengel 0.1.2 released</a></h3>
+        <p>Version 0.1.2 has been released, containing some bug fixes and minor improvements.</p>
+        <p>
+            <ul>
+                <li>Option added to minimize to tray</li>
+                <li>Properly use XDG directories for storing config files and data</li>
+                <li>Fixed segmentation fault when destroying dbus plugin</li>
+                <li>Use updated interface of lastfmlib 0.4.0</li>
+                <li>Right clicking on a column header in the track view allows you to select the visible columns</li>
+                <li>Spanish translation added (thanks to mati86dl)</li>
+            </ul>
+        </p>
+        <h3><span>27<br/>Oct</span><a>Gejengel 0.1.1 released</a></h3>
+        <p>Version 0.1.1 has been released, containing some bug fixes and minor improvements.</p>
+        <p>
+            <ul>
+                <li>Don't show disc label if no disc info is present</li>
+                <li>Fixed libnotify showing default action in xfce4-notifyd</li>
+                <li>Don't install unnecessary library</li>
+                <li>Requires lastfmlib 0.3.1 now</li>
+            </ul>
+        </p>
+        <h3><span>23<br/>July</span><a>Gejengel 0.1.0 released</a></h3>
+        <p>Version 0.1.0 has been released, containing some bug fixes and minor improvements.</p>
+        <p>
+            <ul>
+                <li>Save sort order of the treeviews</li>
+                <li>A library scan detects changes in emedded album art</li>
+                <li>Changed Last.fm client identifier</li>
+                <li>Show disc number in track info if present</li>
+            </ul>
+        </p>
+        <h3><span>26<br/>June</span><a>Gejengel 0.1.0_rc3 released</a></h3>
+        <p>A third release candidate has been released, containing some important bug fixes.</p>
+        <p>
+            <ul>
+                <li>CTRL+F puts focus in the search field</li>
+                <li>Basic layout added (no images so low memory usage)</li>
+                <br/>Bug fixes:
+                <li>Fixed compilation errors with gcc 4.4</li>
+                <li>Fixed library scan not working on certain filesystems</li>
+            </ul>
+        </p>
+        <h3><span>25<br/>June</span><a>Gejengel 0.1.0_rc2 released</a></h3>
+        <p>A second release candidate has been released, get it in the <a href="download.html">download</a> section.</p>
+        <p>
+            <ul>
+                <li>Albums with same name and different artist are now put in db separately</li>
+                <br/>Bug fixes:
+                <li>Fixed exception when compiling with only pulseaudio support</li>
+                <li>Fixed tray icon tooltip not properly displaying & symbol</li>
+                <li>Fixed pulseaudio asserts caused by invoking async operation without lock</li>
+                <li>Reset search entry after layout change</li>
+            </ul>
+        </p>
+        <h3><span>23<br/>June</span><a>Gejengel 0.1.0_rc1 released</a></h3>
+        <p>A first release candidate has been created, get it in the <a href="download.html">download</a> section.</p>
+        <h3><span>20<br/>June</span><a>Gejengel considered ready for pre alpha testing</a></h3>
+        <p>I think the project has reached a stage where it is ready for testing by people who are interested. Currently the only possibility
+        is to build the project from subversion.<br/><br/>
+        To build from subversion run the following commands: <br/><br/>
+        <div id="highlight"><div>
+        <em>
+        svn checkout http://gejengel.googlecode.com/svn/trunk/ gejengel<br/>
+        cd gejengel<br/>
+        ./autogen.sh<br/>
+        ./configure<br/>
+        make<br/>
+        sudo make install<br/>
+        </em>
+        </div>
+        </div>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <div>
+      <p class="left">Copyright 2008
+      <a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/"></a><br />This work is licenced under a
+      <a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/">Creative Commons Licence</a>.</p>
+      <p class="right">Design by <a href="http://www.pixelfuze.co.uk">PixelFuze</a></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

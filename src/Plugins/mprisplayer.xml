@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<node name="/">
+    <interface name="org.freedesktop.MediaPlayer">
+        <method name="Next">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        <method name="Prev">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        <method name="Pause">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        <method name="Stop">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        <method name="Play">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="GetCaps">
+            <arg type="i" direction="out" />
+        </method>
+
+        <method name="VolumeSet">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+            <arg type="i"/>
+        </method>
+        <method name="VolumeGet">
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="PositionSet">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+            <arg type="i"/>
+        </method>
+        <method name="PositionGet">
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="Repeat">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+            <arg type="b" />
+        </method>
+
+        <method name="GetMetadata">
+            <arg type="a{sv}" direction="out" />
+        </method>
+
+        <method name="GetStatus">
+            <arg type="(iiii)" direction="out"/>
+        </method>
+
+        <signal name="TrackChange">
+            <arg type="a{sv}"/>
+        </signal>
+        <signal name="StatusChange">
+            <arg type="(iiii)"/>
+        </signal>
+        <signal name="CapsChange">
+            <arg type="i" />
+        </signal>
+    </interface>
+</node>
+
