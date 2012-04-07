@@ -71,12 +71,12 @@ void UPnPTrackFetcher::fetchTrack(const std::string& trackId, Track& track)
 void UPnPTrackFetcher::fetchFirstTrack(const std::string& containerId, utils::ISubscriber<Track>& subscriber)
 {
     upnp::Item container(containerId);
-    m_Browser.getItems(*this, container, 1, 0, "upnp:originalTrackNumber", &subscriber);
+    m_Browser.getItems(*this, container, 1, 0, "+upnp:originalTrackNumber", &subscriber);
 }
 
 void UPnPTrackFetcher::fetchFirstTrackAsync(const std::string& containerId, utils::ISubscriber<Track>& subscriber)
 {
-    m_Browser.getItemsAsync(*this, upnp::Item(containerId), 1, 0, "upnp:originalTrackNumber", &subscriber);
+    m_Browser.getItemsAsync(*this, upnp::Item(containerId), 1, 0, "+upnp:originalTrackNumber", &subscriber);
 }
 
 void UPnPTrackFetcher::fetchTrackAsync(const std::string& trackId, utils::ISubscriber<Track>& subscriber)
@@ -89,13 +89,13 @@ void UPnPTrackFetcher::fetchTracks(const std::string& containerId, utils::ISubsc
 {
     resetTrackCount();
     upnp::Item container(containerId);
-    m_Browser.getItems(*this, container, 0, 0, "upnp:originalTrackNumber", &subscriber);
+    m_Browser.getItems(*this, container, 0, 0, "+upnp:originalTrackNumber", &subscriber);
 }
 
 void UPnPTrackFetcher::fetchTracksAsync(const std::string& containerId, utils::ISubscriber<Track>& subscriber)
 {
     resetTrackCount();
-    m_Browser.getItemsAsync(*this, upnp::Item(containerId), 0, 0, "upnp:originalTrackNumber", &subscriber);
+    m_Browser.getItemsAsync(*this, upnp::Item(containerId), 0, 0, "+upnp:originalTrackNumber", &subscriber);
 }
 
 void UPnPTrackFetcher::itemToTrack(upnp::Item& item, Track& track)
@@ -114,7 +114,7 @@ void UPnPTrackFetcher::itemToTrack(upnp::Item& item, Track& track)
     if (!item.getResources().empty())
     {
         track.filepath = item.getResources().front().getUrl();
-        track.fileSize = stringops::toNumeric<uint64_t>(item.getResources().front().getMetaData(upnp::Resource::Size));
+        track.fileSize = stringops::toNumeric<uint64_t>(item.getResources().front().getMetaData("size"));
     }
 
     std::string trackNrStr = item.getMetaData("upnp:originalTrackNumber");
@@ -135,29 +135,34 @@ void UPnPTrackFetcher::itemToTrack(upnp::Item& item, Track& track)
         track.year = stringops::toNumeric<uint32_t>(date.substr(0, 4));
     }
 
-    std::string duration = item.getMetaData("duration");
-    if (!duration.empty())
+    auto& resources = item.getResources();
+    if (!resources.empty())
     {
-        track.durationInSec = durationFromString(duration);
-    }
+        auto& resource = resources.front();
+        std::string duration = resource.getMetaData("duration");
+        if (!duration.empty())
+        {
+            track.durationInSec = durationFromString(duration);
+        }
 
-    std::string bitrate = item.getMetaData("bitrate");
-    if (!bitrate.empty())
-    {
-        track.bitrate = stringops::toNumeric<uint32_t>(bitrate);
-        track.bitrate /= 1000;
-    }
+        std::string bitrate = resource.getMetaData("bitrate");
+        if (!bitrate.empty())
+        {
+            track.bitrate = stringops::toNumeric<uint32_t>(bitrate);
+            track.bitrate /= 1000;
+        }
 
-    std::string sampleFrequency = item.getMetaData("sampleFrequency");
-    if (!sampleFrequency.empty())
-    {
-        track.sampleRate = stringops::toNumeric<uint32_t>(sampleFrequency);
-    }
+        std::string sampleFrequency = resource.getMetaData("sampleFrequency");
+        if (!sampleFrequency.empty())
+        {
+            track.sampleRate = stringops::toNumeric<uint32_t>(sampleFrequency);
+        }
 
-    std::string channels = item.getMetaData("nrAudioChannels");
-    if (!channels.empty())
-    {
-        track.channels = stringops::toNumeric<uint32_t>(channels);
+        std::string channels = resource.getMetaData("nrAudioChannels");
+        if (!channels.empty())
+        {
+            track.channels = stringops::toNumeric<uint32_t>(channels);
+        }
     }
 
     track.artUrl = item.getMetaData("upnp:albumArtURI");
