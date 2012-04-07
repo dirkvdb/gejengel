@@ -88,6 +88,11 @@ AddUPnPServerDlg::AddUPnPServerDlg(MusicLibrary& library)
     m_DeviceScanner.DeviceDiscoveredEvent.connect(std::bind(&SignalUIDispatcher<const upnp::Device&>::onItem, &m_DeviceAddedDispatcher, _1), &m_DeviceAddedDispatcher);
     m_DeviceScanner.DeviceDissapearedEvent.connect(std::bind(&SignalUIDispatcher<const upnp::Device&>::onItem, &m_DeviceRemovedDispatcher, _1), &m_DeviceRemovedDispatcher);
 
+    if (m_IOwnControlPoint)
+    {
+        m_pCtrlPoint->initialize();
+    }
+
     m_DeviceScanner.start();
     m_DeviceScanner.refresh();
 }
