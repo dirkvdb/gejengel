@@ -1,3 +1,9 @@
 [submodule "modules/upnpframework"]
 	path = modules/upnpframework
 	url = https://bitbucket.org/dirk_vdb/upnpframework.git
+[submodule "utils"]
+	path = utils
+	url = https://bitbucket.org/dirk_vdb/utils.git
+[submodule "modules/utils"]
+	path = modules/utils
+	url = https://bitbucket.org/dirk_vdb/utils.git
