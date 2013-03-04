@@ -8,6 +8,8 @@ Version 0.1.6 (March 5, 2012)
 - Fixed album art being displayed at startup when nothing is playing
 - Apply sample format changes between files for PulseAudio
 - Support newer versions of ffmpeg
+- Moved to git
+- Moved to cmake
 
 Version 0.1.4 (May 25, 2010)
 - Close to tray in stead of minimize to tray
