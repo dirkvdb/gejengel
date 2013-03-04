@@ -47,6 +47,7 @@ int main(int argc, char **argv)
     }
 
 #ifdef HAVE_GETTEXT
+    log::info("%s %s", GETTEXT_PACKAGE, GEJENGEL_LOCALEDIR);
     bindtextdomain(GETTEXT_PACKAGE, GEJENGEL_LOCALEDIR);
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     textdomain(GETTEXT_PACKAGE);
