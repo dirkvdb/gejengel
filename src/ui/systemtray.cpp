@@ -46,7 +46,7 @@ SystemTray::SystemTray()
     utils::trace("Create SystemTray");
     initPopupMenu();
 
-    log::debug("GTKMM Major", GTKMM_MAJOR_VERSION, "Minor", GTKMM_MINOR_VERSION, "Micro", GTKMM_MICRO_VERSION);
+    log::debug("GTKMM Major %d Minor %d Micro %d", GTKMM_MAJOR_VERSION, GTKMM_MINOR_VERSION, GTKMM_MICRO_VERSION);
 }
 
 SystemTray::~SystemTray()
@@ -98,7 +98,7 @@ void SystemTray::onPlay(const Gejengel::Track& track)
     }
     catch (std::exception& e)
     {
-        log::error("SystemTray: Failed to get album:", e.what());
+        log::error("SystemTray: Failed to get album: %s", e.what());
     }
 }
 
@@ -267,7 +267,7 @@ void SystemTray::initPopupMenu()
     }
     catch(const Glib::Error& ex)
     {
-        log::error("Building menus failed:", ex.what());
+        log::error("Building menus failed: %s", ex.what());
     }
 
     m_pMenu = dynamic_cast<Gtk::Menu*>(m_UIManager->get_widget("/PopupMenu"));

@@ -40,10 +40,10 @@ public:
 	AlbumArtGrabber(IGejengelCore& core);
 	virtual ~AlbumArtGrabber();
 
-	void getAlbumArt(const Album& album, utils::ISubscriber<AlbumArt>& subscriber);
-	void getAlbumArt(const Track& track, utils::ISubscriber<AlbumArt>& subscriber);
-	void getAlbumArtFromSource(const Album& album, uint32_t size, utils::ISubscriber<AlbumArt>& subscriber);
-	void getAlbumArtFromSource(const Track& track, uint32_t size, utils::ISubscriber<AlbumArt>& subscriber);
+	void getAlbumArt(const Album& album, utils::ISubscriber<const AlbumArt&>& subscriber);
+	void getAlbumArt(const Track& track, utils::ISubscriber<const AlbumArt&>& subscriber);
+	void getAlbumArtFromSource(const Album& album, uint32_t size, utils::ISubscriber<const AlbumArt&>& subscriber);
+	void getAlbumArtFromSource(const Track& track, uint32_t size, utils::ISubscriber<const AlbumArt&>& subscriber);
 
 private:
 	template <typename T>
@@ -51,12 +51,12 @@ private:
 	{
 	public:
 		WorkDescription() {}
-		WorkDescription(const T& item, utils::ISubscriber<AlbumArt>& subscriber, uint32_t size = -1)
+		WorkDescription(const T& item, utils::ISubscriber<const AlbumArt&>& subscriber, uint32_t size = -1)
 		: item(item), pSubscriber(&subscriber), size(size) {}
 
-		T 								item;
-		utils::ISubscriber<AlbumArt>* 	pSubscriber;
-		uint32_t 						size;
+		T 								        item;
+		utils::ISubscriber<const AlbumArt&>* 	pSubscriber;
+		uint32_t 						        size;
 	};
 
 	template <typename T>

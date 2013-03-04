@@ -43,7 +43,7 @@ public:
     virtual void onQueueCleared() {}
 };
 
-class PlayQueue : public utils::ISubscriber<Track>
+class PlayQueue : public utils::ISubscriber<const Track&>
 {
 public:
     PlayQueue(IGejengelCore& core);

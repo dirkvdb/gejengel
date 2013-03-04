@@ -30,10 +30,10 @@ class AlbumArt;
 class IAlbumArtProvider
 {
 public:
-    virtual void getAlbumArt(const Album& album, utils::ISubscriber<AlbumArt>& subscriber) = 0;
-    virtual void getAlbumArt(const Track& track, utils::ISubscriber<AlbumArt>& subscriber) = 0;
-    virtual void getAlbumArtFromSource(const Album& album, uint32_t size, utils::ISubscriber<AlbumArt>& subscriber) = 0;
-    virtual void getAlbumArtFromSource(const Track& track, uint32_t size, utils::ISubscriber<AlbumArt>& subscriber) = 0;
+    virtual void getAlbumArt(const Album& album, utils::ISubscriber<const AlbumArt&>& subscriber) = 0;
+    virtual void getAlbumArt(const Track& track, utils::ISubscriber<const AlbumArt&>& subscriber) = 0;
+    virtual void getAlbumArtFromSource(const Album& album, uint32_t size, utils::ISubscriber<const AlbumArt&>& subscriber) = 0;
+    virtual void getAlbumArtFromSource(const Track& track, uint32_t size, utils::ISubscriber<const AlbumArt&>& subscriber) = 0;
 };
 
 }

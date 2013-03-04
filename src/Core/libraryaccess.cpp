@@ -66,7 +66,7 @@ void LibraryAccess::setLibraryType(LibraryType type)
     }
     catch (std::exception& e)
 	{
-		log::error("LibraryAccess::setLibraryType Failed to load library, falling back to local library:", e.what());
+		log::error("LibraryAccess::setLibraryType Failed to load library, falling back to local library: %s", e.what());
 		m_LibraryType = Local;
 		m_Library.reset(MusicLibraryFactory::create(m_LibraryType, m_Settings));
 	}
@@ -110,7 +110,7 @@ uint32_t LibraryAccess::getAlbumCount()
 	return 0;
 }
 
-void LibraryAccess::getTrackAsync(const std::string& id, utils::ISubscriber<Track>& subscriber)
+void LibraryAccess::getTrackAsync(const std::string& id, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -119,7 +119,7 @@ void LibraryAccess::getTrackAsync(const std::string& id, utils::ISubscriber<Trac
 	}
 }
 
-void LibraryAccess::getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void LibraryAccess::getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -128,7 +128,7 @@ void LibraryAccess::getTracksFromAlbumAsync(const std::string& albumId, utils::I
 	}
 }
 
-void LibraryAccess::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void LibraryAccess::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -137,7 +137,7 @@ void LibraryAccess::getFirstTrackFromAlbum(const std::string& albumId, utils::IS
 	}
 }
 
-void LibraryAccess::getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void LibraryAccess::getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -146,7 +146,7 @@ void LibraryAccess::getFirstTrackFromAlbumAsync(const std::string& albumId, util
 	}
 }
 
-void LibraryAccess::getAlbumAsync(const std::string& albumId, utils::ISubscriber<Album>& subscriber)
+void LibraryAccess::getAlbumAsync(const std::string& albumId, utils::ISubscriber<const Album&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -155,7 +155,7 @@ void LibraryAccess::getAlbumAsync(const std::string& albumId, utils::ISubscriber
 	}
 }
 
-void LibraryAccess::getAlbumsAsync(utils::ISubscriber<Album>& subscriber)
+void LibraryAccess::getAlbumsAsync(utils::ISubscriber<const Album&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -164,7 +164,7 @@ void LibraryAccess::getAlbumsAsync(utils::ISubscriber<Album>& subscriber)
 	}
 }
 
-void LibraryAccess::getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<Track>& subscriber)
+void LibraryAccess::getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -173,7 +173,7 @@ void LibraryAccess::getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber
 	}
 }
 
-void LibraryAccess::getRandomAlbumAsync(utils::ISubscriber<Track>& subscriber)
+void LibraryAccess::getRandomAlbumAsync(utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())
@@ -202,7 +202,7 @@ void LibraryAccess::scan(bool startFresh, IScanSubscriber& subscriber)
 	}
 }
 
-void LibraryAccess::search(const std::string& search, utils::ISubscriber<Track>& trackSubscriber, utils::ISubscriber<Album>& albumSubscriber)
+void LibraryAccess::search(const std::string& search, utils::ISubscriber<const Track&>& trackSubscriber, utils::ISubscriber<const Album&>& albumSubscriber)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (m_Library.get())

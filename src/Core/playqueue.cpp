@@ -130,7 +130,7 @@ void PlayQueue::queueTrack(const Track& track, int32_t index)
             m_Tracks.insert(iter, track);
         }
     
-        log::debug("Track queued:", track.id);
+        log::debug("Track queued: %s", track.id);
         notifyTrackQueued(listIndex, track);
 
         if (index == -1)
@@ -140,7 +140,7 @@ void PlayQueue::queueTrack(const Track& track, int32_t index)
     }
     catch (std::exception& e)
     {
-        log::error("Failed to queue track (", track.id, ") :", e.what());
+        log::error("Failed to queue track (%s: %s)", track.id, e.what());
     }
 }
 
@@ -156,7 +156,7 @@ void PlayQueue::queueTrack(const std::string& id, int32_t index)
     }
     catch (logic_error& e)
     {
-        log::error("Failed to queue track (", id, ") :", e.what());
+        log::error("Failed to queue track (%s: %s)", id, e.what());
     }
 }
 
@@ -169,7 +169,7 @@ void PlayQueue::queueAlbum(const std::string& id, int32_t index)
     }
     catch (logic_error& e)
     {
-        log::error("Failed to queue album:", e.what());
+        log::error("Failed to queue album: %s", e.what());
     }
 }
 
@@ -182,7 +182,7 @@ void PlayQueue::queueRandomTracks(uint32_t count)
     }
     catch (logic_error& e)
     {
-        log::error("Failed to queue random tracks:", e.what());
+        log::error("Failed to queue random tracks: %s", e.what());
     }
 }
 
@@ -195,7 +195,7 @@ void PlayQueue::queueRandomAlbum()
     }
     catch (logic_error& e)
     {
-        log::error("Failed to queue random album:", e.what());
+        log::error("Failed to queue random album: %s", e.what());
     }
 }
 
@@ -229,7 +229,7 @@ void PlayQueue::removeTrack(uint32_t index)
 
     if (iter == m_Tracks.end())
     {
-        log::error("PlayQueue::removeTrack invalid index:", index);
+        log::error("PlayQueue::removeTrack invalid index: %d", index);
         return;
     }
 

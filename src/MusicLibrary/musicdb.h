@@ -71,11 +71,11 @@ public:
     bool getAlbumArt(const Album& album, AlbumArt& art);
     void setAlbumArt(const std::string& albumId, const std::vector<uint8_t>& data);
 
-    void getRandomTracks(uint32_t trackCount, utils::ISubscriber<Track>& subscriber);
-    void getRandomAlbum(utils::ISubscriber<Track>& subscriber);
-    void getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber);
-    void getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber);
-    void getAlbums(utils::ISubscriber<Album>& subscriber);
+    void getRandomTracks(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber);
+    void getRandomAlbum(utils::ISubscriber<const Track&>& subscriber);
+    void getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber);
+    void getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber);
+    void getAlbums(utils::ISubscriber<const Album&>& subscriber);
     void removeTrack(const std::string& id);
     void removeAlbum(const std::string& id);
 
@@ -83,7 +83,7 @@ public:
     void removeNonExistingAlbums();
     void updateAlbumMetaData();
 
-    void searchLibrary(const std::string& search, utils::ISubscriber<Track>& trackSubscriber, utils::ISubscriber<Album>& albumSubscriber);
+    void searchLibrary(const std::string& search, utils::ISubscriber<const Track&>& trackSubscriber, utils::ISubscriber<const Album&>& albumSubscriber);
     void clearDatabase();
 
 private:

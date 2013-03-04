@@ -26,7 +26,6 @@
 #include "MusicLibrary/metadata.h"
 #include "utils/log.h"
 #include "utils/numericoperations.h"
-#include "utils/scopedlock.h"
 #include "Core/albumartprovider.h"
 #include "Core/gejengel.h"
 #include "sharedfunctions.h"
@@ -98,7 +97,7 @@ void PlayQueueModel::onDispatchedItem(const AlbumArt& art, void* pData)
 					}
 					catch (Gdk::PixbufError& e)
 					{
-						log::error("Failed to load album art for", track.albumId, "(", e.what(), ")");
+						log::error("Failed to load album art for %s (%s)", track.albumId, e.what());
 					}
 				}
 

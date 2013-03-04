@@ -136,7 +136,7 @@ void Settings::saveToFile()
     ofstream file(m_SettingsFile.c_str(), ios_base::trunc);
     if (!file.is_open())
     {
-        log::error("Failed to open settings file for saving: " + m_SettingsFile);
+        log::error("Failed to open settings file for saving: %s", m_SettingsFile);
         return;
     }
 
@@ -166,7 +166,7 @@ void Settings::loadFromFile()
         size_t pos = line.find('=');
         if (pos == string::npos)
         {
-            log::warn("Warning: ignoring malformed line in config file: " + line);
+            log::warn("Warning: ignoring malformed line in config file: %d" + line);
         }
 
         string setting = line.substr(0, pos);

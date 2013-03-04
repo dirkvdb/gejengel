@@ -51,7 +51,7 @@ OpenALRenderer::OpenALRenderer()
     ALenum err = alGetError();
     if (err != AL_NO_ERROR)
     {
-        log::warn("Openal creation error", err);
+        log::warn("Openal creation error $d", err);
     }
     
     alGenBuffers(NUM_BUFFERS, m_AudioBuffers);
@@ -115,7 +115,7 @@ void OpenALRenderer::queueFrame(const AudioFrame& frame)
     ALenum err = alGetError();
     if (err != AL_NO_ERROR)
     {
-        log::warn("Openal queueFrame error", err);
+        log::warn("Openal queueFrame error %d", err);
     }
 }
 
@@ -149,7 +149,7 @@ void OpenALRenderer::flushBuffers()
         ALenum err = alGetError();
         if (err != AL_NO_ERROR)
         {
-            log::warn("Openal flushBuffers error", err);
+            log::warn("Openal flushBuffers error %d", err);
         }
     }
 }

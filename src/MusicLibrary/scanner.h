@@ -32,7 +32,7 @@ class Album;
 class MusicDb;
 class IScanSubscriber;
 
-class Scanner : public fileops::IFileIterator
+class Scanner
 {
 public:
     Scanner(MusicDb& db, IScanSubscriber& subscriber, const std::vector<std::string>& albumArtFilenames);
@@ -40,9 +40,11 @@ public:
 
     void performScan(const std::string& libraryPath);
     void cancel();
-    bool onFile(const std::string& filepath);
 
 private:
+    void scan(const std::string& dir);
+    void onFile(const std::string& filepath);
+
     MusicDb&                        m_LibraryDb;
     IScanSubscriber&                m_ScanSubscriber;
     int32_t                         m_ScannedFiles;

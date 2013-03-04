@@ -192,7 +192,7 @@ void DetailedAlbumView::onCellButtonClicked(const Glib::ustring& rowPath, const 
 {
     if (buttonName == CellRendererAlbum::QueueAlbum)
     {
-        log::info("Queue album:", rowPath);
+        log::info("Queue album: %s", rowPath);
         signalAlbumQueued.emit((*(m_AlbumModel.getStore()->get_iter(Gtk::TreePath(rowPath))))[m_AlbumModel.columns().id], -1);
     }
     else if (buttonName == CellRendererAlbum::ShowTrackInfo)

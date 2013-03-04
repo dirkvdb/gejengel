@@ -175,7 +175,7 @@ uint32_t readMpegHeader(IReader& reader, MpegHeader& header, uint32_t& xingPos)
     int32_t bitrateCode = (headerBytes[2] & 0xF0) >> 4;
     if (!(bitrateCode >= 0x00 && bitrateCode <= 0x0E))
     {
-        log::debug("Invalid bitrate code:", bitrateCode);
+        log::debug("Invalid bitrate code: %d", bitrateCode);
         reader.seekAbsolute(startPos);
         return 0;
     }
@@ -188,7 +188,7 @@ uint32_t readMpegHeader(IReader& reader, MpegHeader& header, uint32_t& xingPos)
     int32_t sampleRateCode = (headerBytes[2] & 0x0c) >> 2;
     if (!(sampleRateCode >= 0x00 && sampleRateCode <= 0x02))
     {
-        log::debug("Invalid samplerate code:", sampleRateCode);
+        log::debug("Invalid samplerate code: %d", sampleRateCode);
         reader.seekAbsolute(startPos);
         return 0;
     }
@@ -216,7 +216,7 @@ uint32_t readMpegHeader(IReader& reader, MpegHeader& header, uint32_t& xingPos)
         break;
     default:
         header.channelMode = MpegHeader::UnknownChannelMode;
-        log::debug("Invalid channelMode:", channelCode);
+        log::debug("Invalid channelMode: %d", channelCode);
         reader.seekAbsolute(startPos);
         return 0;
     }

@@ -43,7 +43,12 @@ FilesystemMusicLibrary::FilesystemMusicLibrary(const Settings& settings)
 FilesystemMusicLibrary::~FilesystemMusicLibrary()
 {
 	m_Destroy = true;
-	if (m_ScannerThread.joinable())
+	cancelScanThread();
+}
+
+void FilesystemMusicLibrary::cancelScanThread()
+{
+    if (m_ScannerThread.joinable())
 	{
 		{
 			std::lock_guard<std::mutex> lock(m_ScanMutex);
@@ -75,29 +80,29 @@ void FilesystemMusicLibrary::getTrack(const std::string& id, Track& track)
     }
 }
 
-void FilesystemMusicLibrary::getTrackAsync(const std::string& id, utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getTrackAsync(const std::string& id, utils::ISubscriber<const Track&>& subscriber)
 {
     Track track;
     getTrack(id, track);
     subscriber.onItem(track);
 }
 
-void FilesystemMusicLibrary::getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     m_Db.getTracksFromAlbum(albumId, subscriber);
 }
 
-void FilesystemMusicLibrary::getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     getTracksFromAlbum(albumId, subscriber);
 }
 
-void FilesystemMusicLibrary::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     m_Db.getFirstTrackFromAlbum(albumId, subscriber);
 }
 
-void FilesystemMusicLibrary::getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
 	getFirstTrackFromAlbum(albumId, subscriber);
 }
@@ -107,38 +112,38 @@ void FilesystemMusicLibrary::getAlbum(const std::string& albumId, Album& album)
     m_Db.getAlbum(albumId, album);
 }
 
-void FilesystemMusicLibrary::getAlbumAsync(const std::string& albumId, utils::ISubscriber<Album>& subscriber)
+void FilesystemMusicLibrary::getAlbumAsync(const std::string& albumId, utils::ISubscriber<const Album&>& subscriber)
 {
 	Album album;
     m_Db.getAlbum(albumId, album);
     subscriber.onItem(album);
 }
 
-void FilesystemMusicLibrary::getRandomTracks(uint32_t trackCount, utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getRandomTracks(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber)
 {
     m_Db.getRandomTracks(trackCount, subscriber);
 }
 
-void FilesystemMusicLibrary::getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber)
 {
 	getRandomTracks(trackCount, subscriber);
 }
 
-void FilesystemMusicLibrary::getRandomAlbum(utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getRandomAlbum(utils::ISubscriber<const Track&>& subscriber)
 {
     m_Db.getRandomAlbum(subscriber);
 }
 
-void FilesystemMusicLibrary::getRandomAlbumAsync(utils::ISubscriber<Track>& subscriber)
+void FilesystemMusicLibrary::getRandomAlbumAsync(utils::ISubscriber<const Track&>& subscriber)
 {
 	getRandomAlbum(subscriber);
 }
-void FilesystemMusicLibrary::getAlbums(utils::ISubscriber<Album>& subscriber)
+void FilesystemMusicLibrary::getAlbums(utils::ISubscriber<const Album&>& subscriber)
 {
     m_Db.getAlbums(subscriber);
 }
 
-void FilesystemMusicLibrary::getAlbumsAsync(utils::ISubscriber<Album>& subscriber)
+void FilesystemMusicLibrary::getAlbumsAsync(utils::ISubscriber<const Album&>& subscriber)
 {
     getAlbums(subscriber);
 }
@@ -158,10 +163,12 @@ void FilesystemMusicLibrary::scan(bool startFresh, IScanSubscriber& subscriber)
     }
 
     m_LibraryPath = libraryPath;
+    
+    cancelScanThread();
     m_ScannerThread = std::thread(&FilesystemMusicLibrary::scannerThread, this, std::ref(subscriber));
 }
 
-void FilesystemMusicLibrary::search(const std::string& searchString, utils::ISubscriber<Track>& trackSubscriber, utils::ISubscriber<Album>& albumSubscriber)
+void FilesystemMusicLibrary::search(const std::string& searchString, utils::ISubscriber<const Track&>& trackSubscriber, utils::ISubscriber<const Album&>& albumSubscriber)
 {
     m_Db.searchLibrary(searchString, trackSubscriber, albumSubscriber);
 }
@@ -196,7 +203,7 @@ void FilesystemMusicLibrary::scannerThread(IScanSubscriber& subscriber)
     }
     catch (std::exception& e)
     {
-        log::error(string("Failed to scan library: ") + e.what());
+        log::error("Failed to scan library: %s", e.what());
         subscriber.scanFailed();
     }
 }

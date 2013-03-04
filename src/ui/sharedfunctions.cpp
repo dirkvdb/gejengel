@@ -115,7 +115,9 @@ Glib::RefPtr<Gdk::Pixbuf> createCoverPixBufWithOverlay(const AlbumArt& albumArt,
         Magick::Blob cdCaseBlob(cdCaseData, sizeof(cdCaseData));
         Magick::Image cdCase(cdCaseBlob, Magick::Geometry(intermediateGeometry.str()), "PNG");
 
-        Magick::Image result(Magick::Geometry(intermediateGeometry.str()), Magick::Color(0, 0, 0, MaxRGB));
+        Magick::Quantum maxRgb;
+        {using namespace Magick; maxRgb = MaxRGB;} // Magick::MaxRGB; quits with the compile-time error "'Quantum' was not declared in this scope"
+        Magick::Image result(Magick::Geometry(intermediateGeometry.str()), Magick::Color(0, 0, 0, maxRgb));
         result.composite(coverImage, coverImageOffsetX, coverImageOffsetY, Magick::CopyCompositeOp);
         result.composite(cdCase, 0, 0, Magick::OverCompositeOp);
         result.scale(Magick::Geometry(finalGeometry.str()));
@@ -133,7 +135,7 @@ Glib::RefPtr<Gdk::Pixbuf> createCoverPixBufWithOverlay(const AlbumArt& albumArt,
     }
     catch (Magick::Exception& e)
     {
-        log::warn("Creating cover with overlay failed:", e.what());
+        log::warn("Creating cover with overlay failed: %s", e.what());
         return createCoverPixBuf(albumArt, size);
     }
 }

@@ -43,30 +43,30 @@ public:
     virtual uint32_t getAlbumCount() = 0;
 
     virtual void getTrack(const std::string& id, Track& track) = 0;
-    virtual void getTrackAsync(const std::string& id, utils::ISubscriber<Track>& subscriber) = 0;
+    virtual void getTrackAsync(const std::string& id, utils::ISubscriber<const Track&>& subscriber) = 0;
 
-    virtual void getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber) = 0;
-    virtual void getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber) = 0;
+    virtual void getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber) = 0;
+    virtual void getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber) = 0;
 
-    virtual void getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber) = 0;
-    virtual void getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber) = 0;
+    virtual void getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber) = 0;
+    virtual void getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber) = 0;
 
     virtual void getAlbum(const std::string& albumId, Album& album) = 0;
-    virtual void getAlbumAsync(const std::string& albumId, utils::ISubscriber<Album>& subscriber) = 0;
+    virtual void getAlbumAsync(const std::string& albumId, utils::ISubscriber<const Album&>& subscriber) = 0;
 
-    virtual void getAlbums(utils::ISubscriber<Album>& subscriber) = 0;
-    virtual void getAlbumsAsync(utils::ISubscriber<Album>& subscriber) = 0;
+    virtual void getAlbums(utils::ISubscriber<const Album&>& subscriber) = 0;
+    virtual void getAlbumsAsync(utils::ISubscriber<const Album&>& subscriber) = 0;
 
-    virtual void getRandomTracks(uint32_t trackCount, utils::ISubscriber<Track>& subscriber) = 0;
-    virtual void getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<Track>& subscriber) = 0;
+    virtual void getRandomTracks(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber) = 0;
+    virtual void getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber) = 0;
 
-    virtual void getRandomAlbum(utils::ISubscriber<Track>& subscriber) = 0;
-    virtual void getRandomAlbumAsync(utils::ISubscriber<Track>& subscriber) = 0;
+    virtual void getRandomAlbum(utils::ISubscriber<const Track&>& subscriber) = 0;
+    virtual void getRandomAlbumAsync(utils::ISubscriber<const Track&>& subscriber) = 0;
 
     virtual bool getAlbumArt(const Album& album, AlbumArt& art) = 0;
 
     virtual void scan(bool startFresh, IScanSubscriber& subscriber) = 0;
-    virtual void search(const std::string& search, utils::ISubscriber<Track>& trackSubscriber, utils::ISubscriber<Album>& albumSubscriber) = 0;
+    virtual void search(const std::string& search, utils::ISubscriber<const Track&>& trackSubscriber, utils::ISubscriber<const Album&>& albumSubscriber) = 0;
 
     virtual void setSource(const LibrarySource& source) = 0;
 

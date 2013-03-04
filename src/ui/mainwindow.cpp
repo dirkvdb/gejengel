@@ -137,7 +137,7 @@ void MainWindow::loadSettings()
             // only break if the server was found, if it wasn't found we fall through to Local db
             break;
         }
-        log::error("UPnP server from preferences (", upnpServer, ") was not found, falling back to local filesystem");
+        log::error("UPnP server from preferences (%s) was not found, falling back to local filesystem", upnpServer);
     }
 #endif
     case Local:
@@ -207,7 +207,7 @@ void MainWindow::showPreferences()
 
     if (libraryBefore != libraryAfter)
     {
-        log::info("Library location changed from", libraryBefore, "to", libraryAfter);
+        log::info("Library location changed from %s to %s", libraryBefore, libraryAfter);
         scanLibrary(true);
     }
 
@@ -437,7 +437,7 @@ void MainWindow::init()
     }
     catch(const Glib::Error& ex)
     {
-        log::error("Building menus failed: " +  ex.what());
+        log::error("Building menus failed: %s" + ex.what());
     }
 
     Gtk::Widget* pMenubar = m_UIManager->get_widget("/MenuBar");
@@ -497,7 +497,7 @@ void MainWindow::updateLibraryMenu()
     }
     catch (const Glib::Error& ex)
     {
-        log::error("Failed to add library locations to the menubar:", ex.what());
+        log::error("Failed to add library locations to the menubar: %s", ex.what());
     }
 #endif
 }
@@ -539,7 +539,7 @@ void MainWindow::onSearchClose()
 
 void MainWindow::onSearchChanged(const Glib::ustring& searchString)
 {
-    log::debug("Search:", searchString);
+    log::debug("Search: %s", searchString);
 
     if (!m_LibraryLoaded)
     {
@@ -661,7 +661,7 @@ void MainWindow::loadUPnPLibrary(const upnp::Device& server)
 {
     try
     {
-        log::debug("Load UPnP server:", server.m_UserDefinedName);
+        log::debug("Load UPnP server: %s", server.m_UserDefinedName);
 
         m_Core.getSettings().set("UPnPServerName", server.m_UserDefinedName);
 

@@ -341,7 +341,7 @@ void TrackView::onHeaderEnable(int32_t headerId)
         }
         else
         {
-            log::error("Invalid header id received:", headerId);
+            log::error("Invalid header id received: %d", headerId);
             return;
         }
         

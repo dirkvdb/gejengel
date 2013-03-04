@@ -175,7 +175,7 @@ void AddUPnPServerDlg::onItem(const upnp::Item& container, void* pData)
         {
             if (!addItem(iter, container, *pCurrentDeviceId))
             {
-                log::error("Failed to add container to the tree:", container.getTitle());
+                log::error("Failed to add container to the tree: %s", container.getTitle());
             }
         }
     }

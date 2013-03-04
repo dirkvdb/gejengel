@@ -59,8 +59,8 @@ MadDecoder::MadDecoder(const std::string& uri)
         throw logic_error("File is not an mp3 file: " + m_pReader->url());
     }
 
-    log::debug("Mad Audio format: bits (16) rate (", m_MpegHeader.sampleRate, ") numChannels (", m_MpegHeader.numChannels, ") bitrate (", m_MpegHeader.bitRate, ")");
-    log::debug("Encoderdelay: ", m_LameHeader.encoderDelay, " Zeropadding:", m_LameHeader.zeroPadding);
+    log::debug("Mad Audio format: bits (16) rate (%d) numChannels (%d) bitrate (%d)", m_MpegHeader.sampleRate, m_MpegHeader.numChannels, m_MpegHeader.bitRate);
+    log::debug("Encoderdelay: %d ZeroPadding: %d", m_LameHeader.encoderDelay, m_LameHeader.zeroPadding);
 
     m_pReader->seekAbsolute(m_Id3Size);
 
@@ -186,7 +186,7 @@ bool MadDecoder::readDataIfNecessary()
         }
         //else if (m_FileStream.fail())
         //{
-        //    log::critical("Mad: Failed to read from file:", m_Filepath);
+        //    log::critical("Mad: Failed to read from file: %s", m_Filepath);
         //    m_MadStream.error = MAD_ERROR_BUFPTR;
         //}
         else
@@ -280,7 +280,7 @@ bool MadDecoder::decodeAudioFrame(AudioFrame& frame, bool processSamples)
         if (MAD_RECOVERABLE(m_MadStream.error))
         {
             if (processSamples)
-                log::warn("Decode error, but recoverable:", mad_stream_errorstr(&m_MadStream));
+                log::warn("Decode error, but recoverable: %s", mad_stream_errorstr(&m_MadStream));
         }
         else
         {        
@@ -295,7 +295,7 @@ bool MadDecoder::decodeAudioFrame(AudioFrame& frame, bool processSamples)
             }
             else
             {
-                log::error("Decoder error, unrecoverable:", mad_stream_errorstr(&m_MadStream));
+                log::error("Decoder error, unrecoverable: %s", mad_stream_errorstr(&m_MadStream));
                 return false;
             }
         }
@@ -385,7 +385,7 @@ bool MadDecoder::readHeaders()
     uint32_t xingPos;
     if (MpegUtils::readMpegHeader(*m_pReader, m_MpegHeader, xingPos) == 0)
     {
-        log::debug("No mpeg header found, offset =", m_Id3Size);
+        log::debug("No mpeg header found, offset = %d", m_Id3Size);
         //try a bruteforce scan in the first meg to be really sure
         if (MpegUtils::searchMpegHeader(*m_pReader, m_MpegHeader, m_Id3Size, xingPos) == 0)
         {

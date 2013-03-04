@@ -107,11 +107,11 @@ void PluginManager::initializePlugins()
         {
             if (iter->first->initialize(m_Core))
             {
-                log::info("Plugin initialized: " + iter->first->getName());
+                log::info("Plugin initialized: %s", iter->first->getName());
             }
             else
             {
-                log::error("Failed to initialize plugin: " + iter->first->getName());
+                log::error("Failed to initialize plugin: %s", iter->first->getName());
             }
         }
     }
@@ -222,7 +222,7 @@ void PluginManager::addPlugin(GejengelPlugin& plugin, bool enabled)
     if (!plugin.initialize(m_Core))
     {
         m_Plugins[&plugin] = false;
-        log::error("Failed to initialize plugin: " + plugin.getName());
+        log::error("Failed to initialize plugin: %s", plugin.getName());
     }
 }
 
@@ -250,20 +250,20 @@ bool PluginManager::setPluginEnabled(GejengelPlugin* pPlugin, bool enabled)
         if (!pPlugin->initialize(m_Core))
         {
             m_Plugins[pPlugin] = false;
-            log::error("Failed to initialize plugin: " + pPlugin->getName());
+            log::error("Failed to initialize plugin: %s", pPlugin->getName());
             return false;
         }
         else
         {
             m_Plugins[pPlugin] = true;
-            log::info("Plugin initialized: " + pPlugin->getName());
+            log::info("Plugin initialized: %s", pPlugin->getName());
         }
     }
     else
     {
         m_Plugins[pPlugin] = false;
         pPlugin->destroy();
-        log::debug("Plugin destroyed: " + pPlugin->getName());
+        log::debug("Plugin destroyed: %s", pPlugin->getName());
     }
 
     return true;

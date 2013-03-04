@@ -91,7 +91,7 @@ static bool set_signal_handlers()
 
     if (sigaction(SIGINT, &sa, nullptr) < 0)
     {
-        log::error("Can't catch SIGINT:", strerror(errno));
+        log::error("Can't catch SIGINT: %s", strerror(errno));
         return false;
     }
 
@@ -103,7 +103,7 @@ static bool set_signal_handlers()
 
     if (sigaction(SIGQUIT, &sa, nullptr) < 0)
     {
-        log::error("Can't catch SIGQUIT:", strerror(errno));
+        log::error("Can't catch SIGQUIT: %s", strerror(errno));
         return false;
     }
 
@@ -115,7 +115,7 @@ static bool set_signal_handlers()
 
     if (sigaction(SIGTERM, &sa, nullptr) < 0)
     {
-        log::error("Can't catch SIGTERM:", strerror(errno));
+        log::error("Can't catch SIGTERM: %s", strerror(errno));
         return false;
     }
 

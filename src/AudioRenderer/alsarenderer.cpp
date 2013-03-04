@@ -125,7 +125,7 @@ void AlsaRenderer::setFormat(const AudioFormat& format)
         return;
     }
 
-    log::debug("Format has changed", format.bits, format.rate, format.numChannels, format.framesPerPacket);
+    log::debug("Format has changed %d %d %d %d", format.bits, format.rate, format.numChannels, format.framesPerPacket);
     snd_pcm_format_t formatType;
     switch (format.bits)
     {
@@ -178,7 +178,7 @@ void AlsaRenderer::play()
         snd_pcm_prepare(m_pAudioDevice);
         play();
     default:
-        log::debug("Alsa renderer in unexpected state:", getDeviceStatusString(status));
+        log::debug("Alsa renderer in unexpected state: %s", getDeviceStatusString(status));
     }
 }
 
@@ -314,7 +314,7 @@ void AlsaRenderer::flushBuffers()
 
         if (size > availableBytes)
         {
-            log::warn("Frame is bigger than available size: frameSize:", dataFrames, "Avail:", available);
+            log::warn("Frame is bigger than available size: frameSize: %s Avail: %s", dataFrames, available);
         }
 
         //log::debug("Write frame: alsaAvB:", availableBytes, "AudioBufAvB", size, m_Buffer.bytesUsed());
@@ -324,31 +324,31 @@ void AlsaRenderer::flushBuffers()
         {
             if (status == -EPIPE)
             {
-                log::warn("Alsa: Failed to write frame data: underrun occured (", snd_strerror(status), ")", m_Buffer.bytesUsed());
+                log::warn("Alsa: Failed to write frame data: underrun occured (%s)", snd_strerror(status), m_Buffer.bytesUsed());
                 snd_pcm_prepare(m_pAudioDevice);
                 snd_pcm_start(m_pAudioDevice);
             }
             else if (status == -EBADFD)
             {
-                log::error("Alsa: Failed to write frame data: stream not in right state (", snd_strerror(status), ")");
+                log::error("Alsa: Failed to write frame data: stream not in right state (%s)", snd_strerror(status));
                 snd_pcm_prepare(m_pAudioDevice);
                 snd_pcm_start(m_pAudioDevice);
             }
             else if (status == -ESTRPIPE)
             {
-                log::warn("AlsaCallback: Failed to write frame data: suspend event occured", snd_strerror(status), m_Buffer.bytesUsed());
+                log::warn("AlsaCallback: Failed to write frame data: suspend event occured %s %d", snd_strerror(status), m_Buffer.bytesUsed());
             }
             else if (status == -EAGAIN)
             {
-                log::warn("AlsaCallback: Failed to write frame data: try again (", snd_strerror(status), ")");
+                log::warn("AlsaCallback: Failed to write frame data: try again (%s)", snd_strerror(status));
                 if (snd_pcm_writei(m_pAudioDevice, pData, dataFrames) < 0)
                 {
-                    log::error("AlsaCallback: Failed again, too bad (", snd_strerror(status), ")");
+                    log::error("AlsaCallback: Failed again, too bad (%s)", snd_strerror(status));
                 }
             }
             else
             {
-                log::error("AlsaCallback: unknown error:", snd_strerror(status));
+                log::error("AlsaCallback: unknown error: %s", snd_strerror(status));
             }
         }
         

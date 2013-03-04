@@ -32,7 +32,7 @@ namespace Gejengel
 
 IReader* ReaderFactory::create(const std::string& uri)
 {
-	utils::log::info("ReaderFactory:", uri);
+	utils::log::info("ReaderFactory: %s", uri);
     if (uri.substr(0, 7) == "http://")
     {
 #ifdef HAVE_LIBUPNP

@@ -14,6 +14,7 @@
 #cmakedefine HAVE_FLAC 1
 #cmakedefine HAVE_MAD 1
 #cmakedefine HAVE_GETTEXT 1
+#cmakedefine HAVE_XDGBASEDIR 1
 
 #ifdef HAVE_GETTEXT
 	#define GETTEXT_PACKAGE PACKAGE

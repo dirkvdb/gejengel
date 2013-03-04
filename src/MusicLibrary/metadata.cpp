@@ -244,7 +244,7 @@ bool Metadata::getAlbumArt(vector<uint8_t>& data, const vector<string>& albumArt
         string possibleAlbumArt = fileops::combinePath(dir, albumArtFileList[i]);
         if (fileops::pathExists(possibleAlbumArt) && fileops::readFile(albumArtData, possibleAlbumArt))
         {
-            log::debug("Art found in:", possibleAlbumArt);
+            log::debug("Art found in: %s", possibleAlbumArt);
             if (resizeAlbumArt(&albumArtData.front(), albumArtData.size(), size, data))
             {
                 return true;
@@ -275,7 +275,7 @@ bool Metadata::resizeAlbumArt(const uint8_t* albumArtData, int32_t dataSize, int
     }
     catch (Magick::Exception& e)
     {
-        log::error("Failed to scale image:", e.what());
+        log::error("Failed to scale image: %s", e.what());
         return false;
     }
 

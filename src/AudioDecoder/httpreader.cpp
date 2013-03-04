@@ -91,7 +91,7 @@ uint64_t HttpReader::read(uint8_t* pData, uint64_t size)
     int32_t timeout = 5;
     upnp::HttpGet httpGet(m_Url.c_str(), m_CurrentPosition, upperLimit - m_CurrentPosition, timeout);
     httpGet.get(pData);
-    utils::log::debug("read from: ", m_CurrentPosition, "req:", upperLimit - m_CurrentPosition, "actual:", httpGet.getContentLength());
+    utils::log::debug("read from: %d req: %d actual: %d", m_CurrentPosition, upperLimit - m_CurrentPosition, httpGet.getContentLength());
 
     m_CurrentPosition += httpGet.getContentLength();
 

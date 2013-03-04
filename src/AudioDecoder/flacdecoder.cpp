@@ -18,10 +18,10 @@
 
 #include <stdexcept>
 #include <cassert>
+#include <mutex>
 
 #include "readerfactory.h"
 #include "AudioRenderer/audioframe.h"
-#include "utils/scopedlock.h"
 #include "utils/log.h"
 
 using namespace std;
@@ -140,7 +140,7 @@ FLAC__StreamDecoderReadStatus FlacDecoder::read_callback(FLAC__byte buffer[], si
     }
     catch (std::exception& e)
     {
-        log::error("Flac decoder read failed:", e.what());
+        log::error("Flac decoder read failed: %s", e.what());
         return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
     }
     
@@ -167,7 +167,7 @@ FLAC__StreamDecoderLengthStatus FlacDecoder::length_callback(FLAC__uint64* pStre
     }
     catch (std::exception& e)
     {
-        log::error("Flac decoder get stream length failed:", e.what());
+        log::error("Flac decoder get stream length failed: %s", e.what());
         return FLAC__STREAM_DECODER_LENGTH_STATUS_ERROR;
     }
     
@@ -218,13 +218,13 @@ void FlacDecoder::metadata_callback(const FLAC__StreamMetadata* pMetadata)
         m_Format.numChannels    = pMetadata->data.stream_info.channels;
         m_NumSamples            = pMetadata->data.stream_info.total_samples;
 
-        log::debug("Flac Audio format: bits (", m_Format.bits, ") rate (", m_Format.rate, ") numChannels (", m_Format.numChannels, pMetadata->data.stream_info.max_framesize);
+        log::debug("Flac Audio format: bits (%d) rate (%d) numChannels (%d) %d", m_Format.bits, m_Format.rate, m_Format.numChannels, pMetadata->data.stream_info.max_framesize);
     }
 }
 
 void FlacDecoder::error_callback(FLAC__StreamDecoderErrorStatus status)
 {
-    log::error("FlacDecoder:",  FLAC__StreamDecoderErrorStatusString[status]);
+    log::error("FlacDecoder: %s",  FLAC__StreamDecoderErrorStatusString[status]);
 }
 
 }

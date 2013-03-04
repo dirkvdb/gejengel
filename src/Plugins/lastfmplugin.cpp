@@ -193,7 +193,7 @@ bool LastFmPlugin::initialize(Gejengel::IGejengelCore& core)
         return false;
     }
     
-    log::debug("user", user, "pass", pass);
+    log::debug("user: %s pass: %s", user, pass);
 
     m_pScrobbler.reset(new LastFmScrobbler(CLIENT_IDENTIFIER, CLIENT_VERSION, user, pass, true, false));
     m_pScrobbler->authenticate();
@@ -229,7 +229,7 @@ void LastFmPlugin::onPlay(const Gejengel::Track& track)
     info.setAlbum(track.album);
     info.setTrackNr(track.trackNr);
     info.setTrackLength(track.durationInSec);
-    log::debug("Scrobble:", track.artist, "-", track.title);
+    log::debug("Scrobble: %s - %s", track.artist, track.title);
     m_pScrobbler->startedPlaying(info);
 }
 

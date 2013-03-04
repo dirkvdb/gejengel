@@ -64,7 +64,7 @@ bool DBusPlugin::initialize(Gejengel::IGejengelCore& core)
 
     if (m_pConnection == nullptr)
     {
-        log::error("Failed to open dbus connection:", pError->message);
+        log::error("Failed to open dbus connection: %s", pError->message);
         g_error_free(pError);
         return false;
     }
@@ -75,7 +75,7 @@ bool DBusPlugin::initialize(Gejengel::IGejengelCore& core)
     dbus_g_proxy_call(m_pProxy, "RequestName", &pError, G_TYPE_STRING, "org.mpris.gejengel", G_TYPE_UINT, 0, G_TYPE_INVALID, G_TYPE_UINT, &requestResult, G_TYPE_INVALID);
     if (pError)
     {
-        log::error("Error requesting name:", pError->message);
+        log::error("Error requesting name: %s", pError->message);
         g_error_free(pError);
         return false;
     }
@@ -154,7 +154,7 @@ Glib::RefPtr<Gdk::Pixbuf> DBusPlugin::getIcon() const
     }
     catch (Glib::Error& e)
     {
-        log::error("Failed to load icon", e.what());
+        log::error("Failed to load icon: %s", e.what());
     }
     
     return icon;

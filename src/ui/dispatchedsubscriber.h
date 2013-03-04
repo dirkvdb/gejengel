@@ -27,7 +27,7 @@ namespace Gejengel
 {
 
 template <typename T>
-class IDispatchedSubscriber : public utils::ISubscriber<T>
+class IDispatchedSubscriber : public utils::ISubscriber<const T&>
 {
 public:
 	IDispatchedSubscriber()
@@ -37,7 +37,7 @@ public:
 
 	virtual ~IDispatchedSubscriber() {}
 
-	void onItem(const T& item, void* pData = nullptr)
+	virtual void onItem(const T& item, void* pData = nullptr)
 	{
 		{
 			std::lock_guard<std::mutex> lock(m_Mutex);

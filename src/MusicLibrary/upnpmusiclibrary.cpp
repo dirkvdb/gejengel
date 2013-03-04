@@ -230,7 +230,7 @@ void UPnPMusicLibrary::setSource(const LibrarySource& source)
     }
     catch (std::exception& e)
     {
-        log::error("Failed to set UPnP device:", e.what());
+        log::error("Failed to set UPnP device: %s", e.what());
     }
 }
 

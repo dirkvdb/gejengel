@@ -90,12 +90,12 @@ bool GStreamerEngine::onBusMessage(const Glib::RefPtr<Gst::Bus>& bus, const Glib
         Glib::RefPtr<Gst::MessageDuration> durationMsg = Glib::RefPtr<Gst::MessageDuration>::cast_dynamic(message);
         if (durationMsg)
         {
-            log::debug("Duration:", durationMsg->parse() / Gst::SECOND);
+            log::debug("Duration: %d", durationMsg->parse() / Gst::SECOND);
         }
         break;
     }
     default:
-        //log::debug("Ignored message", message->get_message_type());
+        //log::debug("Ignored message %d", message->get_message_type());
         break;
     }
 
@@ -192,7 +192,7 @@ Gst::State GStreamerEngine::getState()
 
     if (ret == Gst::STATE_CHANGE_SUCCESS)
     {
-        log::debug("State =", getStateString(state));
+        log::debug("State = %s", getStateString(state));
         return state;
     }
     else if (ret == Gst::STATE_CHANGE_ASYNC)
@@ -213,20 +213,20 @@ bool GStreamerEngine::setState(Gst::State state)
 
     if (ret == Gst::STATE_CHANGE_SUCCESS)
     {
-        log::debug("State =", getStateString(state));
+        log::debug("State = %s", getStateString(state));
     }
     else if (ret == Gst::STATE_CHANGE_ASYNC)
     {
         Gst::State actualState = getState();
         if (state != actualState)
         {
-            log::error("Failed to set state to", getStateString(state), ". Actual state =", getStateString(actualState));
+            log::error("Failed to set state to %s. Actual state = ", getStateString(state), getStateString(actualState));
             return false;
         }
     }
     else if (ret == Gst::STATE_CHANGE_FAILURE || ret == Gst::STATE_CHANGE_NO_PREROLL)
     {
-        log::error("Failed to set state to", getStateString(state), ": hard failure");
+        log::error("Failed to set state to %s: hard failure", getStateString(state));
         return false;
     }
 
@@ -256,7 +256,7 @@ void GStreamerEngine::seek(double seconds)
 {
     if(!m_PlayBin->seek(Gst::FORMAT_TIME, Gst::SEEK_FLAG_FLUSH | Gst::SEEK_FLAG_KEY_UNIT, static_cast<gint64>(seconds * Gst::SECOND)))
     {
-        log::error("Failed to seek to position:", seconds);
+        log::error("Failed to seek to position: %f", seconds);
     }
 }
 
@@ -283,7 +283,7 @@ double GStreamerEngine::getDuration()
     {
         if (format == Gst::FORMAT_TIME)
         {
-            log::debug("duration", duration, duration / Gst::SECOND);
+            log::debug("duration %d", duration, duration / Gst::SECOND);
             return static_cast<double>(duration / Gst::SECOND);
         }
         else

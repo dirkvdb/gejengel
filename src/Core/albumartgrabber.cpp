@@ -56,7 +56,7 @@ AlbumArtGrabber::~AlbumArtGrabber()
 	}
 }
 
-void AlbumArtGrabber::getAlbumArt(const Album& album, utils::ISubscriber<AlbumArt>& subscriber)
+void AlbumArtGrabber::getAlbumArt(const Album& album, utils::ISubscriber<const AlbumArt&>& subscriber)
 {
     {
         std::lock_guard<std::mutex> lock(m_Mutex);
@@ -65,7 +65,7 @@ void AlbumArtGrabber::getAlbumArt(const Album& album, utils::ISubscriber<AlbumAr
 	m_Condition.notify_all();
 }
 
-void AlbumArtGrabber::getAlbumArt(const Track& track, utils::ISubscriber<AlbumArt>& subscriber)
+void AlbumArtGrabber::getAlbumArt(const Track& track, utils::ISubscriber<const AlbumArt&>& subscriber)
 {
     {
         std::lock_guard<std::mutex> lock(m_Mutex);
@@ -76,7 +76,7 @@ void AlbumArtGrabber::getAlbumArt(const Track& track, utils::ISubscriber<AlbumAr
     m_Condition.notify_all();
 }
 
-void AlbumArtGrabber::getAlbumArtFromSource(const Album& album, uint32_t size, utils::ISubscriber<AlbumArt>& subscriber)
+void AlbumArtGrabber::getAlbumArtFromSource(const Album& album, uint32_t size, utils::ISubscriber<const AlbumArt&>& subscriber)
 {
     {
         std::lock_guard<std::mutex> lock(m_Mutex);
@@ -86,7 +86,7 @@ void AlbumArtGrabber::getAlbumArtFromSource(const Album& album, uint32_t size, u
     m_Condition.notify_all();
 }
 
-void AlbumArtGrabber::getAlbumArtFromSource(const Track& track, uint32_t size, utils::ISubscriber<AlbumArt>& subscriber)
+void AlbumArtGrabber::getAlbumArtFromSource(const Track& track, uint32_t size, utils::ISubscriber<const AlbumArt&>& subscriber)
 {
     {
         std::lock_guard<std::mutex> lock(m_Mutex);
@@ -97,7 +97,7 @@ void AlbumArtGrabber::getAlbumArtFromSource(const Track& track, uint32_t size, u
 }
 
 template <typename T>
-bool AlbumArtGrabber::getQueuedItem(std::deque<WorkDescription<T> >& queue, WorkDescription<T>& description)
+bool AlbumArtGrabber::getQueuedItem(std::deque<WorkDescription<T>>& queue, WorkDescription<T>& description)
 {
     std::lock_guard<std::mutex> lock(m_Mutex);
 	if (!queue.empty())
@@ -165,13 +165,13 @@ void AlbumArtGrabber::fetchLoop()
 				AlbumArt art(album.id);
 				if (m_Core.getLibraryAccess().getAlbumArt(album, art))
 				{
-					//log::debug("Album art fetched for album:", album.id, art.getDataSize());
+					//log::debug("Album art fetched for album: %s %d", album.id, art.getDataSize());
 					albumDescription.pSubscriber->onItem(art);
 				}
 			}
 			catch (std::exception& e)
 			{
-				log::warn("Failed to fetch album art for album", album.id, ":", e.what());
+				log::warn("Failed to fetch album art for album %s: %s", album.id, e.what());
 			}
 		}
 
@@ -189,7 +189,7 @@ void AlbumArtGrabber::fetchLoop()
 			}
 			catch (std::exception& e)
 			{
-				log::warn("Failed to fetch album art from source for album", album.id, ":", e.what());
+				log::warn("Failed to fetch album art from source for album %s: %s", album.id, e.what());
 			}
 		}
 
@@ -208,7 +208,7 @@ void AlbumArtGrabber::fetchLoop()
 			}
 			catch (std::exception& e)
 			{
-				log::warn("Failed to fetch album art for track", track.id, ":", e.what());
+				log::warn("Failed to fetch album art for track %s: %s", track.id, e.what());
 			}
 		}
 	}

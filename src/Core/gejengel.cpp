@@ -18,7 +18,6 @@
 
 #include "ui/mainwindow.h"
 #include "utils/log.h"
-#include "utils/scopedlock.h"
 #include "utils/timeoperations.h"
 #include "utils/numericoperations.h"
 #include "MusicLibrary/musiclibrary.h"
@@ -103,7 +102,7 @@ void GejengelCore::play()
         }
         catch(exception& e)
         {
-            log::error(string("GejengelCore::play Failed to start playback: ") + e.what());
+            log::error("GejengelCore::play Failed to start playback: %s", e.what());
         }
     }
 }
@@ -119,7 +118,7 @@ void GejengelCore::pause()
         }
         catch(exception& e)
         {
-            log::error(string("GejengelCore::pause Failed to pause playback: ") + e.what());
+            log::error("GejengelCore::pause Failed to pause playback: %s", e.what());
         }
     }
 }
@@ -135,7 +134,7 @@ void GejengelCore::resume()
         }
         catch(exception& e)
         {
-            log::error(string("GejengelCore::resume Failed to resume playback: ") + e.what());
+            log::error("GejengelCore::resume Failed to resume playback: %s", e.what());
         }
     }
 }
@@ -177,7 +176,7 @@ void GejengelCore::seek(double seconds)
     }
     catch(exception& e)
     {
-        log::error(string("GejengelCore::seek Failed to seek: ") + e.what());
+        log::error("GejengelCore::seek Failed to seek: %s", e.what());
     }
 }
 

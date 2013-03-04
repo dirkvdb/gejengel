@@ -345,7 +345,7 @@ void PulseRenderer::streamUpdateTimingCb(pa_stream* pStream, int success, void* 
     int negative;
     if (pa_stream_get_latency(pStream, &pRenderer->m_Latency, &negative) < 0)
     {
-        log::debug("Failed to get latency:", pa_strerror(pa_context_errno(pRenderer->m_pPulseContext)));
+        log::debug("Failed to get latency: %s", pa_strerror(pa_context_errno(pRenderer->m_pPulseContext)));
         pRenderer->m_Latency = 0;
     }
 }
@@ -435,7 +435,7 @@ void PulseRenderer::streamUnderflowCb(pa_stream* pStream, void* pData)
 {
     assert(pStream);
     PulseRenderer* pRenderer = reinterpret_cast<PulseRenderer*>(pData);
-    log::debug("PulseRenderer: XRUN", pa_stream_writable_size(pStream), pRenderer->m_Buffer.bytesUsed());
+    log::debug("PulseRenderer: XRUN %d %d", pa_stream_writable_size(pStream), pRenderer->m_Buffer.bytesUsed());
 }
 
 }

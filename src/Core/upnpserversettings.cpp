@@ -81,7 +81,7 @@ void UPnPServerSettings::saveToFile()
     ofstream file(m_SettingsFile.c_str(), ios_base::trunc);
     if (!file.is_open())
     {
-        log::error("Failed to open settings file for saving: " + m_SettingsFile);
+        log::error("Failed to open settings file for saving: %s", m_SettingsFile);
         return;
     }
 
@@ -111,7 +111,7 @@ void UPnPServerSettings::loadFromFile()
         std::vector<std::string> items = stringops::tokenize(line, "=");
         if (items.size() != 4)
         {
-            log::warn("Warning: ignoring malformed line in config file: " + line);
+            log::warn("Warning: ignoring malformed line in config file: %s", line);
             continue;
         }
 

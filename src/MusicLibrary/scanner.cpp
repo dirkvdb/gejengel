@@ -32,6 +32,7 @@
 
 using namespace std;
 using namespace utils;
+using namespace fileops;
 
 namespace Gejengel
 {
@@ -57,14 +58,14 @@ void Scanner::performScan(const string& libraryPath)
 	
 #ifdef ENABLE_DEBUG
     time_t startTime = time(nullptr);
-    log::debug("Starting library scan in:", libraryPath);
+    log::debug("Starting library scan in: %s", libraryPath);
 #endif
 
     m_InitialScan = m_LibraryDb.getTrackCount() == 0;
     m_ScannedFiles = 0;
 
-    m_ScanSubscriber.scanStart(fileops::countFilesInDirectory(libraryPath));
-    fileops::iterateDirectory(libraryPath, *this);
+    m_ScanSubscriber.scanStart(countFilesInDirectory(libraryPath));
+    scan(libraryPath);
     m_ScanSubscriber.scanFinish();
 
 #ifdef ENABLE_DEBUG
@@ -72,8 +73,28 @@ void Scanner::performScan(const string& libraryPath)
 	{
 		log::debug("Scan aborted");
 	}
-    log::debug("Library scan took", time(nullptr) - startTime, " seconds. Scanned", m_ScannedFiles, "files.");
+    log::debug("Library scan took %d seconds. Scanned %d files.", time(nullptr) - startTime, m_ScannedFiles);
 #endif
+}
+
+void Scanner::scan(const std::string& dir)
+{
+    for (auto& entry : Directory(dir))
+    {
+        if (m_Stop)
+        {
+            break;
+        }
+        
+        if (entry.type() == FileSystemEntryType::Directory)
+        {
+            scan(entry.path());
+        }
+        else if (entry.type() == FileSystemEntryType::File)
+        {
+            onFile(entry.path());
+        }
+    }
 }
 
 void Scanner::cancel()
@@ -81,24 +102,28 @@ void Scanner::cancel()
 	m_Stop = true;
 }
 
-bool Scanner::onFile(const string& filepath)
+void Scanner::onFile(const string& filepath)
 {
+    
+    auto info = getFileInfo(filepath);
+    
     Track track;
-    track.filepath = filepath;
-    fileops::getFileInfo(filepath, track.fileSize, track.modifiedTime);
+    track.filepath      = filepath;
+    track.fileSize      = info.sizeInBytes;
+    track.modifiedTime  = info.modifyTime;
 
     m_ScanSubscriber.scanUpdate(++m_ScannedFiles);
 
     MusicDb::TrackStatus status = m_LibraryDb.getTrackStatus(filepath, track.modifiedTime);
     if (status == MusicDb::UpToDate)
     {
-        return !m_Stop;
+        return;
     }
 
     Metadata md(track.filepath);
     if (!md.isValid())
     {
-        return !m_Stop;
+        return;
     }
 
     md.getArtist(track.artist);
@@ -190,16 +215,14 @@ bool Scanner::onFile(const string& filepath)
     track.albumId = album.id;
     if (status == MusicDb::DoesntExist)
     {
-        log::debug("New track:", filepath, track.albumId);
+        log::debug("New track: %s %s", filepath, track.albumId);
         m_LibraryDb.addTrack(track);
     }
     else if (status == MusicDb::NeedsUpdate)
     {
-        log::debug("Needs update:", filepath);
+        log::debug("Needs update: %s", filepath);
         m_LibraryDb.updateTrack(track);
     }
-
-    return !m_Stop;
 }
 
 }

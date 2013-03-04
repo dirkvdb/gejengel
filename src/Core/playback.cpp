@@ -106,12 +106,12 @@ bool Playback::startNewTrack()
         std::lock_guard<std::recursive_mutex> lock(m_DecodeMutex);
         try
         {
-            log::info("Play track:", m_CurrentTrack.filepath);
+            log::info("Play track: %s", m_CurrentTrack.filepath);
             m_pAudioDecoder.reset(AudioDecoderFactory::create(m_CurrentTrack.filepath));
         }
         catch (logic_error& e)
         {
-            log::error("Failed to play audio file:", e.what());
+            log::error("Failed to play audio file: %s", e.what());
             m_pAudioDecoder.reset();
             return startNewTrack();
         }
@@ -198,7 +198,7 @@ void Playback::playback()
         
         if (!frameDecoded && !startNewTrack())
         {
-            log::debug("Stop it", frameDecoded, frameConsumed);
+            log::debug("Stop it %d %d", frameDecoded, frameConsumed);
             return;
         }
 
@@ -411,10 +411,10 @@ void Playback::playbackLoop()
     while (!m_Destroy)
     {
         {
-            log::debug("Wait", m_Destroy);
+            log::debug("Wait %d", m_Destroy);
             std::unique_lock<std::mutex> lock(m_PlaybackMutex);
             m_PlaybackCondition.wait(lock);
-            log::debug("Condition signaled playback= " + numericops::toString(m_Stop));
+            log::debug("Condition signaled playback (stop = %d)", m_Stop);
         }
 
         if (m_Destroy)
@@ -429,7 +429,7 @@ void Playback::playbackLoop()
         }
         catch (exception& e)
         {
-            log::error(string("Playback error: ") + e.what());
+            log::error("Playback error: %s", e.what());
         }
     }
 }

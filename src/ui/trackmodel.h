@@ -54,7 +54,7 @@ public:
     Gtk::TreeModelColumn<std::string>   id;
 };
 
-class TrackModel : public utils::ISubscriber<Track>
+class TrackModel : public utils::ISubscriber<const Track&>
 {
 public:
     TrackModel();

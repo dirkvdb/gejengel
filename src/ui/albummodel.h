@@ -31,8 +31,8 @@ class Album;
 class AlbumArt;
 class IAlbumArtProvider;
 
-class AlbumModel 	: public utils::ISubscriber<Album>
-					, public utils::ISubscriber<AlbumArt>
+class AlbumModel :public utils::ISubscriber<const Album&>
+                 , public utils::ISubscriber<const AlbumArt&>
 {
 public:
     class Columns : public Gtk::TreeModel::ColumnRecord
@@ -45,9 +45,9 @@ public:
             add(albumArtUrl);
         }
 
-		Gtk::TreeModelColumn<std::string>                   	id;
-        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> >    	albumArt;
-        Gtk::TreeModelColumn<std::string>                   	albumArtUrl;
+        Gtk::TreeModelColumn<std::string>                       id;
+        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> >        albumArt;
+        Gtk::TreeModelColumn<std::string>                       albumArtUrl;
         Gtk::TreeModelColumn<Glib::ustring>                     title;
         Gtk::TreeModelColumn<Glib::ustring>                     artist;
         Gtk::TreeModelColumn<Glib::ustring>                     duration;
@@ -83,7 +83,7 @@ private:
     IAlbumArtProvider&              m_AlbumArtProvider;
     Glib::RefPtr<Gtk::ListStore>    m_ListStore;
     Columns                         m_Columns;
-    std::mutex					    m_Mutex;
+    std::mutex                      m_Mutex;
 
     Glib::Dispatcher                m_AlbumArtDispatcher;
     std::vector<AlbumArt>           m_FetchedAlbumArt;

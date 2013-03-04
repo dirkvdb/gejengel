@@ -17,12 +17,12 @@
 #include "ffmpegdecoder.h"
 #include "AudioRenderer/audioframe.h"
 #include "AudioRenderer/audioformat.h"
-#include "utils/scopedlock.h"
 #include "utils/log.h"
 
 #include <cassert>
 #include <stdexcept>
 #include <algorithm>
+#include <mutex>
 
 #ifdef WIN32
 #include "winconfig.h"
@@ -49,7 +49,7 @@ FFmpegDecoder::FFmpegDecoder(const std::string& filepath)
 , m_pAudioBuffer(nullptr)
 , m_BytesPerFrame(0)
 {
-    log::debug("AVCodec Major:", LIBAVCODEC_VERSION_MAJOR);
+    log::debug("AVCodec Major: %d", LIBAVCODEC_VERSION_MAJOR);
 
     initialize();
 }
@@ -228,7 +228,7 @@ void FFmpegDecoder::seek(::int64_t timestamp)
     }
     else
     {
-        log::error("Error seeking to position:", timestamp);
+        log::error("Error seeking to position: %d", timestamp);
     }
 }
 
@@ -348,7 +348,7 @@ AudioFormat FFmpegDecoder::getAudioFormat()
     format.numChannels      = m_pAudioCodecContext->channels;
     format.framesPerPacket  = m_pAudioCodecContext->frame_size;
 
-    log::debug("Audio format: rate (", format.rate, ") numChannels (", format.numChannels, ")");
+    log::debug("Audio format: rate (%d) numChannels (%d)", format.rate, format.numChannels);
 
     return format;
 }

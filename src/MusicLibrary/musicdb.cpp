@@ -28,7 +28,6 @@
 #include "album.h"
 #include "albumart.h"
 #include "subscribers.h"
-#include "utils/scopedlock.h"
 #include "utils/fileoperations.h"
 #include "utils/stringoperations.h"
 #include "utils/numericoperations.h"
@@ -374,7 +373,7 @@ bool MusicDb::getAlbum(const std::string& albumId, Album& album)
     return !album.id.empty();
 }
 
-void MusicDb::getRandomTracks(uint32_t trackCount, utils::ISubscriber<Track>& subscriber)
+void MusicDb::getRandomTracks(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::recursive_mutex> lock(m_DbMutex);
 
@@ -390,7 +389,7 @@ void MusicDb::getRandomTracks(uint32_t trackCount, utils::ISubscriber<Track>& su
     performQuery(pStmt, getTracksCb, &subscriber);
 }
 
-void MusicDb::getRandomAlbum(utils::ISubscriber<Track>& subscriber)
+void MusicDb::getRandomAlbum(utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::recursive_mutex> lock(m_DbMutex);
 
@@ -405,7 +404,7 @@ void MusicDb::getRandomAlbum(utils::ISubscriber<Track>& subscriber)
     getTracksFromAlbum(id, subscriber);
 }
 
-void MusicDb::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void MusicDb::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::recursive_mutex> lock(m_DbMutex);
     sqlite3_stmt* pStmt = createStatement(
@@ -421,7 +420,7 @@ void MusicDb::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscri
     performQuery(pStmt, getTracksCb, &subscriber);
 }
 
-void MusicDb::getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void MusicDb::getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     std::lock_guard<std::recursive_mutex> lock(m_DbMutex);
     sqlite3_stmt* pStmt = createStatement(
@@ -438,7 +437,7 @@ void MusicDb::getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<
     performQuery(pStmt, getTracksCb, &subscriber);
 }
 
-void MusicDb::getAlbums(utils::ISubscriber<Album>& subscriber)
+void MusicDb::getAlbums(utils::ISubscriber<const Album&>& subscriber)
 {
     std::lock_guard<std::recursive_mutex> lock(m_DbMutex);
     performQuery(createStatement("SELECT albums.Id, albums.Name, albums.AlbumArtist, albums.Year, albums.Duration, albums.DateAdded, genres.Name "
@@ -504,7 +503,7 @@ void MusicDb::removeNonExistingFiles()
 
     for (size_t i = 0; i < files.size(); ++i)
     {
-        log::debug("Removed deleted file from database:", files[i]);
+        log::debug("Removed deleted file from database: %s", files[i]);
         removeTrack(numericops::toString(files[i]));
     }
 }
@@ -529,7 +528,7 @@ void MusicDb::removeNonExistingAlbums()
 
         if (count == 0)
         {
-            log::debug("Removed album without tracks from database:",  *iter);
+            log::debug("Removed album without tracks from database: %d",  *iter);
             albumsToBeRemoved.push_back(*iter);
         }
 
@@ -614,17 +613,17 @@ void MusicDb::updateAlbumMetaData()
 class SearchTrackData
 {
 public:
-    SearchTrackData(utils::ISubscriber<Track>& trackSubscriber, set<uint32_t>& foundIds)
+    SearchTrackData(utils::ISubscriber<const Track&>& trackSubscriber, set<uint32_t>& foundIds)
     : subscriber(trackSubscriber)
     , ids(foundIds)
     {
     }
 
-    utils::ISubscriber<Track>& subscriber;
+    utils::ISubscriber<const Track&>& subscriber;
     set<uint32_t>&      ids;
 };
 
-void MusicDb::searchLibrary(const std::string& search, utils::ISubscriber<Track>& trackSubscriber, utils::ISubscriber<Album>& albumSubscriber)
+void MusicDb::searchLibrary(const std::string& search, utils::ISubscriber<const Track&>& trackSubscriber, utils::ISubscriber<const Album&>& albumSubscriber)
 {
     std::lock_guard<std::recursive_mutex> lock(m_DbMutex);
 
@@ -1008,7 +1007,7 @@ void MusicDb::addResultCb(sqlite3_stmt* pStmt, void* pData)
 
 int32_t MusicDb::busyCb(void* pData, int32_t retries)
 {
-    log::debug("DB busy: attempt", retries);
+    log::debug("DB busy: attempt %d", retries);
     if (retries > BUSY_RETRIES)
     {
         return 0;

@@ -107,7 +107,7 @@ void AlbumInfoView::setAlbum(const std::string& albumId)
     }
     catch (std::exception& e)
     {
-        log::error("Error getting album from database: ", e.what());
+        log::error("Error getting album from database: %s", e.what());
     }
 }
 

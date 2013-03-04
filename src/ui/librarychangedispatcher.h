@@ -143,10 +143,10 @@ private:
 
 
 template<typename T>
-class UIDispatcher : public utils::ISubscriber<T>
+class UIDispatcher : public utils::ISubscriber<const T&>
 {
 public:
-    UIDispatcher(utils::ISubscriber<T>& subscriber)
+    UIDispatcher(utils::ISubscriber<const T&>& subscriber)
     : m_Subscriber(subscriber)
     {
         sendItem.connect(sigc::mem_fun(this, &UIDispatcher<T>::dispatchItem));
@@ -186,10 +186,10 @@ private:
         m_Subscriber.finalItemReceived();
     }
 
-    utils::ISubscriber<T>&  m_Subscriber;
-    std::vector<T>      	m_Items;
-    std::vector<void*>  	m_Datas;
-    std::mutex        	    m_VectorMutex;
+    utils::ISubscriber<const T&>&   m_Subscriber;
+    std::vector<T>                  m_Items;
+    std::vector<void*>  	        m_Datas;
+    std::mutex        	            m_VectorMutex;
 };
 
 template <typename T,

@@ -26,7 +26,6 @@
 #include "sharedfunctions.h"
 #include "utils/log.h"
 #include "utils/trace.h"
-#include "utils/scopedlock.h"
 #include "MusicLibrary/album.h"
 #include "MusicLibrary/albumart.h"
 #include "Core/albumartprovider.h"
@@ -199,7 +198,7 @@ void AlbumModel::dispatchAlbumArt()
                 }
                 catch (Gdk::PixbufError& e)
                 {
-                    log::error("Failed to load album art for", albumArt.getAlbumId(), "(", e.what(), ")");
+                    log::error("Failed to load album art for %s (%s)", albumArt.getAlbumId(), e.what());
                 }
                 break;
             }
