@@ -21,6 +21,7 @@
 #include <glibmm/i18n.h>
 
 #include "utils/log.h"
+#include "upnp/upnpitem.h"
 #include "upnp/upnpcontrolpoint.h"
 #include "MusicLibrary/upnpmusiclibrary.h"
 
@@ -39,8 +40,8 @@ AddUPnPServerDlg::AddUPnPServerDlg(MusicLibrary& library)
 , m_CustomServerName(false)
 , m_Destroy(false)
 , m_pLibrary(dynamic_cast<UPnPMusicLibrary*>(&library))
-, m_pCtrlPoint(m_pLibrary ? (&m_pLibrary->getControlPoint()) : new upnp::ControlPoint())
-, m_DeviceScanner(*m_pCtrlPoint, upnp::DeviceScanner::Servers)
+, m_pClient(m_pLibrary ? (&m_pLibrary->getClient()) : new upnp::Client())
+, m_DeviceScanner(*m_pClient, upnp::Device::Type::MediaServer)
 , m_IOwnControlPoint(m_pLibrary == nullptr)
 , m_ContainerDispatcher(*this)
 {
@@ -85,12 +86,12 @@ AddUPnPServerDlg::AddUPnPServerDlg(MusicLibrary& library)
 
     m_DeviceAddedDispatcher.DispatchedItemEvent.connect(std::bind(&AddUPnPServerDlg::onUPnPDeviceDiscovered, this, _1), this);
     m_DeviceRemovedDispatcher.DispatchedItemEvent.connect(std::bind(&AddUPnPServerDlg::onUPnPDeviceDissapeared, this, _1), this);
-    m_DeviceScanner.DeviceDiscoveredEvent.connect(std::bind(&SignalUIDispatcher<const upnp::Device&>::onItem, &m_DeviceAddedDispatcher, _1), &m_DeviceAddedDispatcher);
-    m_DeviceScanner.DeviceDissapearedEvent.connect(std::bind(&SignalUIDispatcher<const upnp::Device&>::onItem, &m_DeviceRemovedDispatcher, _1), &m_DeviceRemovedDispatcher);
+    m_DeviceScanner.DeviceDiscoveredEvent.connect([this] (std::shared_ptr<upnp::Device> dev) { m_DeviceAddedDispatcher.onItem(dev); }, this);
+    m_DeviceScanner.DeviceDissapearedEvent.connect([this] (std::shared_ptr<upnp::Device> dev) { m_DeviceRemovedDispatcher.onItem(dev); }, this);
 
     if (m_IOwnControlPoint)
     {
-        m_pCtrlPoint->initialize();
+        m_pClient->initialize();
     }
 
     m_DeviceScanner.start();
@@ -103,9 +104,9 @@ AddUPnPServerDlg::~AddUPnPServerDlg()
 
     m_DeviceScanner.stop();
 
-    for (auto& browser : m_BrowserMap)
+    for (auto& server : m_ServerMap)
     {
-        browser.second->cancel();
+        server.second->abort();
     }
 
     m_Destroy = true;
@@ -122,14 +123,14 @@ AddUPnPServerDlg::~AddUPnPServerDlg()
     if (m_IOwnControlPoint)
     {
         log::debug("delete ctrlpnt");
-        delete m_pCtrlPoint;
+        delete m_pClient;
         log::debug("ctrlpnt deleted");
     }
     else
     {
         //reset controlpoint to avoid receiving devices that would cause a crash
         log::debug("Reset Control point");
-        m_pCtrlPoint->reset();
+        m_pClient->reset();
         log::debug("reset done");
     }
     log::debug("Delete server dialog done");
@@ -181,13 +182,13 @@ void AddUPnPServerDlg::onItem(const upnp::Item& container, void* pData)
     }
 }
 
-void AddUPnPServerDlg::onUPnPDeviceDiscovered(const upnp::Device& device)
+void AddUPnPServerDlg::onUPnPDeviceDiscovered(const std::shared_ptr<upnp::Device>& device)
 {
     const Gtk::TreeNodeChildren& children = m_TreeModel->children();
     for (Gtk::TreeModel::iterator iter = children.begin(); iter != children.end(); ++iter)
     {
         const std::string& deviceId = (*iter)[m_Columns.deviceId];
-        if (deviceId == device.m_UDN)
+        if (deviceId == device->m_UDN)
         {
             //ignore duplicate devices
             return;
@@ -197,24 +198,24 @@ void AddUPnPServerDlg::onUPnPDeviceDiscovered(const upnp::Device& device)
     Gtk::TreeModel::iterator iter = m_TreeModel->append();
 
     const Gtk::TreeModel::Row& row = *iter;
-    row[m_Columns.name]         = device.m_FriendlyName;
-    row[m_Columns.id]           = upnp::Browser::rootId;
-    row[m_Columns.deviceId]     = device.m_UDN;
+    row[m_Columns.name]         = device->m_FriendlyName;
+    row[m_Columns.id]           = upnp::MediaServer::rootId;
+    row[m_Columns.deviceId]     = device->m_UDN;
 
-    auto browser = std::make_shared<upnp::Browser>(*m_pCtrlPoint);
-    browser->setDevice(device);
-    m_BrowserMap[device.m_UDN] = browser;
+    auto server = std::make_shared<upnp::MediaServer>(*m_pClient);
+    server->setDevice(device);
+    m_ServerMap[device->m_UDN] = server;
 
-    m_BrowseThreads.push_back(std::thread(&AddUPnPServerDlg::fetchDeviceTreeThread, this, browser));
+    m_BrowseThreads.push_back(std::thread(&AddUPnPServerDlg::fetchDeviceTreeThread, this, server));
 }
 
-void AddUPnPServerDlg::onUPnPDeviceDissapeared(const upnp::Device& device)
+void AddUPnPServerDlg::onUPnPDeviceDissapeared(const std::shared_ptr<upnp::Device>& device)
 {
     const Gtk::TreeNodeChildren& children = m_TreeModel->children();
     for (Gtk::TreeModel::iterator iter = children.begin(); iter != children.end(); ++iter)
     {
         const std::string& deviceId = (*iter)[m_Columns.deviceId];
-        if (deviceId == device.m_UDN)
+        if (deviceId == device->m_UDN)
         {
             m_TreeModel->erase(iter);
             break;
@@ -231,7 +232,7 @@ void AddUPnPServerDlg::onCheckAddSensitivity()
         if (!m_CustomServerName)
         {
             const std::string& deviceId = (*iter)[m_Columns.deviceId];
-            m_ServerNameEntry.set_text(m_BrowserMap[deviceId]->getDevice().m_FriendlyName);
+            m_ServerNameEntry.set_text(m_ServerMap[deviceId]->getDevice()->m_FriendlyName);
         }
 
         if (!m_ServerNameEntry.get_text().empty())
@@ -244,15 +245,15 @@ void AddUPnPServerDlg::onCheckAddSensitivity()
     set_response_sensitive(Gtk::RESPONSE_OK, false);
 }
 
-upnp::Device AddUPnPServerDlg::getSelectedServerContainer()
+std::shared_ptr<upnp::Device> AddUPnPServerDlg::getSelectedServerContainer()
 {
     assert(m_TreeView.get_selection()->count_selected_rows() == 1);
     Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
 
     const std::string& udn = (*iter)[m_Columns.deviceId];
-    upnp::Device device = m_BrowserMap[udn]->getDevice();
-    device.m_UserDefinedName    = m_ServerNameEntry.get_text();
-    device.m_ContainerId        = (*iter)[m_Columns.id];
+    auto device = m_ServerMap[udn]->getDevice();
+    device->m_UserDefinedName    = m_ServerNameEntry.get_text();
+    device->m_ContainerId        = (*iter)[m_Columns.id];
 
     return device;
 }
@@ -263,42 +264,30 @@ bool AddUPnPServerDlg::onCustomServerName(GdkEventKey* pEvent)
     return false;
 }
 
-void AddUPnPServerDlg::fetchDeviceTreeThread(std::shared_ptr<upnp::Browser> browser)
+void AddUPnPServerDlg::fetchDeviceTreeThread(std::shared_ptr<upnp::MediaServer> server)
 {
-    class ContainerSubscriber : public utils::ISubscriber<upnp::Item>
-    {
-    public:
-        ContainerSubscriber(UIDispatcher<upnp::Item>& dispatcher, const std::string& deviceId)
-        : m_Dispatcher(dispatcher)
-        , m_DeviceId(deviceId)
-        {}
-
-        void onItem(const upnp::Item& container, void* pData)
-        {
-            long level = reinterpret_cast<long>(pData);
-            assert(level < MAX_BROWSE_LEVEL);
-            m_ChildNodes[level].push_back(container);
-            m_Dispatcher.onItem(container, &const_cast<std::string&>(m_DeviceId));
-        }
-
-        UIDispatcher<upnp::Item>&    m_Dispatcher;
-        std::vector<upnp::Item>      m_ChildNodes[MAX_BROWSE_LEVEL];
-        const std::string&           m_DeviceId;
-    };
-
-    ContainerSubscriber subscriber(m_ContainerDispatcher, browser->getDevice().m_UDN);
-    long startLevel = 0;
-    upnp::Item rootContainer(upnp::Browser::rootId);
-    browser->getContainers(subscriber, rootContainer, 0, 0, reinterpret_cast<void*>(startLevel));
+    auto deviceId = server->getDevice()->m_UDN;
+    std::vector<upnp::ItemPtr> childNodes[MAX_BROWSE_LEVEL];
+    
+    auto rootContainer = std::make_shared<upnp::Item>(upnp::MediaServer::rootId);
+    server->getContainersInContainer(rootContainer, [&] (const upnp::ItemPtr& item) {
+        childNodes[0].push_back(item);
+        m_ContainerDispatcher.onItem(*item, &const_cast<std::string&>(deviceId));
+    }, 0, 0);
     
     for (long level = 1; level < MAX_BROWSE_LEVEL && !m_Destroy; ++level)
     {
         long parentLevel = level - 1;
-        for (size_t i = 0; i < subscriber.m_ChildNodes[parentLevel].size() && !m_Destroy; ++i)
+        for (size_t i = 0; i < childNodes[parentLevel].size() && !m_Destroy; ++i)
         {
-            upnp::Item container(subscriber.m_ChildNodes[parentLevel][i].getObjectId());
-            container.setTitle(subscriber.m_ChildNodes[parentLevel][i].getTitle());
-            browser->getContainers(subscriber, container, 0, 0, reinterpret_cast<void*>(level));
+            auto container = std::make_shared<upnp::Item>(childNodes[parentLevel][i]->getObjectId());
+            container->setTitle(childNodes[parentLevel][i]->getTitle());
+            
+            server->getContainersInContainer(container, [&, level] (const upnp::ItemPtr& item) {
+                assert(level < MAX_BROWSE_LEVEL);
+                childNodes[level].push_back(item);
+                m_ContainerDispatcher.onItem(*item, &const_cast<std::string&>(deviceId));
+            }, 0, 0);
         }
     }
 }

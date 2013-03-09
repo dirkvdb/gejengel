@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spain\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-12 20:28+0100\n"
+"POT-Creation-Date: 2013-03-07 00:25+0100\n"
 "PO-Revision-Date: 2009-08-11 20:10-0300\n"
 "Last-Translator: Matias <mati86_dl@yahoo.com.ar>\n"
 "Language-Team:  <mati86dl@gmail.co>\n"
@@ -24,8 +24,8 @@ msgstr ""
 msgid " Preferences"
 msgstr "Preferencias"
 
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:36
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:47
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:37
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:48
 msgid "Add UPnP server"
 msgstr ""
 
@@ -234,7 +234,7 @@ msgstr "Escaneando biblioteca"
 msgid "Scrobble your tracks on Last.fm"
 msgstr "Scrobble tus canciones en Last.fm"
 
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:37
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:38
 msgid "Select a upnp container containing albums"
 msgstr ""
 
@@ -242,7 +242,7 @@ msgstr ""
 msgid "Select library location"
 msgstr "Seleccionar un directorio para la biblioteca"
 
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:38
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:39
 #, fuzzy
 msgid "Server name: "
 msgstr "Nombre de usuario:"

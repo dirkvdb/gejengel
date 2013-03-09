@@ -97,11 +97,11 @@ protected:
     bool onKeyPress(GdkEventKey* event);
     bool onWindowStateChanged(GdkEventWindowState* pState);
     void onLocalLibraryActivated();
-    void onUPnPServerActivated(const upnp::Device& server);
+    void onUPnPServerActivated(const std::shared_ptr<upnp::Device>& server);
     void loadLayout();
     void pushStatusMessage(const Glib::ustring& message);
     void loadLocalLibrary();
-    void loadUPnPLibrary(const upnp::Device& server);
+    void loadUPnPLibrary(const std::shared_ptr<upnp::Device>& server);
     void updateLibraryMenu();
 
     IGejengelCore&                      m_Core;

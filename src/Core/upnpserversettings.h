@@ -36,9 +36,9 @@ public:
     UPnPServerSettings(const std::string& settingsFile = "");
     ~UPnPServerSettings();
 
-    upnp::Device getServer(const std::string& userDefinedName) const;
-    std::vector<upnp::Device> getServers() const;
-    void setServers(std::vector<upnp::Device>& servers);
+    std::shared_ptr<upnp::Device> getServer(const std::string& userDefinedName) const;
+    std::vector<std::shared_ptr<upnp::Device>> getServers() const;
+    void setServers(std::vector<std::shared_ptr<upnp::Device>>& servers);
 
     void saveToFile();
 
@@ -46,8 +46,8 @@ private:
     void loadFromFile();
     void determineSettingsPath();
 
-    std::string                 m_SettingsFile;
-    std::vector<upnp::Device>   m_Servers;
+    std::string                                     m_SettingsFile;
+    std::vector<std::shared_ptr<upnp::Device>>      m_Servers;
 };
 
 }

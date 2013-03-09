@@ -20,23 +20,25 @@
 #include "librarysource.h"
 #include "upnp/upnpdevice.h"
 
+#include <memory>
+
 namespace Gejengel
 {
 
 class UPnPLibrarySource : public LibrarySource
 {
 public:
-	UPnPLibrarySource(const upnp::Device& device)
+	UPnPLibrarySource(const std::shared_ptr<upnp::Device>& device)
 	: m_Device(device)
 	{}
 
-	const upnp::Device& getDevice() const
+	std::shared_ptr<upnp::Device> getDevice() const
 	{
 		return m_Device;
 	}
 
 private:
-	upnp::Device 	m_Device;
+	std::shared_ptr<upnp::Device>   m_Device;
 };
 
 }

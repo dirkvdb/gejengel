@@ -26,13 +26,13 @@
 #include "librarychangedispatcher.h"
 #include "upnp/upnpdevice.h"
 #include "upnp/upnpitem.h"
-#include "upnp/upnpbrowser.h"
+#include "upnp/upnpmediaserver.h"
 #include "upnp/upnpdevicescanner.h"
 #include "MusicLibrary/subscribers.h"
 
 namespace upnp
 {
-    class ControlPoint;
+    class Client;
 }
 
 namespace Gejengel
@@ -42,17 +42,17 @@ class MusicLibrary;
 class UPnPMusicLibrary;
 
 class AddUPnPServerDlg  : public Gtk::Dialog
-                        , public utils::ISubscriber<upnp::Item>
+                        , public utils::ISubscriber<const upnp::Item&>
 {
 public:
     AddUPnPServerDlg(MusicLibrary& library);
     ~AddUPnPServerDlg();
 
-    upnp::Device getSelectedServerContainer();
+    std::shared_ptr<upnp::Device> getSelectedServerContainer();
     void onUPnPItem(const upnp::Item& container);
     void onItem(const upnp::Item& container, void* pData = nullptr);
-    void onUPnPDeviceDiscovered(const upnp::Device& device);
-    void onUPnPDeviceDissapeared(const upnp::Device& device);
+    void onUPnPDeviceDiscovered(const std::shared_ptr<upnp::Device>& device);
+    void onUPnPDeviceDissapeared(const std::shared_ptr<upnp::Device>& device);
 
 private:
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
@@ -73,7 +73,7 @@ private:
     void onCheckAddSensitivity();
     bool onCustomServerName(GdkEventKey* pEvent);
     bool addItem(Gtk::TreeModel::iterator& currentLevel, const upnp::Item& container, const std::string& deviceId);
-    void fetchDeviceTreeThread(std::shared_ptr<upnp::Browser> browser);
+    void fetchDeviceTreeThread(std::shared_ptr<upnp::MediaServer> server);
 
     ModelColumns                            m_Columns;
     Gtk::ScrolledWindow                     m_ScrolledWindow;
@@ -88,15 +88,17 @@ private:
     bool                                    m_Destroy;
     
     UPnPMusicLibrary*                       m_pLibrary;
-    upnp::ControlPoint*                     m_pCtrlPoint;
+    upnp::Client*                           m_pClient;
     upnp::DeviceScanner                     m_DeviceScanner;
     bool                                    m_IOwnControlPoint;
-    SignalUIDispatcher<const upnp::Device&> m_DeviceAddedDispatcher;
-    SignalUIDispatcher<const upnp::Device&> m_DeviceRemovedDispatcher;
+    
     UIDispatcher<upnp::Item>                m_ContainerDispatcher;
     std::vector<std::thread>                m_BrowseThreads;
     
-    std::map<std::string, std::shared_ptr<upnp::Browser>> m_BrowserMap;
+    SignalUIDispatcher<std::shared_ptr<upnp::Device>> m_DeviceAddedDispatcher;
+    SignalUIDispatcher<std::shared_ptr<upnp::Device>> m_DeviceRemovedDispatcher;
+    
+    std::map<std::string, std::shared_ptr<upnp::MediaServer>>   m_ServerMap;
 };
 
 }

@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <iosfwd>
+#include <ctime>
 
 #include "libraryitem.h"
 #include "utils/types.h"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-12 20:28+0100\n"
+"POT-Creation-Date: 2013-03-07 00:25+0100\n"
 "PO-Revision-Date: 2009-07-23 12:21+0100\n"
 "Last-Translator: Dirk Vanden Boer <dirk.vdb@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,8 +23,8 @@ msgstr ""
 msgid " Preferences"
 msgstr " Voorkeuren"
 
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:36
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:47
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:37
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:48
 msgid "Add UPnP server"
 msgstr ""
 
@@ -233,7 +233,7 @@ msgstr "Bibliotheek wordt ingelezen"
 msgid "Scrobble your tracks on Last.fm"
 msgstr "Verzamel afspeel gegevens op Last.fm"
 
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:37
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:38
 msgid "Select a upnp container containing albums"
 msgstr ""
 
@@ -241,7 +241,7 @@ msgstr ""
 msgid "Select library location"
 msgstr "Selecteer bibliotheek locatie"
 
-#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:38
+#: /home/dirk/projects/gejengel/po/../src/ui/addupnpserverdlg.cpp:39
 #, fuzzy
 msgid "Server name: "
 msgstr "Gebruikersnaam:"

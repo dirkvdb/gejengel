@@ -19,13 +19,12 @@
 
 #include <string>
 #include <vector>
-#include <inttypes.h>
+#include <cinttypes>
 
-#include "utils/thread.h"
 #include "musiclibrary.h"
 #include "upnpalbumfetcher.h"
-#include "upnp/upnpcontrolpoint.h"
-#include "upnp/upnpbrowser.h"
+#include "upnp/upnpclient.h"
+#include "upnp/upnpmediaserver.h"
 
 namespace Gejengel
 {
@@ -45,40 +44,41 @@ public:
     uint32_t getAlbumCount();
 
     void getTrack(const std::string& id, Track& track);
-    void getTrackAsync(const std::string& id, utils::ISubscriber<Track>& subscriber);
+    void getTrackAsync(const std::string& id, utils::ISubscriber<const Track&>& subscriber);
 
-    void getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber);
-    void getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber);
+    void getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber);
+    void getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber);
 
-    void getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber);
-    void getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber);
+    void getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber);
+    void getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber);
 
     void getAlbum(const std::string& albumId, Album& album);
-    void getAlbumAsync(const std::string& albumId, utils::ISubscriber<Album>& subscriber);
+    void getAlbumAsync(const std::string& albumId, utils::ISubscriber<const Album&>& subscriber);
 
-    void getAlbums(utils::ISubscriber<Album>& subscriber);
-    void getAlbumsAsync(utils::ISubscriber<Album>& subscriber);
+    void getAlbums(utils::ISubscriber<const Album&>& subscriber);
+    void getAlbumsAsync(utils::ISubscriber<const Album&>& subscriber);
 
-    void getRandomTracks(uint32_t trackCount, utils::ISubscriber<Track>& subscriber);
-    void getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<Track>& subscriber);
+    void getRandomTracks(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber);
+    void getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber);
 
-    void getRandomAlbum(utils::ISubscriber<Track>& subscriber);
-    void getRandomAlbumAsync(utils::ISubscriber<Track>& subscriber);
+    void getRandomAlbum(utils::ISubscriber<const Track&>& subscriber);
+    void getRandomAlbumAsync(utils::ISubscriber<const Track&>& subscriber);
 
     bool getAlbumArt(const Album& album, AlbumArt& art);
 
     void scan(bool startFresh, IScanSubscriber& subscriber);
-    void search(const std::string& search, utils::ISubscriber<Track>& trackSubscriber, utils::ISubscriber<Album>& albumSubscriber);
+    void search(const std::string& search, utils::ISubscriber<const Track&>& trackSubscriber, utils::ISubscriber<const Album&>& albumSubscriber);
 
     virtual void setSource(const LibrarySource& source);
-    upnp::ControlPoint& getControlPoint();
+    upnp::Client& getClient();
     
 private:
-    upnp::ControlPoint      m_CtrlPnt;
-    upnp::Browser           m_Browser;
-    upnp::Device            m_CurrentServer;
-    UPnPTrackFetcher        m_TrackFetcher;
-    UPnPAlbumFetcher        m_AlbumFetcher;
+    upnp::Client                    m_Client;
+    upnp::MediaServer               m_Server;
+    UPnPTrackFetcher                m_TrackFetcher;
+    UPnPAlbumFetcher                m_AlbumFetcher;
+    
+    std::shared_ptr<upnp::Device>   m_CurrentServer;
 };
 
 }

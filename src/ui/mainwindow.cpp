@@ -465,12 +465,12 @@ void MainWindow::updateLibraryMenu()
     m_LibraryActionGroup->add(action, sigc::mem_fun(*this, &MainWindow::onLocalLibraryActivated));
 
     UPnPServerSettings& serverSettings = m_Core.getUPnPServerSettings();
-    std::vector<upnp::Device> servers = serverSettings.getServers();
+    auto servers = serverSettings.getServers();
 
     // add new library locations
-    for (const upnp::Device& dev : servers)
+    for (auto& dev : servers)
     {
-        Glib::RefPtr<RadioAction> action = Gtk::RadioAction::create(libraryTypeGroup, dev.m_UserDefinedName, dev.m_UserDefinedName + " (UPnP)");
+        Glib::RefPtr<RadioAction> action = Gtk::RadioAction::create(libraryTypeGroup, dev->m_UserDefinedName, dev->m_UserDefinedName + " (UPnP)");
         m_LibraryActionGroup->add(action, sigc::bind<-1>(sigc::mem_fun(*this, &MainWindow::onUPnPServerActivated), dev));
     }
 
@@ -484,9 +484,9 @@ void MainWindow::updateLibraryMenu()
        << "<menu action='LibraryMenu'>"
        << "<menuitem action='Local'/>";
 
-    for (const upnp::Device& dev : servers)
+    for (auto& dev : servers)
     {
-        ss << "<menuitem action='" << dev.m_UserDefinedName << "'/>";
+        ss << "<menuitem action='" << dev->m_UserDefinedName << "'/>";
     }
 
     ss << "</menu></menubar></ui>";
@@ -640,12 +640,12 @@ void MainWindow::loadLocalLibrary()
 }
 
 #ifdef HAVE_LIBUPNP
-void MainWindow::onUPnPServerActivated(const upnp::Device& server)
+void MainWindow::onUPnPServerActivated(const std::shared_ptr<upnp::Device>& server)
 {
 	LibraryAccess& lib = m_Core.getLibraryAccess();
     LibraryType currentType = lib.getLibraryType();
 
-    Glib::RefPtr<RadioAction> action = Glib::RefPtr<RadioAction>::cast_dynamic(m_UIManager->get_action("/MenuBar/LibraryMenu/" + server.m_UserDefinedName));
+    Glib::RefPtr<RadioAction> action = Glib::RefPtr<RadioAction>::cast_dynamic(m_UIManager->get_action("/MenuBar/LibraryMenu/" + server->m_UserDefinedName));
     if (action && action->get_active())
     {
         if (currentType != UPnP)
@@ -657,13 +657,13 @@ void MainWindow::onUPnPServerActivated(const upnp::Device& server)
     }
 }
 
-void MainWindow::loadUPnPLibrary(const upnp::Device& server)
+void MainWindow::loadUPnPLibrary(const std::shared_ptr<upnp::Device>& server)
 {
     try
     {
-        log::debug("Load UPnP server: %s", server.m_UserDefinedName);
+        log::debug("Load UPnP server: %s", server->m_UserDefinedName);
 
-        m_Core.getSettings().set("UPnPServerName", server.m_UserDefinedName);
+        m_Core.getSettings().set("UPnPServerName", server->m_UserDefinedName);
 
         m_TrackModel.clear();
         m_AlbumModel.clear();

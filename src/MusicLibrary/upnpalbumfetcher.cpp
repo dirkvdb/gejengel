@@ -23,7 +23,7 @@
 #include "track.h"
 #include "album.h"
 #include "subscribers.h"
-#include "upnp/upnpbrowser.h"
+#include "upnp/upnpmediaserver.h"
 
 using namespace utils;
 
@@ -32,8 +32,8 @@ namespace Gejengel
 
 uint32_t durationFromString(const std::string& durationString);
 
-UPnPTrackFetcher::UPnPTrackFetcher(upnp::Browser& browser)
-: m_Browser(browser)
+UPnPTrackFetcher::UPnPTrackFetcher(upnp::MediaServer& server)
+: m_Server(server)
 , m_CurrentTrackNr(0)
 , m_CurrentDiscNr(1)
 {
@@ -45,71 +45,64 @@ void UPnPTrackFetcher::resetTrackCount()
     m_CurrentDiscNr = 1;
 }
 
-void UPnPTrackFetcher::onItem(const upnp::Item& item, void* pData)
+Track UPnPTrackFetcher::fetchTrack(const std::string& trackId)
 {
-    utils::ISubscriber<Track>* pSubscriber = reinterpret_cast<utils::ISubscriber<Track>*> (pData);
-    assert(pSubscriber);
+    auto item = std::make_shared<upnp::Item>(trackId);
+    m_Server.getMetaData(item);
+    return itemToTrack(*item);
+}
 
+void UPnPTrackFetcher::fetchFirstTrack(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber)
+{
+    auto container = std::make_shared<upnp::Item>(containerId);
+    m_Server.getItemsInContainer(container, [&] (const upnp::ItemPtr& item) {
+        subscriber.onItem(itemToTrack(*item));
+    }, 0, 1, upnp::Property::TrackNumber);
+}
+
+void UPnPTrackFetcher::fetchFirstTrackAsync(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber)
+{
+    auto container = std::make_shared<upnp::Item>(containerId);
+    m_Server.getItemsInContainerAsync(container, [&] (const upnp::ItemPtr& item) {
+        subscriber.onItem(itemToTrack(*item));
+    }, 0, 1, upnp::Property::TrackNumber);
+}
+
+void UPnPTrackFetcher::fetchTrackAsync(const std::string& trackId, utils::ISubscriber<const Track&>& subscriber)
+{
+    auto item = std::make_shared<upnp::Item>(trackId);
+    m_Server.getMetaDataAsync(item, [&] (const upnp::ItemPtr& item) {
+        subscriber.onItem(itemToTrack(*item));
+    });
+}
+
+void UPnPTrackFetcher::fetchTracks(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber)
+{
+    resetTrackCount();
+    auto container = std::make_shared<upnp::Item>(containerId);
+    m_Server.getItemsInContainer(container, [&] (const upnp::ItemPtr& item) {
+        subscriber.onItem(itemToTrack(*item));
+    }, 0, 0, upnp::Property::TrackNumber);
+}
+
+void UPnPTrackFetcher::fetchTracksAsync(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber)
+{
+    resetTrackCount();
+    auto container = std::make_shared<upnp::Item>(containerId);
+    m_Server.getItemsInContainerAsync(container, [&] (const upnp::ItemPtr& item) {
+        subscriber.onItem(itemToTrack(*item));
+    }, 0, 0, upnp::Property::TrackNumber);
+}
+
+Track UPnPTrackFetcher::itemToTrack(upnp::Item& item)
+{
     Track track;
-    fetchTrack(item.getObjectId(), track);
-
-    pSubscriber->onItem(track);
-}
-
-void UPnPTrackFetcher::onItem(const std::shared_ptr<upnp::Item>& item, void* pData)
-{
-    onItem(*item, pData);
-}
-
-void UPnPTrackFetcher::fetchTrack(const std::string& trackId, Track& track)
-{
-    upnp::Item item(trackId);
-    m_Browser.getMetaData(item, "*");
-    itemToTrack(item, track);
-}
-
-void UPnPTrackFetcher::fetchFirstTrack(const std::string& containerId, utils::ISubscriber<Track>& subscriber)
-{
-    upnp::Item container(containerId);
-    m_Browser.getItems(*this, container, 1, 0, "+upnp:originalTrackNumber", &subscriber);
-}
-
-void UPnPTrackFetcher::fetchFirstTrackAsync(const std::string& containerId, utils::ISubscriber<Track>& subscriber)
-{
-    m_Browser.getItemsAsync(*this, upnp::Item(containerId), 1, 0, "+upnp:originalTrackNumber", &subscriber);
-}
-
-void UPnPTrackFetcher::fetchTrackAsync(const std::string& trackId, utils::ISubscriber<Track>& subscriber)
-{
-    std::shared_ptr<upnp::Item> item = std::make_shared<upnp::Item>(trackId);
-    m_Browser.getMetaDataAsync(*this, item, "*", &subscriber);
-}
-
-void UPnPTrackFetcher::fetchTracks(const std::string& containerId, utils::ISubscriber<Track>& subscriber)
-{
-    resetTrackCount();
-    upnp::Item container(containerId);
-    m_Browser.getItems(*this, container, 0, 0, "+upnp:originalTrackNumber", &subscriber);
-}
-
-void UPnPTrackFetcher::fetchTracksAsync(const std::string& containerId, utils::ISubscriber<Track>& subscriber)
-{
-    resetTrackCount();
-    m_Browser.getItemsAsync(*this, upnp::Item(containerId), 0, 0, "+upnp:originalTrackNumber", &subscriber);
-}
-
-void UPnPTrackFetcher::itemToTrack(upnp::Item& item, Track& track)
-{
-    if (track.id.empty())
-    {
-        track.id = item.getObjectId();
-    }
-
-    track.albumId = item.getMetaData("parentID");
-    track.title = item.getMetaData("dc:title");
-    track.artist = item.getMetaData("upnp:artist");
-    track.album = item.getMetaData("upnp:album");
-    track.genre = item.getMetaData("upnp:genre");
+    track.id        = item.getObjectId();
+    track.albumId   = item.getMetaData(upnp::Property::ParentId);
+    track.title     = item.getMetaData(upnp::Property::Title);
+    track.artist    = item.getMetaData(upnp::Property::Artist);
+    track.album     = item.getMetaData(upnp::Property::Album);
+    track.genre     = item.getMetaData(upnp::Property::Genre);
 
     if (!item.getResources().empty())
     {
@@ -117,7 +110,7 @@ void UPnPTrackFetcher::itemToTrack(upnp::Item& item, Track& track)
         track.fileSize = stringops::toNumeric<uint64_t>(item.getResources().front().getMetaData("size"));
     }
 
-    std::string trackNrStr = item.getMetaData("upnp:originalTrackNumber");
+    std::string trackNrStr = item.getMetaData(upnp::Property::TrackNumber);
     if (!trackNrStr.empty()) {
         track.trackNr = stringops::toNumeric<uint32_t>(trackNrStr);
     }
@@ -129,8 +122,8 @@ void UPnPTrackFetcher::itemToTrack(upnp::Item& item, Track& track)
     m_CurrentTrackNr = track.trackNr;
     track.discNr = m_CurrentDiscNr;
 
-    std::string date = item.getMetaData("dc:date");
-    if (!date.length() > 4)
+    std::string date = item.getMetaData(upnp::Property::Date);
+    if (!(date.length() > 4))
     {
         track.year = stringops::toNumeric<uint32_t>(date.substr(0, 4));
     }
@@ -165,78 +158,77 @@ void UPnPTrackFetcher::itemToTrack(upnp::Item& item, Track& track)
         }
     }
 
-    track.artUrl = item.getMetaData("upnp:albumArtURI");
+    track.artUrl = item.getMetaData(upnp::Property::AlbumArt);
+    
+    return track;
 }
 
-UPnPAlbumFetcher::UPnPAlbumFetcher(upnp::Browser& browser)
-: m_Browser(browser)
+UPnPAlbumFetcher::UPnPAlbumFetcher(upnp::MediaServer& server)
+: m_Server(server)
 {
 }
 
-void UPnPAlbumFetcher::onItem(const upnp::Item& container, void* pData)
+void UPnPAlbumFetcher::processItem(const upnp::ItemPtr& item, utils::ISubscriber<const Album&>& subscriber)
 {
-    utils::ISubscriber<Album>* pSubscriber = reinterpret_cast<utils::ISubscriber<Album>*> (pData);
-    assert(pSubscriber);
-
-    upnp::Item containerWithMetadata = container;
-    m_Browser.getMetaData(containerWithMetadata, "@childCount,dc:title,upnp:artist,upnp:genre,upnp:albumArtURI");
-
-    Album album;
-    containerToAlbum(containerWithMetadata, album);
-
-    pSubscriber->onItem(album);
+    m_Server.getMetaData(item);
+    subscriber.onItem(containerToAlbum(*item));
 }
 
-void UPnPAlbumFetcher::onItem(const std::shared_ptr<upnp::Item>& item, void* pData)
-{
-    onItem(*item, pData);
-}
-
+/*
 void UPnPAlbumFetcher::finalItemReceived(void* pData)
 {
-    utils::ISubscriber<Album>* pSubscriber = reinterpret_cast<utils::ISubscriber<Album>*> (pData);
+    utils::ISubscriber<const Album&>* pSubscriber = reinterpret_cast<utils::ISubscriber<const Album&>*> (pData);
     assert(pSubscriber);
     pSubscriber->finalItemReceived();
+}*/
+
+Album UPnPAlbumFetcher::fetchAlbum(const std::string& albumId)
+{
+    auto container = std::make_shared<upnp::Item>(albumId);
+    m_Server.getMetaData(container);
+
+    return containerToAlbum(*container);
 }
 
-void UPnPAlbumFetcher::fetchAlbum(const std::string& albumId, Album& album)
+void UPnPAlbumFetcher::fetchAlbumAsync(const std::string& albumId, utils::ISubscriber<const Album&>& subscriber)
 {
-    upnp::Item container(albumId);
-    m_Browser.getMetaData(container, "@childCount,dc:title,upnp:artist,upnp:genre,upnp:albumArtURI");
-
-    containerToAlbum(container, album);
+    auto container = std::make_shared<upnp::Item>(albumId);
+    m_Server.getMetaDataAsync(container, [&] (const upnp::ItemPtr& item) {
+        processItem(item, subscriber);
+    });
 }
 
-void UPnPAlbumFetcher::fetchAlbumAsync(const std::string& albumId, utils::ISubscriber<Album>& subscriber)
+void UPnPAlbumFetcher::fetchAlbums(const std::string& containerId, utils::ISubscriber<const Album&>& subscriber)
 {
-    std::shared_ptr<upnp::Item> container = std::make_shared<upnp::Item>(albumId);
-    m_Browser.getMetaDataAsync(*this, container, "@childCount,dc:title,upnp:artist,upnp:genre,upnp:albumArtURI", &subscriber);
+    auto container = std::make_shared<upnp::Item>(containerId);
+    m_Server.getContainersInContainer(container, [&] (const upnp::ItemPtr& item) {
+        processItem(item, subscriber);
+    }, 0, 0);
 }
 
-void UPnPAlbumFetcher::fetchAlbums(const std::string& containerId, utils::ISubscriber<Album>& subscriber)
+void UPnPAlbumFetcher::fetchAlbumsAsync(const std::string& containerId, utils::ISubscriber<const Album&>& subscriber)
 {
-    upnp::Item container(containerId);
-    m_Browser.getContainers(*this, container, 0, 0, &subscriber);
+    m_Server.setCompletedCallback([&] () {
+        subscriber.finalItemReceived();
+    });
+    
+    auto container = std::make_shared<upnp::Item>(containerId);
+    m_Server.getContainersInContainerAsync(container, [&] (const upnp::ItemPtr& item) {
+        processItem(item, subscriber);
+    }, 0, 0);
 }
 
-void UPnPAlbumFetcher::fetchAlbumsAsync(const std::string& containerId, utils::ISubscriber<Album>& subscriber)
+Album UPnPAlbumFetcher::containerToAlbum(const upnp::Item& container)
 {
-    m_Browser.getContainersAsync(*this, upnp::Item(containerId), 0, 0, &subscriber);
-}
-
-void UPnPAlbumFetcher::containerToAlbum(const upnp::Item& container, Album& album)
-{
-    if (album.id.empty())
-    {
-        album.id = container.getObjectId();
-    }
-
-    album.title = container.getTitle();
-    album.artist = container.getMetaData("upnp:artist");
-    album.artUrl = container.getMetaData("upnp:albumArtURI");
-    album.genre = container.getMetaData("upnp:genre");
-
-    album.trackCount = stringops::toNumeric<uint32_t>(container.getMetaData("childCount"));
+    Album album;
+    album.id            = container.getObjectId();
+    album.title         = container.getTitle();
+    album.trackCount    = container.getChildCount();
+    album.artist        = container.getMetaData(upnp::Property::Artist);
+    album.artUrl        = container.getMetaData(upnp::Property::AlbumArt);
+    album.genre         = container.getMetaData(upnp::Property::Genre);
+    
+    return album;
 }
 
 uint32_t durationFromString(const std::string& durationString)

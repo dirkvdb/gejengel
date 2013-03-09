@@ -78,18 +78,17 @@ UPnPView::~UPnPView()
 
 void UPnPView::loadServers()
 {
-    std::vector<upnp::Device> servers = m_ServerSettings.getServers();
-    for (auto server : servers)
+    for (auto& server : m_ServerSettings.getServers())
     {
         Gtk::TreeModel::Row row     = *(m_TreeModel->append());
-        row[m_Columns.serverName]   = server.m_UserDefinedName;
+        row[m_Columns.serverName]   = server->m_UserDefinedName;
         row[m_Columns.server]       = server;
     }
 }
 
 void UPnPView::saveServers()
 {
-    std::vector<upnp::Device> servers;
+    std::vector<std::shared_ptr<upnp::Device>> servers;
     
     Gtk::TreeModel::Children rows = m_TreeModel->children();
     for (Gtk::TreeModel::iterator iter = rows.begin(); iter != rows.end(); ++iter)
@@ -124,9 +123,9 @@ void UPnPView::onAddDialogClosed(int response)
 {
     if (response == Gtk::RESPONSE_OK)
     {
-        upnp::Device server = m_pDialog->getSelectedServerContainer();
+        auto server = m_pDialog->getSelectedServerContainer();
         Gtk::TreeModel::Row row     = *(m_TreeModel->append());
-        row[m_Columns.serverName]   = server.m_UserDefinedName;
+        row[m_Columns.serverName]   = server->m_UserDefinedName;
         row[m_Columns.server]       = server;
     }
     

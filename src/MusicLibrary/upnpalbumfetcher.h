@@ -28,7 +28,7 @@
 
 namespace upnp
 {
-    class Browser;
+    class MediaServer;
 }
 
 namespace Gejengel
@@ -37,54 +37,48 @@ namespace Gejengel
 class Track;
 class Album;
 
-class UPnPTrackFetcher	: public utils::ISubscriber<upnp::Item>
-                        , public utils::ISubscriber<std::shared_ptr<upnp::Item>>
+class UPnPTrackFetcher
 {
 public:
-    UPnPTrackFetcher(upnp::Browser& browser);
+    UPnPTrackFetcher(upnp::MediaServer& server);
 
-    void onItem(const upnp::Item& item, void* pData = nullptr);
-    void onItem(const std::shared_ptr<upnp::Item>& item, void* pData = nullptr);
+    Track fetchTrack(const std::string& TrackId);
+    void fetchTrackAsync(const std::string& trackId, utils::ISubscriber<const Track&>& subscriber);
 
-    void fetchTrack(const std::string& TrackId, Track& track);
-    void fetchTrackAsync(const std::string& trackId, utils::ISubscriber<Track>& subscriber);
+    void fetchTracks(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber);
+    void fetchTracksAsync(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber);
 
-    void fetchTracks(const std::string& containerId, utils::ISubscriber<Track>& subscriber);
-    void fetchTracksAsync(const std::string& containerId, utils::ISubscriber<Track>& subscriber);
-
-    void fetchFirstTrack(const std::string& containerId, utils::ISubscriber<Track>& subscriber);
-    void fetchFirstTrackAsync(const std::string& containerId, utils::ISubscriber<Track>& subscriber);
+    void fetchFirstTrack(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber);
+    void fetchFirstTrackAsync(const std::string& containerId, utils::ISubscriber<const Track&>& subscriber);
 
 private:
     void resetTrackCount();
-    void itemToTrack(upnp::Item& item, Track& track);
+    Track itemToTrack(upnp::Item& item);
     
-    upnp::Browser&        		m_Browser;
-    uint32_t					m_CurrentTrackNr;
-    uint32_t					m_CurrentDiscNr;
+    upnp::MediaServer&          m_Server;
+    uint32_t                    m_CurrentTrackNr;
+    uint32_t                    m_CurrentDiscNr;
 };
 
-class UPnPAlbumFetcher 	: public utils::ISubscriber<upnp::Item>
-                        , public utils::ISubscriber<std::shared_ptr<upnp::Item>>
+class UPnPAlbumFetcher
 {
 public:
-    UPnPAlbumFetcher(upnp::Browser& browser);
+    UPnPAlbumFetcher(upnp::MediaServer& browser);
 
-    void onItem(const upnp::Item& container, void* pData = nullptr);
-    void onItem(const std::shared_ptr<upnp::Item>& item, void* pData = nullptr);
+    Album fetchAlbum(const std::string& albumId);
+    void fetchAlbumAsync(const std::string& albumId, utils::ISubscriber<const Album&>& subscriber);
 
-    void fetchAlbum(const std::string& albumId, Album& album);
-    void fetchAlbumAsync(const std::string& albumId, utils::ISubscriber<Album>& subscriber);
-
-    void fetchAlbums(const std::string& containerId, utils::ISubscriber<Album>& subscriber);
-    void fetchAlbumsAsync(const std::string& containerId, utils::ISubscriber<Album>& subscriber);
+    void fetchAlbums(const std::string& containerId, utils::ISubscriber<const Album&>& subscriber);
+    void fetchAlbumsAsync(const std::string& containerId, utils::ISubscriber<const Album&>& subscriber);
 
     void finalItemReceived(void* pData = nullptr);
 
 private:
-    void containerToAlbum(const upnp::Item& container, Album& album);
+    void processItem(const upnp::ItemPtr& item, utils::ISubscriber<const Album&>& subscriber);
 
-    upnp::Browser&        		m_Browser;
+    Album containerToAlbum(const upnp::Item& container);
+
+    upnp::MediaServer&              m_Server;
 };
 
 }

@@ -40,12 +40,12 @@ namespace Gejengel
 
 UPnPMusicLibrary::UPnPMusicLibrary(Settings& settings)
 : MusicLibrary(settings)
-, m_Browser(m_CtrlPnt)
-, m_TrackFetcher(m_Browser)
-, m_AlbumFetcher(m_Browser)
+, m_Server(m_Client)
+, m_TrackFetcher(m_Server)
+, m_AlbumFetcher(m_Server)
 {
     utils::trace("Create UPnPMusicLibrary");
-    m_CtrlPnt.initialize();
+    m_Client.initialize();
 }
 
 UPnPMusicLibrary::~UPnPMusicLibrary()
@@ -61,69 +61,63 @@ uint32_t UPnPMusicLibrary::getAlbumCount()
 {
     uint32_t albumCount = 0;
 
-    upnp::Item container(m_CurrentServer.m_ContainerId);
-    m_Browser.getMetaData(container, "*");
+    auto container = std::make_shared<upnp::Item>(m_CurrentServer->m_ContainerId);
+    m_Server.getMetaData(container);
 
-    std::string childCountStr = container.getMetaData("childCount");
-    if (!childCountStr.empty())
-    {
-        albumCount = stringops::toNumeric<uint32_t>(childCountStr);
-    }
-    
-    return albumCount;
+    return container->getChildCount();
 }
 
 void UPnPMusicLibrary::getTrack(const std::string& id, Track& track)
 {
-    m_TrackFetcher.fetchTrack(id, track);
+    track = m_TrackFetcher.fetchTrack(id);
 }
 
-void UPnPMusicLibrary::getTrackAsync(const std::string& id, utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getTrackAsync(const std::string& id, utils::ISubscriber<const Track&>& subscriber)
 {
     m_TrackFetcher.fetchTrackAsync(id, subscriber);
 }
 
-void UPnPMusicLibrary::getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getTracksFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     m_TrackFetcher.fetchTracks(albumId, subscriber);
 }
 
-void UPnPMusicLibrary::getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getTracksFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
     m_TrackFetcher.fetchTracksAsync(albumId, subscriber);
 }
 
-void UPnPMusicLibrary::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getFirstTrackFromAlbum(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
 	m_TrackFetcher.fetchFirstTrack(albumId, subscriber);
 }
 
-void UPnPMusicLibrary::getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getFirstTrackFromAlbumAsync(const std::string& albumId, utils::ISubscriber<const Track&>& subscriber)
 {
 	m_TrackFetcher.fetchFirstTrackAsync(albumId, subscriber);
 }
 
 void UPnPMusicLibrary::getAlbum(const std::string& albumId, Album& album)
 {
-    m_AlbumFetcher.fetchAlbum(albumId, album);
+    album = m_AlbumFetcher.fetchAlbum(albumId);
 }
 
-void UPnPMusicLibrary::getAlbumAsync(const std::string& albumId, utils::ISubscriber<Album>& subscriber)
+void UPnPMusicLibrary::getAlbumAsync(const std::string& albumId, utils::ISubscriber<const Album&>& subscriber)
 {
 	m_AlbumFetcher.fetchAlbumAsync(albumId, subscriber);
 }
 
-void UPnPMusicLibrary::getRandomTracks(uint32_t trackCount, utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getRandomTracks(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber)
 {
 	log::warn("UPnPMusicLibrary::getRandomTracks TODO: implement me");
 }
 
-void UPnPMusicLibrary::getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getRandomTracksAsync(uint32_t trackCount, utils::ISubscriber<const Track&>& subscriber)
 {
 	log::warn("UPnPMusicLibrary::getRandomTracks async TODO: implement me");
 }
 
-void UPnPMusicLibrary::getRandomAlbum(utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getRandomAlbum(utils::ISubscriber<const Track&>& subscriber)
 {
     uint32_t albumCount = getAlbumCount();
     if (albumCount == 0)
@@ -134,42 +128,30 @@ void UPnPMusicLibrary::getRandomAlbum(utils::ISubscriber<Track>& subscriber)
 
     uint32_t randomAlbum = rand() % albumCount;
 
-    class ContainerSubscriber : public utils::ISubscriber<upnp::Item>
-    {
-    public:
-        void onItem(const upnp::Item& container, void* pData)
-        {
-            m_ContainerId = container.getObjectId();
-        }
-
-        std::string  m_ContainerId;
-    };
-
-    ContainerSubscriber albumSubscriber;
-    upnp::Item container(m_CurrentServer.m_ContainerId);
-    m_Browser.getContainers(albumSubscriber, container, 1, randomAlbum, nullptr);
-
-    getTracksFromAlbumAsync(albumSubscriber.m_ContainerId, subscriber);
+    auto container = std::make_shared<upnp::Item>(m_CurrentServer->m_ContainerId);
+    m_Server.getContainersInContainer(container, [&] (const upnp::ItemPtr& container) {
+        getTracksFromAlbumAsync(container->getObjectId(), subscriber);
+    }, randomAlbum, 1);
 }
 
-void UPnPMusicLibrary::getRandomAlbumAsync(utils::ISubscriber<Track>& subscriber)
+void UPnPMusicLibrary::getRandomAlbumAsync(utils::ISubscriber<const Track&>& subscriber)
 {
 	log::debug("TODO: UPnPMusicLibrary::getRandomAlbumAsync: implement me");
 }
 
-void UPnPMusicLibrary::getAlbums(utils::ISubscriber<Album>& subscriber)
+void UPnPMusicLibrary::getAlbums(utils::ISubscriber<const Album&>& subscriber)
 {
-    if (!m_CurrentServer.m_ContainerId.empty())
+    if (!m_CurrentServer->m_ContainerId.empty())
     {
-        m_AlbumFetcher.fetchAlbums(m_CurrentServer.m_ContainerId, subscriber);
+        m_AlbumFetcher.fetchAlbums(m_CurrentServer->m_ContainerId, subscriber);
     }
 }
 
-void UPnPMusicLibrary::getAlbumsAsync(utils::ISubscriber<Album>& subscriber)
+void UPnPMusicLibrary::getAlbumsAsync(utils::ISubscriber<const Album&>& subscriber)
 {
-    if (!m_CurrentServer.m_ContainerId.empty())
+    if (!m_CurrentServer->m_ContainerId.empty())
     {
-        m_AlbumFetcher.fetchAlbumsAsync(m_CurrentServer.m_ContainerId, subscriber);
+        m_AlbumFetcher.fetchAlbumsAsync(m_CurrentServer->m_ContainerId, subscriber);
     }
 }
 
@@ -214,7 +196,7 @@ void UPnPMusicLibrary::scan(bool startFresh, IScanSubscriber& subscriber)
     subscriber.scanFinish();
 }
 
-void UPnPMusicLibrary::search(const std::string& searchString, utils::ISubscriber<Track>& trackSubscriber, utils::ISubscriber<Album>& albumSubscriber)
+void UPnPMusicLibrary::search(const std::string& searchString, utils::ISubscriber<const Track&>& trackSubscriber, utils::ISubscriber<const Album&>& albumSubscriber)
 {
 }
 
@@ -226,7 +208,7 @@ void UPnPMusicLibrary::setSource(const LibrarySource& source)
     
     try
     {
-        m_Browser.setDevice(m_CurrentServer);
+        m_Server.setDevice(m_CurrentServer);
     }
     catch (std::exception& e)
     {
@@ -234,9 +216,9 @@ void UPnPMusicLibrary::setSource(const LibrarySource& source)
     }
 }
 
-upnp::ControlPoint& UPnPMusicLibrary::getControlPoint()
+upnp::Client& UPnPMusicLibrary::getClient()
 {
-    return m_CtrlPnt;
+    return m_Client;
 }
 
 }

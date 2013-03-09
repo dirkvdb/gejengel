@@ -44,7 +44,7 @@ MusicLibrary* MusicLibraryFactory::create(const LibraryType type, Settings& sett
 #endif
     }
 
-    throw std::logic_error("MusicLibraryFactory: Unsupported music library type provided: " + type);
+    throw std::logic_error("MusicLibraryFactory: Unsupported music library type provided: " + std::to_string(type));
 }
 
 }

@@ -53,11 +53,11 @@ UPnPServerSettings::~UPnPServerSettings()
 {
 }
 
-upnp::Device UPnPServerSettings::getServer(const std::string& userDefinedName) const
+std::shared_ptr<upnp::Device> UPnPServerSettings::getServer(const std::string& userDefinedName) const
 {
-    for (auto server : m_Servers)
+    for (auto& server : m_Servers)
     {
-        if (server.m_UserDefinedName == userDefinedName)
+        if (server->m_UserDefinedName == userDefinedName)
         {
             return server;
         }
@@ -66,12 +66,12 @@ upnp::Device UPnPServerSettings::getServer(const std::string& userDefinedName) c
     throw std::logic_error("Server not found: " + userDefinedName);
 }
 
-std::vector<upnp::Device> UPnPServerSettings::getServers() const
+std::vector<std::shared_ptr<upnp::Device>> UPnPServerSettings::getServers() const
 {
     return m_Servers;
 }
 
-void UPnPServerSettings::setServers(std::vector<upnp::Device>& servers)
+void UPnPServerSettings::setServers(std::vector<std::shared_ptr<upnp::Device>>& servers)
 {
     m_Servers = servers;
 }
@@ -85,9 +85,13 @@ void UPnPServerSettings::saveToFile()
         return;
     }
 
-    for (upnp::Device& device: m_Servers)
+    for (auto& device: m_Servers)
     {
-        file << device.m_UserDefinedName << "=" << device.m_UDN << "=" << device.m_ContainerId << "=" << device.m_CDControlURL << endl;
+        if (device->implementsService(upnp::ServiceType::ContentDirectory))
+        {
+            auto url = device->m_Services[upnp::ServiceType::ContentDirectory].m_ControlURL;
+            file << device->m_UserDefinedName << "=" << device->m_UDN << "=" << device->m_ContainerId << "=" << url << endl;
+        }
     }
 }
 
@@ -115,17 +119,14 @@ void UPnPServerSettings::loadFromFile()
             continue;
         }
 
-        upnp::Device server;
-        server.m_UserDefinedName    = items[0];
-        server.m_UDN                = items[1];
-        server.m_ContainerId        = items[2];
-        server.m_CDControlURL       = items[3];
-
-        stringops::trim(server.m_UserDefinedName);
-        stringops::trim(server.m_UDN);
-        stringops::trim(server.m_ContainerId);
-        stringops::trim(server.m_CDControlURL);
-
+        upnp::Service service;
+        service.m_ControlURL      = stringops::trim(items[3].c_str());
+        
+        auto server = std::make_shared<upnp::Device>();
+        server->m_UserDefinedName    = stringops::trim(items[0].c_str());
+        server->m_UDN                = stringops::trim(items[1].c_str());
+        server->m_ContainerId        = stringops::trim(items[2].c_str());
+        server->m_Services[upnp::ServiceType::ContentDirectory] = service;
         m_Servers.push_back(server);
     }
 }

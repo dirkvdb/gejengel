@@ -1,6 +1,11 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+ADD_DEFINITIONS("-std=c++11")
+ADD_DEFINITIONS("-D__STDC_CONSTANT_MACROS")
+IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    ADD_DEFINITIONS("-stdlib=libc++")
+ENDIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g -O0 -Wall -Werror -Wfatal-errors -Wno-deprecated-declarations")
 
 FIND_PACKAGE(PkgConfig)
@@ -140,9 +145,9 @@ IF (HAVE_FLAC)
     LIST(APPEND AUDIODECODER_SRC_LIST AudioDecoder/flacdecoder.cpp)
 ENDIF(HAVE_FLAC)
 
-IF (HAVE_LIBUPNP)
+IF (UPNPSUPPORT)
     LIST(APPEND AUDIODECODER_SRC_LIST AudioDecoder/httpreader.cpp)
-ENDIF(HAVE_LIBUPNP)
+ENDIF (UPNPSUPPORT)
 
 SET(AUDIORENDERER_SRC_LIST
     AudioRenderer/audiobuffer.cpp
@@ -191,13 +196,13 @@ SET(MUSICLIBRARY_SRC_LIST
     MusicLibrary/track.cpp
 )
 
-IF (HAVE_LIBUPNP)
+IF (UPNPSUPPORT)
     SET(MUSICLIBRARY_SRC_LIST
         ${MUSICLIBRARY_SRC_LIST}
         MusicLibrary/upnpalbumfetcher.cpp
         MusicLibrary/upnpmusiclibrary.cpp
     )
-ENDIF (HAVE_LIBUPNP)
+ENDIF (UPNPSUPPORT)
 
 SET(PLUGIN_SRC_LIST dummy.cpp)
 
@@ -245,7 +250,6 @@ SET(UI_SRC_LIST
     ui/trackview.cpp
     ui/uilayoutfactory.cpp
     ui/uilayoutfactory.h
-    
 )
 
 IF (HAVE_LIBUPNP)
@@ -257,6 +261,10 @@ IF (HAVE_LIBUPNP)
 
 ENDIF (HAVE_LIBUPNP)
 
+foreach(f ${LINK_DIRECTORIES})
+    message(${f})
+endforeach(f) 
+
 ADD_LIBRARY(audiodecoder    STATIC ${AUDIODECODER_SRC_LIST})
 ADD_LIBRARY(audiorenderer   STATIC ${AUDIORENDERER_SRC_LIST})
 ADD_LIBRARY(core            STATIC ${CORE_SRC_LIST})
@@ -266,13 +274,13 @@ ADD_LIBRARY(ui              STATIC ${UI_SRC_LIST})
 
 ADD_EXECUTABLE(gejengel main.cpp)
 
-TARGET_LINK_LIBRARIES(audiodecoder)
-TARGET_LINK_LIBRARIES(audiorenderer)
-TARGET_LINK_LIBRARIES(plugins)
-TARGET_LINK_LIBRARIES(musiclibrary ${UPNP_FRAMEWORK_LIBRARIES})
-TARGET_LINK_LIBRARIES(ui core)
+TARGET_LINK_LIBRARIES(audiodecoder ${LINK_LIBS})
+TARGET_LINK_LIBRARIES(audiorenderer ${LINK_LIBS})
+TARGET_LINK_LIBRARIES(plugins ${LINK_LIBS})
+TARGET_LINK_LIBRARIES(musiclibrary ${LINK_LIBS})
+TARGET_LINK_LIBRARIES(ui core ${LINK_LIBS})
 TARGET_LINK_LIBRARIES(core audiodecoder audiorenderer musiclibrary plugins ui utils ${LINK_LIBS})
 
-TARGET_LINK_LIBRARIES(gejengel core)
+TARGET_LINK_LIBRARIES(gejengel ${LINK_LIBS} audiodecoder audiorenderer musiclibrary plugins core ui)
 INSTALL(TARGETS gejengel RUNTIME DESTINATION bin)
 

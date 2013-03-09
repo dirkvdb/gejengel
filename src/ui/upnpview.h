@@ -45,7 +45,7 @@ private:
 
         Gtk::TreeModelColumn<Glib::ustring>                 serverName;
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> >    serverIcon;
-        Gtk::TreeModelColumn<upnp::Device>                  server;
+        Gtk::TreeModelColumn<std::shared_ptr<upnp::Device>> server;
     };
     
     void loadServers();
