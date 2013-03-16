@@ -330,13 +330,13 @@ AudioFormat FFmpegDecoder::getAudioFormat()
 
     switch(m_pAudioCodecContext->sample_fmt)
     {
-    case SAMPLE_FMT_U8:
+    case AV_SAMPLE_FMT_U8:
         format.bits = 8;
         break;
-    case SAMPLE_FMT_S16:
+    case AV_SAMPLE_FMT_S16:
         format.bits = 16;
         break;
-    case SAMPLE_FMT_S32:
+    case AV_SAMPLE_FMT_S32:
         format.bits = 32;
         break;
     default:
