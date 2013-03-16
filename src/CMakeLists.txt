@@ -261,10 +261,6 @@ IF (HAVE_LIBUPNP)
 
 ENDIF (HAVE_LIBUPNP)
 
-foreach(f ${LINK_DIRECTORIES})
-    message(${f})
-endforeach(f) 
-
 ADD_LIBRARY(audiodecoder    STATIC ${AUDIODECODER_SRC_LIST})
 ADD_LIBRARY(audiorenderer   STATIC ${AUDIORENDERER_SRC_LIST})
 ADD_LIBRARY(core            STATIC ${CORE_SRC_LIST})
@@ -274,12 +270,9 @@ ADD_LIBRARY(ui              STATIC ${UI_SRC_LIST})
 
 ADD_EXECUTABLE(gejengel main.cpp)
 
-TARGET_LINK_LIBRARIES(audiodecoder ${LINK_LIBS})
-TARGET_LINK_LIBRARIES(audiorenderer ${LINK_LIBS})
-TARGET_LINK_LIBRARIES(plugins ${LINK_LIBS})
-TARGET_LINK_LIBRARIES(musiclibrary ${LINK_LIBS})
-TARGET_LINK_LIBRARIES(ui core ${LINK_LIBS})
-TARGET_LINK_LIBRARIES(core audiodecoder audiorenderer musiclibrary plugins ui utils ${LINK_LIBS})
+TARGET_LINK_LIBRARIES(musiclibrary ${UPNPFRAMEWORK_LIBRARIES})
+TARGET_LINK_LIBRARIES(ui core ${UPNPFRAMEWORK_LIBRARIES})
+TARGET_LINK_LIBRARIES(core audiodecoder audiorenderer musiclibrary plugins ui utils)
 
 TARGET_LINK_LIBRARIES(gejengel ${LINK_LIBS} audiodecoder audiorenderer musiclibrary plugins core ui)
 INSTALL(TARGETS gejengel RUNTIME DESTINATION bin)
