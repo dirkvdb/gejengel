@@ -7,3 +7,6 @@
 [submodule "modules/utils"]
 	path = modules/utils
 	url = https://bitbucket.org/dirk_vdb/utils.git
+[submodule "modules/audio"]
+	path = modules/audio
+	url = https://dirk_vdb@bitbucket.org/dirk_vdb/audio.git

@@ -21,17 +21,17 @@
 #include <mutex>
 
 #include "readerfactory.h"
-#include "AudioRenderer/audioframe.h"
+#include "audio/audioframe.h"
 #include "utils/log.h"
 
 using namespace std;
 using namespace utils;
 
-namespace Gejengel
+namespace audio
 {
 
 FlacDecoder::FlacDecoder(const std::string& uri)
-: AudioDecoder(uri)
+: IDecoder(uri)
 , m_BytesPerFrame(0)
 , m_NumSamples(0)
 , m_pReader(ReaderFactory::create(uri))
@@ -56,7 +56,7 @@ FlacDecoder::~FlacDecoder()
     finish();
 }
 
-AudioFormat FlacDecoder::getAudioFormat()
+Format FlacDecoder::getAudioFormat()
 {
     return m_Format;
 }
@@ -102,7 +102,7 @@ void FlacDecoder::seekRelative(double offset)
     seekAbsolute(m_AudioClock + offset);
 }
 
-bool FlacDecoder::decodeAudioFrame(AudioFrame& frame)
+bool FlacDecoder::decodeAudioFrame(Frame& frame)
 {
     if (!process_single())
     {

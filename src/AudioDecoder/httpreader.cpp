@@ -21,7 +21,7 @@
 #include "utils/log.h"
 #include "upnp/upnphttpget.h"
 
-namespace Gejengel
+namespace audio
 {
 
 HttpReader::HttpReader()

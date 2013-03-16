@@ -33,23 +33,23 @@ extern "C"
     #include <libavformat/avformat.h>
 }
 
-namespace Gejengel
+namespace audio
 {
 
-class AudioFrame;
-struct AudioFormat;
+class Frame;
+struct Format;
 
-class FFmpegDecoder : public AudioDecoder
+class FFmpegDecoder : public IDecoder
 {
 public:
     FFmpegDecoder(const std::string& filename);
     ~FFmpegDecoder();
 
-    bool decodeAudioFrame(AudioFrame& audioFrame);
+    bool decodeAudioFrame(Frame& audioFrame);
     void seekAbsolute(double time);
     void seekRelative(double offset);
 
-    AudioFormat getAudioFormat();
+    Format getAudioFormat();
 
     double  getProgress();
     double  getDuration();

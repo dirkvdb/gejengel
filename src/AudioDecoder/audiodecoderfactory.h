@@ -19,15 +19,15 @@
 
 #include <string>
 
-namespace Gejengel
+namespace audio
 {
 
-class AudioDecoder;
+class IDecoder;
 
-class AudioDecoderFactory
+class DecoderFactory
 {
 public:
-    static AudioDecoder* create(const std::string& filepath);
+    static IDecoder* create(const std::string& filepath);
 };
 
 }

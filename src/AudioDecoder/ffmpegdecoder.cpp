@@ -15,8 +15,8 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "ffmpegdecoder.h"
-#include "AudioRenderer/audioframe.h"
-#include "AudioRenderer/audioformat.h"
+#include "audio/audioframe.h"
+#include "audio/audioformat.h"
 #include "utils/log.h"
 
 #include <cassert>
@@ -36,11 +36,11 @@ extern "C"
 using namespace std;
 using namespace utils;
 
-namespace Gejengel
+namespace audio
 {
 
 FFmpegDecoder::FFmpegDecoder(const std::string& filepath)
-: AudioDecoder(filepath)
+: IDecoder(filepath)
 , m_AudioStream(-1)
 , m_pFormatContext(nullptr)
 , m_pAudioCodecContext(nullptr)
@@ -161,7 +161,7 @@ void FFmpegDecoder::initializeAudio()
         throw logic_error("Could not open audio codec for " + m_Filepath);
     }
 
-    AudioFormat format = getAudioFormat();
+    Format format = getAudioFormat();
     m_BytesPerFrame = format.framesPerPacket * (format.bits / 8) * format.numChannels;
 
     m_CurrentPacket.data = nullptr;
@@ -233,7 +233,7 @@ void FFmpegDecoder::seek(::int64_t timestamp)
 }
 
 
-bool FFmpegDecoder::decodeAudioFrame(AudioFrame& frame)
+bool FFmpegDecoder::decodeAudioFrame(Frame& frame)
 {
     for (;;)
     {
@@ -324,9 +324,9 @@ bool FFmpegDecoder::readPacket(AVPacket& packet)
     return frameRead;
 }
 
-AudioFormat FFmpegDecoder::getAudioFormat()
+Format FFmpegDecoder::getAudioFormat()
 {
-    AudioFormat format;
+    Format format;
 
     switch(m_pAudioCodecContext->sample_fmt)
     {

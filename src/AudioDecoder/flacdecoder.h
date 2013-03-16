@@ -25,27 +25,27 @@
 #include <FLAC++/decoder.h>
 
 #include "AudioDecoder/audiodecoder.h"
-#include "AudioRenderer/audioformat.h"
+#include "audio/audioformat.h"
 #include "utils/types.h"
 
-namespace Gejengel
+namespace audio
 {
 
-class AudioFrame;
+class Frame;
 class IReader;
 
-class FlacDecoder : public AudioDecoder
+class FlacDecoder : public IDecoder
                   , public FLAC::Decoder::Stream
 {
 public:
     FlacDecoder(const std::string& uri);
     ~FlacDecoder();
 
-    bool decodeAudioFrame(AudioFrame& audioFrame);
+    bool decodeAudioFrame(Frame& audioFrame);
     void seekAbsolute(double time);
     void seekRelative(double offset);
 
-    AudioFormat getAudioFormat();
+    Format getAudioFormat();
 
     double  getProgress();
     double  getDuration();
@@ -66,7 +66,7 @@ private:
     std::vector<uint8_t>        m_AudioBuffer;
     uint32_t                    m_BytesPerFrame;
     uint64_t                    m_NumSamples;
-    AudioFormat                 m_Format;
+    Format                      m_Format;
     std::unique_ptr<IReader>    m_pReader;
 };
 

@@ -21,7 +21,7 @@
 
 #include "utils/types.h"
 
-namespace Gejengel
+namespace audio
 {
 
 class IReader

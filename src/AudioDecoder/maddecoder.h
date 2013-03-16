@@ -27,23 +27,23 @@
 #include "utils/types.h"
 #include "AudioDecoder/audiodecoder.h"
 
-namespace Gejengel
+namespace audio
 {
 
-class AudioFrame;
+class Frame;
 class IReader;
 
-class MadDecoder : public AudioDecoder
+class MadDecoder : public IDecoder
 {
 public:
     MadDecoder(const std::string& uri);
     ~MadDecoder();
 
-    bool decodeAudioFrame(AudioFrame& audioFrame);
+    bool decodeAudioFrame(Frame& audioFrame);
     void seekAbsolute(double time);
     void seekRelative(double offset);
 
-    AudioFormat getAudioFormat();
+    Format getAudioFormat();
 
     double  getProgress();
     double  getAudioClock();
@@ -54,7 +54,7 @@ private:
     bool readDataIfNecessary();
     bool synchronize();
     bool readHeaders();
-    bool decodeAudioFrame(AudioFrame& audioFrame, bool processSamples);
+    bool decodeAudioFrame(Frame& audioFrame, bool processSamples);
     
     uint32_t                    m_FileSize;
     mad_stream                  m_MadStream;

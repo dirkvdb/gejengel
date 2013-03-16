@@ -22,8 +22,8 @@
 #include <stdexcept>
 
 #include "readerfactory.h"
-#include "AudioRenderer/audioframe.h"
-#include "AudioRenderer/audioformat.h"
+#include "audio/audioframe.h"
+#include "audio/audioformat.h"
 #include "utils/log.h"
 #include "utils/fileoperations.h"
 #include "utils/numericoperations.h"
@@ -31,13 +31,13 @@
 using namespace std;
 using namespace utils;
 
-namespace Gejengel
+namespace audio
 {
 
 static const size_t     INPUT_BUFFER_SIZE = 65536; //64kb buffer
 
 MadDecoder::MadDecoder(const std::string& uri)
-: AudioDecoder(uri)
+: IDecoder(uri)
 , m_FileSize(0)
 , m_TrackPos(mad_timer_zero)
 , m_EncoderDelay(0)
@@ -76,9 +76,9 @@ MadDecoder::~MadDecoder()
     mad_synth_finish(&m_MadSynth);
 }
 
-AudioFormat MadDecoder::getAudioFormat()
+Format MadDecoder::getAudioFormat()
 {
-    AudioFormat format;
+    Format format;
     format.bits = 16;
     format.rate = m_MpegHeader.sampleRate;
     format.numChannels = m_MpegHeader.numChannels;
@@ -148,7 +148,7 @@ void MadDecoder::seekAbsolute(double time)
     synchronize();
 
     //already decode one frame to avoid clicks
-    AudioFrame frame;
+    Frame frame;
     decodeAudioFrame(frame, false);
     decodeAudioFrame(frame, false);
 }
@@ -266,12 +266,12 @@ inline int32_t dither(mad_fixed_t sample, mad_fixed_t ditherError[3], mad_fixed_
     return output >> scalebits;
 }
 
-bool MadDecoder::decodeAudioFrame(AudioFrame& audioFrame)
+bool MadDecoder::decodeAudioFrame(Frame& audioFrame)
 {
     return decodeAudioFrame(audioFrame, true);
 }
 
-bool MadDecoder::decodeAudioFrame(AudioFrame& frame, bool processSamples)
+bool MadDecoder::decodeAudioFrame(Frame& frame, bool processSamples)
 {
     readDataIfNecessary();
 

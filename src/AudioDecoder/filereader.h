@@ -23,7 +23,7 @@
 
 #include "reader.h"
 
-namespace Gejengel
+namespace audio
 {
 
 class FileReader : public IReader

@@ -19,7 +19,7 @@
 
 #include <string>
 
-namespace Gejengel
+namespace audio
 {
 
 class IReader;

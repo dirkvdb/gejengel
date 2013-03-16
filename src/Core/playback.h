@@ -24,7 +24,7 @@
 #include <sigc++/connection.h>
 
 #include "playbackengine.h"
-#include "AudioRenderer/audioframe.h"
+#include "audio/audioframe.h"
 #include "MusicLibrary/track.h"
 #include "utils/types.h"
 
@@ -32,11 +32,15 @@
 //#define DUMP_TO_WAVE
 //#include <fstream>
 
+namespace audio
+{
+    class IRenderer;
+    class IDecoder;
+}
+
 namespace Gejengel
 {
 
-class AudioDecoder;
-class AudioRenderer;
 class GejengelCore;
 
 class Playback : public PlaybackEngine
@@ -71,8 +75,8 @@ private:
     void playbackLoop();
     bool rendererHasSpace(uint32_t dataSize);
 
-    std::unique_ptr<AudioDecoder>   m_pAudioDecoder;
-    std::unique_ptr<AudioRenderer>  m_pAudioRenderer;
+    std::unique_ptr<audio::IDecoder>        m_pAudioDecoder;
+    std::unique_ptr<audio::IRenderer>       m_pAudioRenderer;
 
     std::thread             m_PlaybackThread;
     std::condition_variable m_PlaybackCondition;
@@ -87,7 +91,7 @@ private:
     bool                    m_SkipTrack;
     bool                    m_SeekOccured;
     double                  m_CurrentPts;
-    AudioFrame              m_AudioFrame;
+    audio::Frame            m_AudioFrame;
 
 #ifdef DUMP_TO_WAVE
     std::ofstream           m_WaveFile;

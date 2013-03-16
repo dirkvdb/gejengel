@@ -25,7 +25,7 @@
 using namespace std;
 using namespace utils;
 
-namespace Gejengel
+namespace audio
 {
 
 namespace MpegUtils

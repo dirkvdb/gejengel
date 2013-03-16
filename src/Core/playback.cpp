@@ -23,10 +23,10 @@
 
 #include "AudioDecoder/audiodecoder.h"
 #include "AudioDecoder/audiodecoderfactory.h"
-#include "AudioRenderer/audiorenderer.h"
-#include "AudioRenderer/audioformat.h"
-#include "AudioRenderer/audioframe.h"
-#include "AudioRenderer/audiorendererfactory.h"
+#include "audio/audiorenderer.h"
+#include "audio/audioformat.h"
+#include "audio/audioframe.h"
+#include "audio/audiorendererfactory.h"
 #include "MusicLibrary/track.h"
 #include "MusicLibrary/album.h"
 #include "utils/timeoperations.h"
@@ -38,6 +38,7 @@
 #include "settings.h"
 
 using namespace std;
+using namespace std::placeholders;
 using namespace utils;
 
 namespace Gejengel
@@ -55,7 +56,8 @@ Playback::Playback(GejengelCore& core)
 {
     try
     {
-        m_pAudioRenderer.reset(AudioRendererFactory::create(core.getSettings().get("AudioBackend"), *this));
+        m_pAudioRenderer.reset(audio::RendererFactory::create(PACKAGE_NAME, core.getSettings().get("AudioBackend")));
+        m_pAudioRenderer->VolumeChanged.connect(std::bind(&Playback::setVolume, this, _1), this);
     }
     catch (std::exception&)
     {
@@ -82,6 +84,7 @@ Playback::~Playback()
     updateWaveHeaderSize();
 #endif
 
+    m_pAudioRenderer->VolumeChanged.disconnect(this);
     m_PlaybackCondition.notify_all();
 
     if (m_PlaybackThread.joinable())
@@ -107,7 +110,7 @@ bool Playback::startNewTrack()
         try
         {
             log::info("Play track: %s", m_CurrentTrack.filepath);
-            m_pAudioDecoder.reset(AudioDecoderFactory::create(m_CurrentTrack.filepath));
+            m_pAudioDecoder.reset(audio::DecoderFactory::create(m_CurrentTrack.filepath));
         }
         catch (logic_error& e)
         {
@@ -125,7 +128,7 @@ bool Playback::startNewTrack()
     m_Core.dispatchNewTrackStarted();
     m_NewTrackStarted = true;
 
-    AudioFormat format = m_pAudioDecoder->getAudioFormat();
+    auto format = m_pAudioDecoder->getAudioFormat();
     if (m_pAudioRenderer)
     {
         m_pAudioRenderer->setFormat(format);

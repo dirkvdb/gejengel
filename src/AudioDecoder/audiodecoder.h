@@ -22,23 +22,23 @@
 #include "utils/types.h"
 #include "reader.h"
 
-namespace Gejengel
+namespace audio
 {
 
-class AudioFrame;
-struct AudioFormat;
+class Frame;
+struct Format;
 
-class AudioDecoder
+class IDecoder
 {
 public:
-    AudioDecoder(const std::string& uri) : m_Filepath(uri), m_AudioClock(0.0) {}
-    virtual ~AudioDecoder() {}
+    IDecoder(const std::string& uri) : m_Filepath(uri), m_AudioClock(0.0) {}
+    virtual ~IDecoder() {}
 
-    virtual bool decodeAudioFrame(AudioFrame& audioFrame) = 0;
+    virtual bool decodeAudioFrame(Frame& audioFrame) = 0;
     virtual void seekAbsolute(double time) = 0;
     virtual void seekRelative(double offset) = 0;
 
-    virtual AudioFormat getAudioFormat() = 0;
+    virtual Format getAudioFormat() = 0;
 
     virtual double  getAudioClock() { return m_AudioClock; }
     virtual double  getDuration() = 0;

@@ -18,7 +18,7 @@
 
 #include <stdexcept>
 
-namespace Gejengel
+namespace audio
 {
     
 FileReader::FileReader()

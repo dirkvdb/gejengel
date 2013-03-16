@@ -27,7 +27,7 @@
     #include "httpreader.h"
 #endif
 
-namespace Gejengel
+namespace audio
 {
 
 IReader* ReaderFactory::create(const std::string& uri)

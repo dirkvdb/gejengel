@@ -41,10 +41,10 @@
 
 using namespace utils;
 
-namespace Gejengel
+namespace audio
 {
 
-AudioDecoder* AudioDecoderFactory::create(const std::string& filepath)
+IDecoder* DecoderFactory::create(const std::string& filepath)
 {
     std::string extension = fileops::getFileExtension(filepath);
     stringops::lowercase(extension);

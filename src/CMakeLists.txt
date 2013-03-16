@@ -1,11 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-ADD_DEFINITIONS("-std=c++11")
 ADD_DEFINITIONS("-D__STDC_CONSTANT_MACROS")
-IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    ADD_DEFINITIONS("-stdlib=libc++")
-ENDIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g -O0 -Wall -Werror -Wfatal-errors -Wno-deprecated-declarations")
 
 FIND_PACKAGE(PkgConfig)
@@ -18,27 +13,12 @@ pkg_check_modules(XDGBASEDIR libxdg-basedir REQUIRED)
 
 pkg_check_modules(FLAC flac++)
 pkg_check_modules(MAD mad)
-pkg_check_modules(PULSEAUDIO libpulse)
 pkg_check_modules(LASTFMLIB liblastfmlib)
 pkg_check_modules(LIBNOTIFY libnotify)
 pkg_check_modules(DBUSGLIB dbus-glib-1)
 pkg_check_modules(AVCODEC libavcodec)
 pkg_check_modules(AVFORMAT libavformat)
 pkg_check_modules(AVUTIL libavutil)
-
-FIND_PACKAGE(ALSA)
-IF (ALSA_FOUND)
-    OPTION(HAVE_ALSA "Alsa audio output support" ON)
-ENDIF (ALSA_FOUND)
-
-IF (PULSEAUDIO_FOUND)
-    OPTION(HAVE_PULSE "Pulse audio output support" ON)
-ENDIF (PULSEAUDIO_FOUND)
-
-FIND_PACKAGE(OpenAL)
-IF (OPENAL_FOUND)
-    OPTION(HAVE_OPENAL "OpenAL audio output support" ON)
-ENDIF (OPENAL_FOUND)
 
 IF (AVCODEC_FOUND AND AVFORMAT_FOUND AND AVUTIL_FOUND)
     OPTION(HAVE_FFMPEG "FFmpeg audio decoder support" ON)
@@ -80,9 +60,7 @@ INCLUDE_DIRECTORIES(
     ${MAGICK_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
     ${MAD_INCLUDE_DIRS}
-    ${ALSA_INCLUDE_DIRS}
-    ${OPENAL_INCLUDE_DIR}
-    ${PULSEAUDIO_INCLUDE_DIRS}
+    ${AUDIO_INCLUDE_DIRS}
     ${UTILS_INCLUDE_DIRS}
     ${UPNPFRAMEWORK_INCLUDE_DIRS}
     ${DBUSGLIB_INCLUDE_DIRS}
@@ -99,7 +77,7 @@ LINK_DIRECTORIES(
     ${MAGICK_LIBRARY_DIRS}
     ${FFMPEG_LIBRARY_DIRS}
     ${FLAC_LIBRARY_DIRS}
-    ${PULSEAUDIO_LIBRARY_DIRS}
+    ${AUDIO_LIBRARY_DIRS}
     ${UTILS_LIBRARY_DIRS}
     ${UPNPFRAMEWORK_LIBRARY_DIRS}
     ${DBUSGLIB_LIBRARY_DIRS}
@@ -113,13 +91,11 @@ SET(LINK_LIBS
     ${TAGLIB_LIBRARIES}
     ${MAGICK_LIBRARIES}
     ${XDGBASEDIR_LIBRARIES}
-    ${ALSA_LIBRARIES}
-    ${OPENAL_LIBRARY}
     ${FFMPEG_LIBRARIES}
     ${FLAC_LIBRARIES}
     ${MAD_LIBRARIES}
-    ${PULSEAUDIO_LIBRARIES}
     ${UTILS_LIBRARIES}
+    ${AUDIO_LIBRARIES}
     ${UPNPFRAMEWORK_LIBRARIES}
     ${DBUSGLIB_LIBRARIES}
     ${LASTFMLIB_LIBRARIES}
@@ -148,26 +124,6 @@ ENDIF(HAVE_FLAC)
 IF (UPNPSUPPORT)
     LIST(APPEND AUDIODECODER_SRC_LIST AudioDecoder/httpreader.cpp)
 ENDIF (UPNPSUPPORT)
-
-SET(AUDIORENDERER_SRC_LIST
-    AudioRenderer/audiobuffer.cpp
-    AudioRenderer/audioframe.cpp
-    AudioRenderer/audiorenderer.cpp
-    AudioRenderer/audiorendererfactory.cpp
-)
-
-IF (HAVE_ALSA)
-    LIST(APPEND AUDIORENDERER_SRC_LIST AudioRenderer/alsarenderer.cpp)
-ENDIF (HAVE_ALSA)
-
-IF (HAVE_OPENAL)
-    LIST(APPEND AUDIORENDERER_SRC_LIST AudioRenderer/openalrenderer.cpp)
-ENDIF (HAVE_OPENAL)
-
-IF (HAVE_PULSE)
-    LIST(APPEND AUDIORENDERER_SRC_LIST AudioRenderer/pulserenderer.cpp)
-ENDIF (HAVE_PULSE)
-    
 
 SET(CORE_SRC_LIST
     Core/albumartgrabber.cpp
@@ -262,7 +218,6 @@ IF (HAVE_LIBUPNP)
 ENDIF (HAVE_LIBUPNP)
 
 ADD_LIBRARY(audiodecoder    STATIC ${AUDIODECODER_SRC_LIST})
-ADD_LIBRARY(audiorenderer   STATIC ${AUDIORENDERER_SRC_LIST})
 ADD_LIBRARY(core            STATIC ${CORE_SRC_LIST})
 ADD_LIBRARY(musiclibrary    STATIC ${MUSICLIBRARY_SRC_LIST})
 ADD_LIBRARY(plugins         STATIC ${PLUGIN_SRC_LIST})
@@ -272,8 +227,8 @@ ADD_EXECUTABLE(gejengel main.cpp)
 
 TARGET_LINK_LIBRARIES(musiclibrary ${UPNPFRAMEWORK_LIBRARIES})
 TARGET_LINK_LIBRARIES(ui core ${UPNPFRAMEWORK_LIBRARIES})
-TARGET_LINK_LIBRARIES(core audiodecoder audiorenderer musiclibrary plugins ui utils)
+TARGET_LINK_LIBRARIES(core audiodecoder musiclibrary plugins ui utils ${AUDIO_LIBRARIES})
 
-TARGET_LINK_LIBRARIES(gejengel ${LINK_LIBS} audiodecoder audiorenderer musiclibrary plugins core ui)
+TARGET_LINK_LIBRARIES(gejengel ${LINK_LIBS} audiodecoder musiclibrary plugins core ui)
 INSTALL(TARGETS gejengel RUNTIME DESTINATION bin)
 
