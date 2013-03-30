@@ -199,7 +199,12 @@ void PlayQueue::queueRandomAlbum()
     }
 }
 
-bool PlayQueue::getNextTrack(Track& track)
+size_t PlayQueue::getNumberOfTracks() const
+{
+    return m_Tracks.size();
+}
+
+bool PlayQueue::getNextTrack(std::string& track)
 {
     std::lock_guard<std::mutex> lock(m_TracksMutex);
     if (m_Tracks.empty())
@@ -207,10 +212,16 @@ bool PlayQueue::getNextTrack(Track& track)
         return false;
     }
 
-    track = m_Tracks.front();
+    m_CurrentTrack = m_Tracks.front();
     m_Tracks.pop_front();
     notifyTrackRemoved(0);
+    track = m_CurrentTrack.filepath;
     return true;
+}
+
+Track PlayQueue::getCurrentTrack()
+{
+    return m_CurrentTrack;
 }
 
 void PlayQueue::removeTrack(uint32_t index)
@@ -304,11 +315,6 @@ void PlayQueue::clear()
     std::lock_guard<std::mutex> lock(m_TracksMutex);
     m_Tracks.clear();
     notifyQueueCleared();
-}
-
-uint32_t PlayQueue::size() const
-{
-    return m_Tracks.size();
 }
 
 const std::list<Track>& PlayQueue::getTracks()

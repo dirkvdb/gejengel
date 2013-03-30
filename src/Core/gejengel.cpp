@@ -23,8 +23,13 @@
 #include "MusicLibrary/musiclibrary.h"
 #include "MusicLibrary/subscribers.h"
 #include "playqueue.h"
-#include "playbackengine.h"
-#include "playbackenginefactory.h"
+#include "audio/audioplaybackinterface.h"
+#include "audio/audioplaybackfactory.h"
+#include "audio/audioreaderfactory.h"
+
+#ifdef HAVE_LIBUPNP
+#include "upnp/upnphttpreader.h"
+#endif
 
 #include <glibmm/i18n.h>
 
@@ -42,9 +47,14 @@ GejengelCore::GejengelCore()
 , m_CurrentProgress(0)
 , m_FetchStatus(FetchStarted)
 {
+#ifdef HAVE_LIBUPNP
+    // make sure we can read http urls
+    audio::ReaderFactory::registerBuilder(std::unique_ptr<IReaderBuilder>(new upnp::HttpReaderBuilder()));
+#endif
+    
     loadSettings();
     m_pMainWindow.reset(new MainWindow(*this));
-
+    
     dispatchProgress.connect(sigc::mem_fun(this, &GejengelCore::sendProgress));
     dispatchVolumeChanged.connect(sigc::mem_fun(this, &GejengelCore::sendVolumeChange));
     dispatchStop.connect(sigc::mem_fun(&m_PluginMgr, &PluginManager::sendStop));
@@ -61,16 +71,19 @@ GejengelCore::~GejengelCore()
     
     m_PluginMgr.destroy();
     
-    // deletion order matters!
+    // deletion order matters (that's why we use pointers)!
     m_pMainWindow.reset();
-    m_pPlayQueue.reset();
     m_pPlayback.reset();
+    m_pPlayQueue.reset();
 }
 
 void GejengelCore::loadSettings()
 {
-    m_pPlayback.reset(PlaybackEngineFactory::create(m_Settings.get("PlaybackEngine"), *this));
+    m_pPlayback.reset(audio::PlaybackFactory::create(m_Settings.get("PlaybackEngine"), m_Settings.get("AudioBackend"), *m_pPlayQueue));
     m_pPlayback->setVolume(m_Settings.getAsInt("PlaybackVolume", 100));
+    m_pPlayback->ProgressChanged.connect([this] (double) { dispatchProgress(); }, this);
+    m_pPlayback->VolumeChanged.connect([this] (int32_t) { dispatchVolumeChanged(); }, this);
+    m_pPlayback->NewTrackStarted.connect([this] (std::string) { dispatchNewTrackStarted(); }, this);
     
     LibraryType libraryType = static_cast<LibraryType>(m_Settings.getAsInt("LibraryType", Local));
     m_LibraryAccess.setLibraryType(libraryType);
@@ -129,7 +142,7 @@ void GejengelCore::resume()
     {
         try
         {
-            m_pPlayback->resume();
+            m_pPlayback->play();
             m_PluginMgr.sendResume();
         }
         catch(exception& e)
@@ -165,7 +178,21 @@ void GejengelCore::stop()
 
 PlaybackState GejengelCore::getPlaybackState()
 {
-    return m_pPlayback ? m_pPlayback->getState() : Stopped;
+    if (!m_pPlayback)
+    {
+        return Stopped;
+    }
+    
+    switch (m_pPlayback->getState())
+    {
+    case audio::PlaybackState::Playing:
+        return Playing;
+    case audio::PlaybackState::Paused:
+        return Paused;
+    case audio::PlaybackState::Stopped:
+    default:
+        return Stopped;
+    }
 }
 
 void GejengelCore::seek(double seconds)
@@ -187,9 +214,9 @@ double GejengelCore::getTrackPosition()
 
 void GejengelCore::getCurrentTrack(Track& track)
 {
-    if (m_pPlayback)
+    if (m_pPlayQueue)
     { 
-        track = m_pPlayback->getTrack();
+        track = m_pPlayQueue->getCurrentTrack();
     }
 }
 
@@ -258,6 +285,7 @@ bool GejengelCore::getNextTrack(Track& track)
     m_FetchStatus = FetchStarted;
     dispatchGetNextTrack();
 
+    // please kill me ....
     while (m_FetchStatus == FetchStarted)
     {
         timeops::sleepMs(10);
@@ -275,14 +303,15 @@ bool GejengelCore::getNextTrack(Track& track)
 
 void GejengelCore::newTrackStarted()
 {
-
-    m_CurrentTrack = m_pPlayback->getTrack();
+    m_CurrentTrack = m_pPlayQueue->getCurrentTrack();
     m_PluginMgr.sendPlay(m_CurrentTrack);
 }
 
 void GejengelCore::sendGetNextTrack()
 {
-    m_FetchStatus = m_pPlayQueue->getNextTrack(m_CurrentTrack) ? FetchSuccess : FetchFailed;
+    std::string track;
+    m_FetchStatus = m_pPlayQueue->getNextTrack(track) ? FetchSuccess : FetchFailed;
+    m_CurrentTrack = m_pPlayQueue->getCurrentTrack();
 }
 
 void GejengelCore::sendProgress()

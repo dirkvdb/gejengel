@@ -28,6 +28,13 @@
 
 #include <glibmm.h>
 
+namespace audio
+{
+
+class IPlayback;
+
+}
+
 namespace Gejengel
 {
 
@@ -107,7 +114,7 @@ private:
     LibraryAccess						m_LibraryAccess;
     AlbumArtGrabber						m_AlbumArtProvider;
     std::unique_ptr<PlayQueue>          m_pPlayQueue;
-    std::unique_ptr<PlaybackEngine>     m_pPlayback;
+    std::unique_ptr<audio::IPlayback>   m_pPlayback;
     PluginManager                       m_PluginMgr;
     std::unique_ptr<MainWindow>         m_pMainWindow;
     Track                               m_CurrentTrack;

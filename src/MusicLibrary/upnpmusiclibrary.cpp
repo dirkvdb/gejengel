@@ -30,7 +30,7 @@
 #include "utils/trace.h"
 #include "utils/simplesubscriber.h"
 #include "utils/stringoperations.h"
-#include "upnp/upnphttpget.h"
+#include "upnp/upnphttpclient.h"
 
 using namespace std;
 using namespace utils;
@@ -59,8 +59,6 @@ uint32_t UPnPMusicLibrary::getTrackCount()
 
 uint32_t UPnPMusicLibrary::getAlbumCount()
 {
-    uint32_t albumCount = 0;
-
     auto container = std::make_shared<upnp::Item>(m_CurrentServer->m_ContainerId);
     m_Server.getMetaData(container);
 
@@ -179,8 +177,8 @@ bool UPnPMusicLibrary::getAlbumArt(const Album& album, AlbumArt& art)
     try
     {
 		int32_t timeout = 10;
-		upnp::HttpGet httpGet(url.c_str(), timeout);
-		httpGet.get(art.getData());
+		upnp::HttpClient client(timeout);
+		art.getData() = client.getData(url);
     }
     catch (std::exception& e)
     {

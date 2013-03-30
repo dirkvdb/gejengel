@@ -18,8 +18,10 @@
 #define PLAYQUEUE_H
 
 #include "utils/subscriber.h"
-#include "MusicLibrary/track.h"
 #include "utils/types.h"
+#include "audio/audioplaylistinterface.h"
+#include "MusicLibrary/track.h"
+
 
 #include <list>
 #include <vector>
@@ -44,6 +46,7 @@ public:
 };
 
 class PlayQueue : public utils::ISubscriber<const Track&>
+                , public audio::IPlaylist
 {
 public:
     PlayQueue(IGejengelCore& core);
@@ -56,13 +59,16 @@ public:
     void queueRandomTracks(uint32_t count);
     void queueRandomAlbum();
 
-    bool getNextTrack(Track& track);
+    // IPLaylist
+    bool getNextTrack(std::string& track);
+    uint32_t getNumberOfTracks() const;
+
+    Track getCurrentTrack();
     void removeTrack(uint32_t index);
     void removeTracks(std::vector<uint32_t> indexes);
     void moveTrack(uint32_t sourceIndex, uint32_t destIndex);
     bool getTrackInfo(uint32_t index, Track& track);
     void clear();
-    uint32_t size() const;
     const std::list<Track>& getTracks();
 
     void subscribe(PlayQueueSubscriber& subscriber);
@@ -87,6 +93,8 @@ private:
     std::vector<PlayQueueSubscriber*>   m_Subscribers;
     int32_t                             m_QueueIndex;
     std::map<std::string, int32_t>		m_IndexMap;
+    
+    Track                               m_CurrentTrack; //the last popped track
 
     std::mutex                          m_TracksMutex;
     std::mutex                          m_SubscribersMutex;
