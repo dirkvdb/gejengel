@@ -204,7 +204,7 @@ size_t PlayQueue::getNumberOfTracks() const
     return m_Tracks.size();
 }
 
-bool PlayQueue::getNextTrack(std::string& track)
+bool PlayQueue::dequeueNextTrack(std::string& track)
 {
     std::lock_guard<std::mutex> lock(m_TracksMutex);
     if (m_Tracks.empty())

@@ -310,7 +310,7 @@ void GejengelCore::newTrackStarted()
 void GejengelCore::sendGetNextTrack()
 {
     std::string track;
-    m_FetchStatus = m_pPlayQueue->getNextTrack(track) ? FetchSuccess : FetchFailed;
+    m_FetchStatus = m_pPlayQueue->dequeueNextTrack(track) ? FetchSuccess : FetchFailed;
     m_CurrentTrack = m_pPlayQueue->getCurrentTrack();
 }
 

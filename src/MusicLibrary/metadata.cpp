@@ -235,8 +235,7 @@ bool Metadata::getAlbumArt(vector<uint8_t>& data, const vector<string>& albumArt
     }
 
     //no embedded album art found, see if we can find a cover.jpg, ... file
-    string dir;
-    fileops::getPathFromFilepath(m_FilePath, dir);
+    string dir = fileops::getPathFromFilepath(m_FilePath);
 
     vector<uint8_t> albumArtData;
     for (size_t i = 0; i < albumArtFileList.size(); ++i)

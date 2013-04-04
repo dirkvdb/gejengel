@@ -60,8 +60,8 @@ public:
     void queueRandomAlbum();
 
     // IPLaylist
-    bool getNextTrack(std::string& track);
-    uint32_t getNumberOfTracks() const;
+    bool dequeueNextTrack(std::string& track);
+    size_t getNumberOfTracks() const;
 
     Track getCurrentTrack();
     void removeTrack(uint32_t index);
