@@ -29,6 +29,7 @@ namespace Gejengel
 
 class Track;
 class Album;
+class AlbumArt;
 class MusicDb;
 class IScanSubscriber;
 
@@ -44,6 +45,7 @@ public:
 private:
     void scan(const std::string& dir);
     void onFile(const std::string& filepath);
+    void processAlbumArt(const std::string& filepath, AlbumArt& art);
 
     MusicDb&                        m_LibraryDb;
     IScanSubscriber&                m_ScanSubscriber;

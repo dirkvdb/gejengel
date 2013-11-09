@@ -22,7 +22,6 @@
 #include "MusicLibrary/track.h"
 #include "MusicLibrary/album.h"
 #include "MusicLibrary/albumart.h"
-#include "MusicLibrary/metadata.h"
 #include "Core/libraryaccess.h"
 #include "Core/gejengelcore.h"
 #include "Core/settings.h"

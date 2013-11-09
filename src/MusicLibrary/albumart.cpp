@@ -18,6 +18,8 @@
 
 #include <cstring>
 
+using namespace audio;
+
 namespace Gejengel
 {
 
@@ -30,25 +32,29 @@ AlbumArt::AlbumArt(const std::string& albumId)
 {
 }
 
-void AlbumArt::setAlbumData(const uint8_t* pData, uint32_t size)
+void AlbumArt::setAlbumArt(Metadata::AlbumArt&& art)
 {
-	m_Data.resize(size);
-    memcpy(&m_Data[0], pData, size);
+    m_Art = std::move(art);
+}
+
+void AlbumArt::setAlbumArt(const Metadata::AlbumArt& art)
+{
+    m_Art = art;
 }
 
 std::vector<uint8_t>& AlbumArt::getData()
 {
-	return m_Data;
+	return m_Art.data;
 }
 
 const std::vector<uint8_t>& AlbumArt::getData() const
 {
-	return m_Data;
+	return m_Art.data;
 }
 
 uint32_t AlbumArt::getDataSize() const
 {
-	return m_Data.size();
+	return m_Art.data.size();
 }
 
 std::string AlbumArt::getAlbumId() const

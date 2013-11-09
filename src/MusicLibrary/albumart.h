@@ -21,6 +21,7 @@
 #include <string>
 
 #include "utils/types.h"
+#include "audio/audiometadata.h"
 
 namespace Gejengel
 {
@@ -31,15 +32,17 @@ public:
 	AlbumArt();
 	AlbumArt(const std::string& albumId);
 
-	void setAlbumData(const uint8_t* pData, uint32_t size);
+    void setAlbumArt(audio::Metadata::AlbumArt&& art);
+    void setAlbumArt(const audio::Metadata::AlbumArt& art);
+    
 	std::vector<uint8_t>& getData();
 	const std::vector<uint8_t>& getData() const;
 	uint32_t getDataSize() const;
 	std::string getAlbumId() const;
 
 private:
-	std::string 			m_AlbumId;
-	std::vector<uint8_t> 	m_Data;
+	std::string                 m_AlbumId;
+	audio::Metadata::AlbumArt   m_Art;
 };
 
 }

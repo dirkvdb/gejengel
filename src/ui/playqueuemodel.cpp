@@ -23,7 +23,6 @@
 
 #include "MusicLibrary/track.h"
 #include "MusicLibrary/album.h"
-#include "MusicLibrary/metadata.h"
 #include "utils/log.h"
 #include "utils/numericoperations.h"
 #include "Core/albumartprovider.h"

@@ -21,9 +21,9 @@
 #include "Core/libraryaccess.h"
 #include "MusicLibrary/album.h"
 #include "MusicLibrary/track.h"
-#include "MusicLibrary/metadata.h"
 #include "utils/log.h"
 #include "utils/simplesubscriber.h"
+#include "audio/audiometadata.h"
 
 using namespace utils;
 
@@ -131,15 +131,19 @@ bool AlbumArtGrabber::fetchAlbumFromSource(const Album& album, AlbumArt& art, ui
 
 bool AlbumArtGrabber::fetchTrackFromSource(const Track& track, AlbumArt& art, uint32_t size)
 {
-	if (!track.filepath.empty())
-	{
-		Metadata md(track.filepath);
-		md.getAlbumArt(art.getData(), m_AlbumArtFilenames, size);
-	}
-
-	/* Failed to get art from file, try to get it from the library */
+    if (!track.filepath.empty())
+    {
+        try
+        {
+            audio::Metadata md(track.filepath);
+            art.setAlbumArt(md.getAlbumArt());
+        }
+        catch(std::exception&) {}
+    }
+    
 	if (art.getData().empty())
 	{
+        // Failed to get art from file, try to get it from the library
 		m_Core.getLibraryAccess().getAlbumArt(Album(track.albumId), art);
 	}
 

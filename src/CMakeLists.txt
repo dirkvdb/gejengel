@@ -85,7 +85,6 @@ SET(MUSICLIBRARY_SRC_LIST
     MusicLibrary/albumart.cpp
     MusicLibrary/filesystemmusiclibrary.cpp
     MusicLibrary/libraryitem.cpp
-    MusicLibrary/metadata.cpp
     MusicLibrary/musicdb.cpp
     MusicLibrary/musiclibrary.cpp
     MusicLibrary/musiclibraryfactory.cpp
