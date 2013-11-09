@@ -135,7 +135,7 @@ bool AlbumArtGrabber::fetchTrackFromSource(const Track& track, AlbumArt& art, ui
     {
         try
         {
-            audio::Metadata md(track.filepath);
+            audio::Metadata md(track.filepath, audio::Metadata::ReadAudioProperties::No);
             art.setAlbumArt(md.getAlbumArt());
         }
         catch(std::exception&) {}

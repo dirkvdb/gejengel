@@ -116,7 +116,6 @@ void Scanner::cancel()
 
 void Scanner::onFile(const string& filepath)
 {
-    
     auto info = getFileInfo(filepath);
     
     Track track;
@@ -132,8 +131,7 @@ void Scanner::onFile(const string& filepath)
         return;
     }
 
-
-    audio::Metadata md(track.filepath);
+    audio::Metadata md(track.filepath, audio::Metadata::ReadAudioProperties::Yes);
     track.artist        = md.getArtist();
     track.albumArtist   = md.getAlbumArtist();
     track.title         = md.getTitle();
@@ -147,7 +145,7 @@ void Scanner::onFile(const string& filepath)
     track.sampleRate    = md.getSampleRate();
     track.channels      = md.getChannels();
     track.durationInSec = md.getDuration();
-
+    
     if (track.album.empty())    track.album = UNKNOWN_ALBUM;
     if (track.artist.empty())   track.artist = UNKNOWN_ARTIST;
     if (track.title.empty())    track.title = UNKNOWN_TITLE;

@@ -113,7 +113,6 @@ void GejengelCore::play()
     {
         try
         {
-            log::info("###############################");
             m_pPlayback->play();
         }
         catch(exception& e)

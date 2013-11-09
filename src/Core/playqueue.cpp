@@ -75,13 +75,15 @@ void PlayQueue::loadQueueFromFile()
         std::string playQueue = fileops::readTextFile(queuePath);
 
         {
-            std::lock_guard<std::mutex> lock(m_TracksMutex);
+            std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
             vector<std::string> ids = stringops::tokenize(playQueue, "\n");
-            for (size_t i = 0; i < ids.size() && !m_Destroy; ++i)
+            for (auto& id : ids)
             {
-                if (!ids[i].empty())
+                if (m_Destroy) break;
+                
+                if (!id.empty())
                 {
-                    queueTrack(ids[i]);
+                    queueTrack(id);
                 }
             }
         }
@@ -110,7 +112,7 @@ void PlayQueue::saveQueue()
         return;
     }
 
-    std::lock_guard<std::mutex> lock(m_TracksMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
     for (auto& track : m_Tracks)
     {
         file << track->getTrack().id << endl;
@@ -127,13 +129,13 @@ void PlayQueue::queueTrack(const Track& track, int32_t index)
 
         if (listIndex == -1)
         {
-            std::lock_guard<std::mutex> lock(m_TracksMutex);
+            std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
             listIndex = m_Tracks.size();
             m_Tracks.push_back(queueItem);
         }
         else
         {
-            std::lock_guard<std::mutex> lock(m_TracksMutex);
+            std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
             auto iter = m_Tracks.begin();
             for (int32_t i = 0; i < index && iter != m_Tracks.end(); ++i)
             {
@@ -167,7 +169,7 @@ void PlayQueue::queueTrack(const std::string& id, int32_t index)
     try
     {
     	{
-    	    std::lock_guard<std::mutex> lock(m_TracksMutex);
+    	    std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
     		m_IndexMap[id] = index;
     	}
         m_Core.getLibraryAccess().getTrackAsync(id, *this);
@@ -224,7 +226,7 @@ size_t PlayQueue::getNumberOfTracks() const
 
 std::shared_ptr<audio::ITrack> PlayQueue::dequeueNextTrack()
 {
-    std::lock_guard<std::mutex> lock(m_TracksMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
     if (m_Tracks.empty())
     {
         return false;
@@ -249,7 +251,7 @@ Track PlayQueue::getCurrentTrack()
 
 void PlayQueue::removeTrack(uint32_t index)
 {
-    std::lock_guard<std::mutex> lock(m_TracksMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
     if (m_Tracks.empty())
     {
         return;
@@ -289,7 +291,7 @@ void PlayQueue::moveTrack(uint32_t sourceIndex, uint32_t destIndex)
         return;
     }
 
-    std::lock_guard<std::mutex> lock(m_TracksMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
     auto sourceIter = m_Tracks.begin();
     for (uint32_t i = 0; i < sourceIndex; ++i)
     {
@@ -317,7 +319,7 @@ void PlayQueue::moveTrack(uint32_t sourceIndex, uint32_t destIndex)
 
 bool PlayQueue::getTrackInfo(uint32_t index, Track& track)
 {
-    std::lock_guard<std::mutex> lock(m_TracksMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
     if (index >= m_Tracks.size())
     {
         return false;
@@ -335,7 +337,7 @@ bool PlayQueue::getTrackInfo(uint32_t index, Track& track)
 
 void PlayQueue::clear()
 {
-    std::lock_guard<std::mutex> lock(m_TracksMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
     m_Tracks.clear();
     notifyQueueCleared();
 }
@@ -436,7 +438,7 @@ void PlayQueue::onItem(const Track& track, void* pData)
         int32_t index = -1;
 
         {
-            std::lock_guard<std::mutex> lock(m_TracksMutex);
+            std::lock_guard<std::recursive_mutex> lock(m_TracksMutex);
             auto iter = m_IndexMap.find(track.id);
             if (iter != m_IndexMap.end())
             {

@@ -112,7 +112,7 @@ private:
     
     std::shared_ptr<PlayQueueItem>              m_CurrentTrack; //the last popped track
 
-    std::mutex                                  m_TracksMutex;
+    std::recursive_mutex                        m_TracksMutex;
     std::mutex                                  m_SubscribersMutex;
 
     bool                                        m_Destroy;
