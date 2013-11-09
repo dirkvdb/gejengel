@@ -69,7 +69,7 @@ gboolean mprisTrackList_add_track(MprisTrackList* pInstance, const gchar* pUri, 
 
 gboolean mprisTrackList_get_length(MprisTrackList* pInstance, gint* pLength, GError** pError)
 {
-    *pLength = pInstance->pCore->getPlayQueue().size();
+    *pLength = pInstance->pCore->getPlayQueue().getNumberOfTracks();
     return TRUE;
 }
 
@@ -173,7 +173,7 @@ gboolean mprisTrackList_get_metadata(MprisTrackList* pInstance, gint trackNr, GH
 
 void mprisTrackList_emit_track_list_change(MprisTrackList* pInstance)
 {
-    g_signal_emit(pInstance, tracklistChangedSignal, 0, pInstance->pCore->getPlayQueue().size());
+    g_signal_emit(pInstance, tracklistChangedSignal, 0, pInstance->pCore->getPlayQueue().getNumberOfTracks());
 }
 
 MprisPlayQueueSubscriber::MprisPlayQueueSubscriber(MprisTrackList* playlist)

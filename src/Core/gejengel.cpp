@@ -16,8 +16,10 @@
 
 #include "gejengel.h"
 
+#include "config.h"
 #include "ui/mainwindow.h"
 #include "utils/log.h"
+#include "utils/readerfactory.h"
 #include "utils/timeoperations.h"
 #include "utils/numericoperations.h"
 #include "MusicLibrary/musiclibrary.h"
@@ -25,7 +27,6 @@
 #include "playqueue.h"
 #include "audio/audioplaybackinterface.h"
 #include "audio/audioplaybackfactory.h"
-#include "audio/audioreaderfactory.h"
 
 #ifdef HAVE_LIBUPNP
 #include "upnp/upnphttpreader.h"
@@ -35,6 +36,7 @@
 
 using namespace std;
 using namespace utils;
+using namespace audio;
 
 namespace Gejengel
 {
@@ -49,7 +51,7 @@ GejengelCore::GejengelCore()
 {
 #ifdef HAVE_LIBUPNP
     // make sure we can read http urls
-    audio::ReaderFactory::registerBuilder(std::unique_ptr<IReaderBuilder>(new upnp::HttpReaderBuilder()));
+    ReaderFactory::registerBuilder(std::unique_ptr<IReaderBuilder>(new upnp::HttpReaderBuilder()));
 #endif
     
     loadSettings();
@@ -79,11 +81,11 @@ GejengelCore::~GejengelCore()
 
 void GejengelCore::loadSettings()
 {
-    m_pPlayback.reset(audio::PlaybackFactory::create(m_Settings.get("PlaybackEngine"), m_Settings.get("AudioBackend"), *m_pPlayQueue));
+    m_pPlayback.reset(audio::PlaybackFactory::create(m_Settings.get("PlaybackEngine"), PACKAGE_NAME, m_Settings.get("AudioBackend"), "default", *m_pPlayQueue));
     m_pPlayback->setVolume(m_Settings.getAsInt("PlaybackVolume", 100));
     m_pPlayback->ProgressChanged.connect([this] (double) { dispatchProgress(); }, this);
     m_pPlayback->VolumeChanged.connect([this] (int32_t) { dispatchVolumeChanged(); }, this);
-    m_pPlayback->NewTrackStarted.connect([this] (std::string) { dispatchNewTrackStarted(); }, this);
+    m_pPlayback->NewTrackStarted.connect([this] (std::shared_ptr<ITrack>) { dispatchNewTrackStarted(); }, this);
     
     LibraryType libraryType = static_cast<LibraryType>(m_Settings.getAsInt("LibraryType", Local));
     m_LibraryAccess.setLibraryType(libraryType);
@@ -111,6 +113,7 @@ void GejengelCore::play()
     {
         try
         {
+            log::info("###############################");
             m_pPlayback->play();
         }
         catch(exception& e)
@@ -309,8 +312,8 @@ void GejengelCore::newTrackStarted()
 
 void GejengelCore::sendGetNextTrack()
 {
-    std::string track;
-    m_FetchStatus = m_pPlayQueue->dequeueNextTrack(track) ? FetchSuccess : FetchFailed;
+    auto track = m_pPlayQueue->dequeueNextTrack();
+    m_FetchStatus = track ? FetchSuccess : FetchFailed;
     m_CurrentTrack = m_pPlayQueue->getCurrentTrack();
 }
 

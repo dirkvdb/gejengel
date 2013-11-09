@@ -50,7 +50,7 @@ public:
     bool getAlbumArt(std::vector<uint8_t>& data, const std::vector<std::string>& albumArtFileList, int32_t albumArtSize = -1);
 
 private:
-    static bool resizeAlbumArt(const uint8_t* albumArtData, int32_t dataSize, int32_t albumArtSize, std::vector<uint8_t>& resizedAlbumArtData);
+    static bool resizeAlbumArt(const uint8_t* pData, uint64_t dataSize, int32_t albumArtSize, std::vector<uint8_t>& resizedAlbumArtData);
     static uint32_t parseDisc(const std::string& disc);
 
     TagLib::FileRef     m_TagFile;

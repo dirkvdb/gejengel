@@ -194,7 +194,7 @@ void Settings::loadDefaultSettings()
     m_Settings["AudioBackend"] = "Alsa";
 #endif
 
-    m_Settings["PlaybackEngine"] = "FFmpeg";
+    m_Settings["PlaybackEngine"] = "Custom";
 }
 
 void Settings::determineSettingsPath()

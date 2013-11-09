@@ -10,3 +10,6 @@
 [submodule "modules/audio"]
 	path = modules/audio
 	url = https://dirk_vdb@bitbucket.org/dirk_vdb/audio.git
+[submodule "modules/image"]
+	path = modules/image
+	url = https://dirk_vdb@bitbucket.org/dirk_vdb/image.git

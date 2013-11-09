@@ -21,6 +21,7 @@
 #include "utils/stringoperations.h"
 #include "Core/gejengel.h"
 #include "MusicLibrary/musiclibrary.h"
+#include "MusicLibrary/track.h"
 
 #include <fstream>
 #include <cassert>
@@ -37,6 +38,21 @@ using namespace utils;
 
 namespace Gejengel
 {
+    
+PlayQueueItem::PlayQueueItem(const Track& track)
+: m_Track(track)
+{
+}
+
+std::string PlayQueueItem::getUri() const
+{
+    return m_Track.filepath;
+}
+
+Track PlayQueueItem::getTrack() const
+{
+    return m_Track;
+}
 
 PlayQueue::PlayQueue(IGejengelCore& core)
 : m_Core(core)
@@ -52,27 +68,27 @@ PlayQueue::~PlayQueue()
 
 void PlayQueue::loadQueueFromFile()
 {
-    string queuePath = determinePlayQueuePath();
-
-    std::string playQueue;
-    if (!fileops::readTextFile(playQueue, queuePath))
+    try
     {
-        return;
-    }
+        string queuePath = determinePlayQueuePath();
+        
+        std::string playQueue = fileops::readTextFile(queuePath);
 
-    {
-        std::lock_guard<std::mutex> lock(m_TracksMutex);
-        vector<std::string> ids = stringops::tokenize(playQueue, "\n");
-        for (size_t i = 0; i < ids.size() && !m_Destroy; ++i)
         {
-            if (!ids[i].empty())
+            std::lock_guard<std::mutex> lock(m_TracksMutex);
+            vector<std::string> ids = stringops::tokenize(playQueue, "\n");
+            for (size_t i = 0; i < ids.size() && !m_Destroy; ++i)
             {
-                queueTrack(ids[i]);
+                if (!ids[i].empty())
+                {
+                    queueTrack(ids[i]);
+                }
             }
         }
-    }
 
-    fileops::deleteFile(queuePath);
+        fileops::deleteFile(queuePath);
+    }
+    catch (std::exception&) {}
 }
 
 
@@ -95,9 +111,9 @@ void PlayQueue::saveQueue()
     }
 
     std::lock_guard<std::mutex> lock(m_TracksMutex);
-    for (list<Track>::iterator iter = m_Tracks.begin(); iter != m_Tracks.end(); ++iter)
+    for (auto& track : m_Tracks)
     {
-        file << iter->id << endl;
+        file << track->getTrack().id << endl;
     }
 }
 
@@ -106,17 +122,19 @@ void PlayQueue::queueTrack(const Track& track, int32_t index)
     try
     {
         int32_t listIndex = index;
+        
+        auto queueItem = std::make_shared<PlayQueueItem>(track);
 
         if (listIndex == -1)
         {
             std::lock_guard<std::mutex> lock(m_TracksMutex);
             listIndex = m_Tracks.size();
-            m_Tracks.push_back(track);
+            m_Tracks.push_back(queueItem);
         }
         else
         {
             std::lock_guard<std::mutex> lock(m_TracksMutex);
-            list<Track>::iterator iter = m_Tracks.begin();
+            auto iter = m_Tracks.begin();
             for (int32_t i = 0; i < index && iter != m_Tracks.end(); ++i)
             {
                 ++iter;
@@ -127,7 +145,7 @@ void PlayQueue::queueTrack(const Track& track, int32_t index)
                 index = m_Tracks.size();
             }
 
-            m_Tracks.insert(iter, track);
+            m_Tracks.insert(iter, queueItem);
         }
     
         log::debug("Track queued: %s", track.id);
@@ -204,7 +222,7 @@ size_t PlayQueue::getNumberOfTracks() const
     return m_Tracks.size();
 }
 
-bool PlayQueue::dequeueNextTrack(std::string& track)
+std::shared_ptr<audio::ITrack> PlayQueue::dequeueNextTrack()
 {
     std::lock_guard<std::mutex> lock(m_TracksMutex);
     if (m_Tracks.empty())
@@ -215,13 +233,18 @@ bool PlayQueue::dequeueNextTrack(std::string& track)
     m_CurrentTrack = m_Tracks.front();
     m_Tracks.pop_front();
     notifyTrackRemoved(0);
-    track = m_CurrentTrack.filepath;
-    return true;
+    
+    return m_CurrentTrack;
 }
 
 Track PlayQueue::getCurrentTrack()
 {
-    return m_CurrentTrack;
+    if (m_CurrentTrack)
+    {
+        return m_CurrentTrack->getTrack();
+    }
+    
+    return Track();
 }
 
 void PlayQueue::removeTrack(uint32_t index)
@@ -232,7 +255,7 @@ void PlayQueue::removeTrack(uint32_t index)
         return;
     }
 
-    list<Track>::iterator iter = m_Tracks.begin();
+    auto iter = m_Tracks.begin();
     for (uint32_t i = 0; i < index && iter != m_Tracks.end(); ++i)
     {
         ++iter;
@@ -267,16 +290,16 @@ void PlayQueue::moveTrack(uint32_t sourceIndex, uint32_t destIndex)
     }
 
     std::lock_guard<std::mutex> lock(m_TracksMutex);
-    list<Track>::iterator sourceIter = m_Tracks.begin();
+    auto sourceIter = m_Tracks.begin();
     for (uint32_t i = 0; i < sourceIndex; ++i)
     {
         ++sourceIter;
     }
 
-    Track track = *sourceIter;
+    auto track = *sourceIter;
     m_Tracks.erase(sourceIter);
 
-    list<Track>::iterator destIter = m_Tracks.begin();
+    auto destIter = m_Tracks.begin();
     for (uint32_t i = 0; i < destIndex && destIter != m_Tracks.end(); ++i)
     {
         ++destIter;
@@ -300,13 +323,13 @@ bool PlayQueue::getTrackInfo(uint32_t index, Track& track)
         return false;
     }
 
-    list<Track>::iterator iter = m_Tracks.begin();
+    auto iter = m_Tracks.begin();
     for (uint32_t i = 0; i < index; ++i)
     {
         ++iter;
     }
 
-    track = *iter;
+    track = (*iter)->getTrack();
     return true;
 }
 
@@ -317,9 +340,15 @@ void PlayQueue::clear()
     notifyQueueCleared();
 }
 
-const std::list<Track>& PlayQueue::getTracks()
+std::list<Track> PlayQueue::getTracks()
 {
-    return m_Tracks;
+    std::list<Track> tracks;
+    for (auto& item : m_Tracks)
+    {
+        tracks.push_back(item->getTrack());
+    }
+    
+    return tracks;
 }
 
 void PlayQueue::subscribe(PlayQueueSubscriber& subscriber)
@@ -408,7 +437,7 @@ void PlayQueue::onItem(const Track& track, void* pData)
 
         {
             std::lock_guard<std::mutex> lock(m_TracksMutex);
-            std::map<std::string, int32_t>::iterator iter = m_IndexMap.find(track.id);
+            auto iter = m_IndexMap.find(track.id);
             if (iter != m_IndexMap.end())
             {
                 index = iter->second;

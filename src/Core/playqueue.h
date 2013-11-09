@@ -19,6 +19,7 @@
 
 #include "utils/subscriber.h"
 #include "utils/types.h"
+#include "audio/audiotrackinterface.h"
 #include "audio/audioplaylistinterface.h"
 #include "MusicLibrary/track.h"
 
@@ -45,6 +46,21 @@ public:
     virtual void onQueueCleared() {}
 };
 
+class PlayQueueItem : public audio::ITrack
+{
+public:
+    PlayQueueItem() = default;
+    PlayQueueItem(const Track& track);
+
+    // ITrack
+    virtual std::string getUri() const override;
+    
+    Track getTrack() const;
+    
+private:
+    Track       m_Track;
+};
+
 class PlayQueue : public utils::ISubscriber<const Track&>
                 , public audio::IPlaylist
 {
@@ -60,7 +76,7 @@ public:
     void queueRandomAlbum();
 
     // IPLaylist
-    bool dequeueNextTrack(std::string& track);
+    std::shared_ptr<audio::ITrack> dequeueNextTrack();
     size_t getNumberOfTracks() const;
 
     Track getCurrentTrack();
@@ -69,7 +85,7 @@ public:
     void moveTrack(uint32_t sourceIndex, uint32_t destIndex);
     bool getTrackInfo(uint32_t index, Track& track);
     void clear();
-    const std::list<Track>& getTracks();
+    std::list<Track> getTracks();
 
     void subscribe(PlayQueueSubscriber& subscriber);
     void unsubscribe(PlayQueueSubscriber& subscriber);
@@ -88,18 +104,18 @@ private:
 
     static std::string determinePlayQueuePath();
 
-    IGejengelCore&                      m_Core;
-    std::list<Track>                    m_Tracks;
-    std::vector<PlayQueueSubscriber*>   m_Subscribers;
-    int32_t                             m_QueueIndex;
-    std::map<std::string, int32_t>		m_IndexMap;
+    IGejengelCore&                              m_Core;
+    std::list<std::shared_ptr<PlayQueueItem>>   m_Tracks;
+    std::vector<PlayQueueSubscriber*>           m_Subscribers;
+    int32_t                                     m_QueueIndex;
+    std::map<std::string, int32_t>              m_IndexMap;
     
-    Track                               m_CurrentTrack; //the last popped track
+    std::shared_ptr<PlayQueueItem>              m_CurrentTrack; //the last popped track
 
-    std::mutex                          m_TracksMutex;
-    std::mutex                          m_SubscribersMutex;
+    std::mutex                                  m_TracksMutex;
+    std::mutex                                  m_SubscribersMutex;
 
-    bool                                m_Destroy;
+    bool                                        m_Destroy;
 };
 
 }

@@ -20,6 +20,9 @@
 #include "utils/log.h"
 #include "utils/stringoperations.h"
 #include "utils/fileoperations.h"
+#include "image/image.h"
+#include "image/imagefactory.h"
+#include "image/imageloadstoreinterface.h"
 
 #include <cmath>
 #include <cassert>
@@ -33,7 +36,6 @@
 #include <flacfile.h>
 #include <attachedpictureframe.h>
 #include <tlist.h>
-#include <Magick++.h>
 
 static const int32_t ALBUM_ART_DB_SIZE = 96;
 
@@ -237,42 +239,36 @@ bool Metadata::getAlbumArt(vector<uint8_t>& data, const vector<string>& albumArt
     //no embedded album art found, see if we can find a cover.jpg, ... file
     string dir = fileops::getPathFromFilepath(m_FilePath);
 
-    vector<uint8_t> albumArtData;
     for (size_t i = 0; i < albumArtFileList.size(); ++i)
     {
-        string possibleAlbumArt = fileops::combinePath(dir, albumArtFileList[i]);
-        if (fileops::pathExists(possibleAlbumArt) && fileops::readFile(albumArtData, possibleAlbumArt))
+        try
         {
+            string possibleAlbumArt = fileops::combinePath(dir, albumArtFileList[i]);
+            auto albumArtData = fileops::readFile(possibleAlbumArt);
             log::debug("Art found in: %s", possibleAlbumArt);
-            if (resizeAlbumArt(&albumArtData.front(), albumArtData.size(), size, data))
+            if (resizeAlbumArt(albumArtData.data(), albumArtData.size(), size, data))
             {
                 return true;
             }
         }
+        catch (std::exception&) {}
     }
 
     data.clear();
     return false;
 }
 
-bool Metadata::resizeAlbumArt(const uint8_t* albumArtData, int32_t dataSize, int32_t albumArtSize, vector<uint8_t>& resizedAlbumArtData)
+bool Metadata::resizeAlbumArt(const uint8_t* pData, uint64_t dataSize, int32_t albumArtSize, vector<uint8_t>& resizedAlbumArtData)
 {
     try
     {
-        Magick::Blob resizedBlob;
-        Magick::Blob albumArtBlob(albumArtData, dataSize);
-        Magick::Image albumArt(albumArtBlob);
+        auto image = image::Factory::createFromData(pData, dataSize);
+        image->resize(albumArtSize, albumArtSize, image::ResizeAlgorithm::Bilinear);
 
-        std::stringstream sizeString;
-        sizeString << albumArtSize << "x" << albumArtSize;
-
-        albumArt.resize(sizeString.str());
-        albumArt.write(&resizedBlob, "PNG");
-        albumArt.magick("PNG");
-        resizedAlbumArtData.resize(resizedBlob.length());
-        memcpy(&resizedAlbumArtData[0], resizedBlob.data(), resizedAlbumArtData.size());
+        auto pngStore = image::Factory::createLoadStore(image::Type::Png);
+        resizedAlbumArtData = pngStore->storeToMemory(*image);
     }
-    catch (Magick::Exception& e)
+    catch (std::exception& e)
     {
         log::error("Failed to scale image: %s", e.what());
         return false;
